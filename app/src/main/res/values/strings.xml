@@ -3,4 +3,5 @@
     <string name="avction_registration">Registration</string>
     <string name="prompt_username">Username</string>
     <string name="prompt_password2">Password</string>
+    <string name="prompt_paperchase">Start Paper Chase</string>
 </resources>

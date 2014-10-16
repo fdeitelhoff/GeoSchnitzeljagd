@@ -105,6 +105,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>
      */
     public void attemptLogin()
     {
+        setContentView(R.layout.activity_home);
         if (mAuthTask != null)
         {
             return;
