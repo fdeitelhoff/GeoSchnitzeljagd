@@ -10,9 +10,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import mobi.fhdo.geoschnitzeljagd.DataManagers.DataManager;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
+import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserLoginException;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 
 public class LoginActivity extends Activity
@@ -20,7 +22,6 @@ public class LoginActivity extends Activity
     // UI references.
     private AutoCompleteTextView usernameView;
     private EditText passwordView;
-    private View loginFormView;
 
     private Users users;
 
@@ -34,7 +35,7 @@ public class LoginActivity extends Activity
         users = new Users(this);
 
         // Set up the login form.
-        loginFormView = (AutoCompleteTextView) findViewById(R.id.username);
+        usernameView = (AutoCompleteTextView) findViewById(R.id.username);
 
         passwordView = (EditText) findViewById(R.id.password);
         passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener()
@@ -74,21 +75,22 @@ public class LoginActivity extends Activity
                 ClickRegistration();
             }
         });
-
-        loginFormView = findViewById(R.id.login_form);
     }
 
     public void ClickLogin()
     {
-        // Weiterleitung an die Startseite
-        // Muss später entfernt werden
-        //setContentView(R.layout.activity_home);
+        try {
+            // Login versuchen und im positiven Fall zur home activity wechseln.
+            User user = new User(usernameView.getText().toString(),
+                    passwordView.getText().toString());
 
-        //Login Logik muss hier implementiert werden
-        User user = new User(usernameView.getText().toString(),
-                passwordView.getText().toString());
+            // Das User Objekt noch speichern. Brauchen wir in vielen Activities.
+            User loggedInUser = users.Login(user);
 
-        User loggedInUser = users.Login(user);
+            setContentView(R.layout.activity_home);
+        } catch (UserLoginException e) {
+            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     public void ClickRegistration()
