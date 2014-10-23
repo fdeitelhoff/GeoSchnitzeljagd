@@ -12,13 +12,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import mobi.fhdo.geoschnitzeljagd.DataManagers.DataManager;
+import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
+import mobi.fhdo.geoschnitzeljagd.Model.User;
 
 public class LoginActivity extends Activity
 {
     // UI references.
-    private AutoCompleteTextView mUsernameView;
-    private EditText mPasswordView;
-    private View mLoginFormView;
+    private AutoCompleteTextView usernameView;
+    private EditText passwordView;
+    private View loginFormView;
+
+    private Users users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -27,12 +31,13 @@ public class LoginActivity extends Activity
         setContentView(R.layout.activity_login);
 
         DataManager dataManager = new DataManager(this);
+        users = new Users(this);
 
         // Set up the login form.
-        mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
+        loginFormView = (AutoCompleteTextView) findViewById(R.id.username);
 
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener()
+        passwordView = (EditText) findViewById(R.id.password);
+        passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener()
         {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent)
@@ -70,16 +75,20 @@ public class LoginActivity extends Activity
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
+        loginFormView = findViewById(R.id.login_form);
     }
 
     public void ClickLogin()
     {
         // Weiterleitung an die Startseite
         // Muss später entfernt werden
-        setContentView(R.layout.activity_home);
+        //setContentView(R.layout.activity_home);
 
         //Login Logik muss hier implementiert werden
+        User user = new User(usernameView.getText().toString(),
+                passwordView.getText().toString());
+
+        User loggedInUser = users.Login(user);
     }
 
     public void ClickRegistration()
