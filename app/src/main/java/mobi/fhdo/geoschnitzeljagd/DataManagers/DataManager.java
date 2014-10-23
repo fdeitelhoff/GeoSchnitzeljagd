@@ -1,11 +1,8 @@
-package mobi.fhdo.geoschnitzeljagd;
+package mobi.fhdo.geoschnitzeljagd.DataManagers;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
-import java.io.Console;
 
 public class DataManager extends SQLiteOpenHelper implements Constants
 {

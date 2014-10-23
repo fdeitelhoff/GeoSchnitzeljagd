@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import mobi.fhdo.geoschnitzeljagd.DataManagers.DataManager;
+
 public class LoginActivity extends Activity
 {
     // UI references.

@@ -1,4 +1,4 @@
-package mobi.fhdo.geoschnitzeljagd;
+package mobi.fhdo.geoschnitzeljagd.DataManagers;
 
 import android.provider.BaseColumns;
 
