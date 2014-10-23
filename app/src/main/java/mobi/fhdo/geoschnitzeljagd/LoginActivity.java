@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import mobi.fhdo.geoschnitzeljagd.DataManagers.DataManager;
+
 public class LoginActivity extends Activity
 {
     // UI references.
@@ -23,6 +25,8 @@ public class LoginActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        DataManager dataManager = new DataManager(this);
 
         // Set up the login form.
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
