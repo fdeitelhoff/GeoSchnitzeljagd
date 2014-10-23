@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="activity_user_profile_label_username">Benutzername</string>
+    <string name="activity_user_profile_label_points">Punkte</string>
+    <string name="activity_user_profile_button_back">Zurück</string>
+</resources>

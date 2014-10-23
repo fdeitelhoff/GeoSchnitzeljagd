@@ -1,8 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">GeoSchnitzeljagd</string>
     <string name="avction_registration">Registration</string>
     <string name="prompt_username">Username</string>
     <string name="prompt_password2">Password</string>
     <string name="prompt_paperchase">Start Paper Chase</string>
     <string name="Back_button">Back</string>
+    <string name="title_activity_user_profile">Benutzerprofil</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_home">GeoSchnitzeljagd</string>
+
 </resources>

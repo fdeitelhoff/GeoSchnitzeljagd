@@ -1,0 +1,9 @@
+<resources>
+    <string name="activity_home_button_start_paperchase">Schnitzeljagd starten</string>
+    <string name="activity_home_button_create_paperchase">Schnitzeljagd erstellen</string>
+    <string name="activity_home_button_delete_paperchase">Schnitzeljagd löschen</string>
+    <string name="activity_home_button_paperchase_overview">Übersicht Schnitzeljagden</string>
+    <string name="activity_home_button_user_profil">Benutzerprofil</string>
+    <string name="activity_home_button_options">Einstellungen</string>
+    <string name="activity_home_button_exit">Beenden</string>
+</resources>
