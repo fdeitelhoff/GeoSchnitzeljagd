@@ -1,6 +1,7 @@
 package mobi.fhdo.geoschnitzeljagd;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -87,7 +88,10 @@ public class LoginActivity extends Activity
             // Das User Objekt noch speichern. Brauchen wir in vielen Activities.
             User loggedInUser = users.Login(user);
 
-            setContentView(R.layout.activity_home);
+            // Die User-ID übergeben, um den User auf anderen Aktivitäten wieder ermitteln zu können.
+            Intent intent = new Intent(getBaseContext(), HomeActivity.class);
+            intent.putExtra("UserID", loggedInUser.getId());
+            startActivity(intent);
         } catch (UserLoginException e) {
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }

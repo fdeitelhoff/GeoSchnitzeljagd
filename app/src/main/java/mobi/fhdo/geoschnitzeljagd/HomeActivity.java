@@ -5,22 +5,47 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
+import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserNotExistsException;
+import mobi.fhdo.geoschnitzeljagd.Model.User;
 
 public class HomeActivity extends Activity {
 
+    private Users users;
+    private User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_home);
 
-        // User Profile Button.
-        Button userProfile = (Button) findViewById(R.id.buton_user_profile);
-        userProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setContentView(R.layout.activity_user_profile);
+            users = new Users(this);
+
+            // Die UserID ermitteln.
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                Integer id = extras.getInt("UserID");
+
+                user = users.Get(id);
+
+                TextView userName = (TextView) findViewById(R.id.textViewUser);
+                userName.setText("Hallo '" + user.getUsername() + "'!");
             }
-        });
+
+            // User Profile Button.
+            Button userProfile = (Button) findViewById(R.id.buton_user_profile);
+            userProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    setContentView(R.layout.activity_user_profile);
+                }
+            });
+        } catch (UserNotExistsException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
