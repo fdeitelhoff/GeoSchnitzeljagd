@@ -16,7 +16,8 @@ public interface Constants
     public static final String _MARKIERUNG = "markierung";
     // Spalten
     public static final String _MID = "MID";
-    public static final String _HINWEIS = "Hinweis";
+    public static final String _GPSDATA = "gpsdata";
+    public static final String _HINWEIS = "hinweis";
     public static final String _REIHENFOLGE = "reihenfolge";
 
 

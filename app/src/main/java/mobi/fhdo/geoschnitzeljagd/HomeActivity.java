@@ -43,6 +43,18 @@ public class HomeActivity extends Activity {
                     setContentView(R.layout.activity_user_profile);
                 }
             });
+
+
+
+            // Settings Button.
+            Button settings = (Button) findViewById(R.id.button_settings);
+            settings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    setContentView(R.layout.activity_settings);
+                }
+            });
+
         } catch (UserNotExistsException e) {
             e.printStackTrace();
         }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="prompt_settings_title">Einstellungen</string>
+    <string name="prompt_settings_gps">GPS-Ortung</string>
+    <string name="prompt_settings_gps_beschreibung">Mit der nachfolgenden Einstelllung können Sie festlegen, ob die Anwendung die Ortungsdienste nuten darf.</string>
+
+    <string name="prompt_settings_benachrichtigung">Benachrichtigungen</string>
+    <string name="prompt_settings_benachrichtigung_beschreibung">Mit der nachfolgenden Einstelllung können Sie festlegen, ob die Anwendung Ihnen eine Benachrichtigung anzeigen darf.</string>
+
+</resources>
