@@ -1,6 +1,7 @@
 package mobi.fhdo.geoschnitzeljagd;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -56,8 +57,8 @@ public class SettingsActivity extends Activity
     {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
         {
-            setContentView(R.layout.activity_home);
-            Log.i("MyApp", "I am here");
+            Intent myIntent = new Intent(this, HomeActivity.class);
+            startActivity(myIntent);
             return true;
         }
 
