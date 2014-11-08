@@ -27,6 +27,12 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_home" />
+        <activity
+            android:name=".NearbyActivity"
+            android:label="@string/title_activity_home" />
+        <activity
+            android:name=".SearchActivity"
+            android:label="@string/title_activity_home" />
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->

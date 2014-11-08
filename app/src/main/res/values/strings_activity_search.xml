@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="prompt_search_title">Schnitzeljagd suchen</string>
+    <string name="prompt_search">Name der Schnitzeljagd</string>
+    <string name="action_search">Suchen</string>
+
+
+</resources>

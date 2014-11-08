@@ -52,8 +52,27 @@ public class HomeActivity extends Activity {
             settings.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //setContentView(R.layout.activity_settings);
                     Intent myIntent = new Intent(view.getContext(), SettingsActivity.class);
+                    startActivity(myIntent);
+                }
+            });
+
+            // Search Button.
+            Button search = (Button) findViewById(R.id.button_search);
+            search.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent myIntent = new Intent(view.getContext(), SearchActivity.class);
+                    startActivity(myIntent);
+                }
+            });
+
+            // Nearby Button.
+            Button nearby = (Button) findViewById(R.id.button_nearby);
+            nearby.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent myIntent = new Intent(view.getContext(), NearbyActivity.class);
                     startActivity(myIntent);
                 }
             });
