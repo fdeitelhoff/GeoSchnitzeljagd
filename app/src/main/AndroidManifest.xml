@@ -41,6 +41,13 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDzfYRJYuZi3pIy87AV4iaZUflFYD74j7o"/>
+            <!--android:value="AIzaSyBq54GhaWCPxdYAli74fQqHausHh3zmgo4"/-->
+
+            <!---
+            !!!!! JW: Um das Projekt bei mir ausführen zu könnne musste ich einen neuen Key generieren!!!!
+            JW-KEy: AIzaSyBq54GhaWCPxdYAli74fQqHausHh3zmgo4
+            Marcel-KEy: AIzaSyDzfYRJYuZi3pIy87AV4iaZUflFYD74j7o
+            -->
 
 
     </application>

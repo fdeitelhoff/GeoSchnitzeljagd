@@ -1,5 +1,5 @@
 package mobi.fhdo.geoschnitzeljagd.DataManagers;
 
-public class SchnitzeljagdManager
+public class schnitzeljagdManager
 {
 }

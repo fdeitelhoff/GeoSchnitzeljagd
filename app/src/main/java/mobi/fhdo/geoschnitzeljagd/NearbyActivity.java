@@ -9,10 +9,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import android.location.Location;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import mobi.fhdo.geoschnitzeljagd.DataManagers.GPSTracker;
 
 public class NearbyActivity extends Activity
 {
@@ -26,7 +31,8 @@ public class NearbyActivity extends Activity
 
         createMapView();
         addMarker();
-    }
+        initLocation();
+}
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
@@ -74,13 +80,14 @@ public class NearbyActivity extends Activity
     private void addMarker(){
 
         /** Make sure that the map has been initialised **/
-        if(null != googleMap){
+        /** if(null != googleMap){
             googleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(0, 0))
                             .title("Marker")
                             .draggable(true)
             );
         }
+         */
     }
 
 
@@ -102,6 +109,19 @@ public class NearbyActivity extends Activity
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void initLocation(){
+        GPSTracker gpsTracker = new GPSTracker(this);
+        Location location = gpsTracker.getLocation();
+        googleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                            .title("aktueller Standort")
+                            .draggable(true));
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(location.getLatitude(), location.getLongitude())),15));
+    }
+
+
 }
 
 
