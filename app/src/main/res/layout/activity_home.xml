@@ -35,11 +35,17 @@
         android:text="@string/activity_home_button_delete_paperchase" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/button_overView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/activity_home_button_paperchase_overview" />
+    <Button
+        android:id="@+id/create"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/create" />
 
     <Button
         android:id="@+id/buton_user_profile"

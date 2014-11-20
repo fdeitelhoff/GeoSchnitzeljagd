@@ -57,6 +57,16 @@ public class HomeActivity extends Activity {
                 }
             });
 
+            // neue Schnitzeljagd Button.
+            Button overView = (Button) findViewById(R.id.button_overView);
+            overView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent myIntent = new Intent(view.getContext(), overViewActivity.class);
+                    startActivity(myIntent);
+                }
+            });
+
             // Search Button.
             Button search = (Button) findViewById(R.id.button_search);
             search.setOnClickListener(new View.OnClickListener() {
