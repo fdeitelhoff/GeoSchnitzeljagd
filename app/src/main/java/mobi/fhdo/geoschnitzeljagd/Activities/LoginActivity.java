@@ -1,4 +1,4 @@
-package mobi.fhdo.geoschnitzeljagd;
+package mobi.fhdo.geoschnitzeljagd.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,9 +17,9 @@ import mobi.fhdo.geoschnitzeljagd.DataManagers.DataManager;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
 import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserLoginException;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
+import mobi.fhdo.geoschnitzeljagd.R;
 
-public class LoginActivity extends Activity
-{
+public class LoginActivity extends Activity {
     // UI references.
     private AutoCompleteTextView usernameView;
     private EditText passwordView;
@@ -27,8 +27,7 @@ public class LoginActivity extends Activity
     private Users users;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -39,13 +38,10 @@ public class LoginActivity extends Activity
         usernameView = (AutoCompleteTextView) findViewById(R.id.username);
 
         passwordView = (EditText) findViewById(R.id.password);
-        passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener()
-        {
+        passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent)
-            {
-                if (id == R.id.login || id == EditorInfo.IME_NULL)
-                {
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == R.id.login || id == EditorInfo.IME_NULL) {
                     ClickLogin();
                     return true;
                 }
@@ -56,11 +52,9 @@ public class LoginActivity extends Activity
         // Login-Button
         Button SignInButton;
         SignInButton = (Button) findViewById(R.id.sign_in_button);
-        SignInButton.setOnClickListener(new OnClickListener()
-        {
+        SignInButton.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 ClickLogin();
             }
         });
@@ -68,18 +62,15 @@ public class LoginActivity extends Activity
         // Registration-Button
         Button RegistrationButton;
         RegistrationButton = (Button) findViewById(R.id.registration_button);
-        RegistrationButton.setOnClickListener(new OnClickListener()
-        {
+        RegistrationButton.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 ClickRegistration();
             }
         });
     }
 
-    public void ClickLogin()
-    {
+    public void ClickLogin() {
         try {
             // Login versuchen und im positiven Fall zur home activity wechseln.
             User user = new User(usernameView.getText().toString(),
@@ -97,8 +88,7 @@ public class LoginActivity extends Activity
         }
     }
 
-    public void ClickRegistration()
-    {
+    public void ClickRegistration() {
         setContentView(R.layout.activity_registration);
     }
 }

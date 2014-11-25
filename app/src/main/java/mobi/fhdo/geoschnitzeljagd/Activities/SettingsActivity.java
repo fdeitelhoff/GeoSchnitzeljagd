@@ -1,23 +1,20 @@
-package mobi.fhdo.geoschnitzeljagd;
+package mobi.fhdo.geoschnitzeljagd.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
-public class SettingsActivity extends Activity
-{
+import mobi.fhdo.geoschnitzeljagd.R;
+
+public class SettingsActivity extends Activity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
@@ -28,10 +25,8 @@ public class SettingsActivity extends Activity
         // GPS-Switch
         Switch mySwitch;
         mySwitch = (Switch) findViewById(R.id.switch_gps);
-        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-        {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-            {
+        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.d("MyApp", "I am here");
                 // do something, the isChecked will be
                 // true if the switch is in the On position
@@ -41,10 +36,8 @@ public class SettingsActivity extends Activity
 
         // Benachrichtigungs-Switch
         mySwitch = (Switch) findViewById(R.id.switch_notification);
-        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-        {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-            {
+        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.d("MyApp", "I am here");
                 // do something, the isChecked will be
                 // true if the switch is in the On position
@@ -53,10 +46,8 @@ public class SettingsActivity extends Activity
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
-        {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             Intent myIntent = new Intent(this, HomeActivity.class);
             startActivity(myIntent);
             return true;

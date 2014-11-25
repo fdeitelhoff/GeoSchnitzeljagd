@@ -1,10 +1,12 @@
-package mobi.fhdo.geoschnitzeljagd;
+package mobi.fhdo.geoschnitzeljagd.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+
+import mobi.fhdo.geoschnitzeljagd.R;
 
 
 /**
@@ -39,8 +41,8 @@ public class PaperchaseDetailActivity extends ActionBarActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(PaperchaseDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(PaperchaseDetailFragment.ARG_ITEM_ID));
+            arguments.putString("PaperchaseId",
+                    getIntent().getStringExtra("PaperchaseId"));
             PaperchaseDetailFragment fragment = new PaperchaseDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

@@ -1,12 +1,12 @@
-package mobi.fhdo.geoschnitzeljagd;
+package mobi.fhdo.geoschnitzeljagd.Activities;
 
 import android.app.ActionBar;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -26,16 +26,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 
 import mobi.fhdo.geoschnitzeljagd.DataManagers.GPSTracker;
+import mobi.fhdo.geoschnitzeljagd.R;
 
 public class overViewActivity extends ActionBarActivity {
 
-    GoogleMap googleMap;
-
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle drawerToggle;
-
     public ListView listView;
-
+    GoogleMap googleMap;
     ArrayList<Location> locations = new ArrayList<Location>();
 
     /*
@@ -72,13 +70,12 @@ public class overViewActivity extends ActionBarActivity {
 
 
         drawerLayout = (DrawerLayout) findViewById(R.id.ganzesLayout);
-        drawerToggle = new ActionBarDrawerToggle(overViewActivity.this, drawerLayout, R.drawable.ic_drawer, R.string.open, R.string.close );
+        drawerToggle = new ActionBarDrawerToggle(overViewActivity.this, drawerLayout, R.drawable.ic_drawer, R.string.open, R.string.close);
         // Navigationsleiste -> Drawer Öffnen
         drawerLayout.setDrawerListener(drawerToggle);
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
 
         listView = (ListView) findViewById(R.id.routenListe);
@@ -88,20 +85,20 @@ public class overViewActivity extends ActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                switch (listView.getPositionForView(view)){
+                switch (listView.getPositionForView(view)) {
                     case 0: {
                         Toast.makeText(getApplicationContext(), "Bochum ausgewählt", Toast.LENGTH_SHORT).show();
                         newLocation(locations.get(0));
                         drawerLayout.closeDrawers();
                         break;
                     }
-                    case 1:{
+                    case 1: {
                         Toast.makeText(getApplicationContext(), "Dortmund ausgewählt", Toast.LENGTH_SHORT).show();
                         newLocation(locations.get(1));
                         drawerLayout.closeDrawers();
                         break;
                     }
-                    case 2:{
+                    case 2: {
                         Toast.makeText(getApplicationContext(), "Essen ausgewählt", Toast.LENGTH_SHORT).show();
                         newLocation(locations.get(2));
                         drawerLayout.closeDrawers();
@@ -113,15 +110,12 @@ public class overViewActivity extends ActionBarActivity {
         });
 
 
-
     }
 
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
-        {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             Intent myIntent = new Intent(this, HomeActivity.class);
             startActivity(myIntent);
             return true;
@@ -133,13 +127,13 @@ public class overViewActivity extends ActionBarActivity {
     /**
      * Initialises the mapview
      */
-    private void createMapView(){
+    private void createMapView() {
         /**
          * Catch the null pointer exception that
          * may be thrown when initialising the map
          */
         try {
-            if(null == googleMap){
+            if (null == googleMap) {
                 googleMap = ((MapFragment) getFragmentManager().findFragmentById(
                         R.id.mapView)).getMap();
 
@@ -147,12 +141,12 @@ public class overViewActivity extends ActionBarActivity {
                  * If the map is still null after attempted initialisation,
                  * show an error to the user
                  */
-                if(null == googleMap) {
+                if (null == googleMap) {
                     Toast.makeText(getApplicationContext(),
                             "Error creating map", Toast.LENGTH_SHORT).show();
                 }
             }
-        } catch (NullPointerException exception){
+        } catch (NullPointerException exception) {
             Log.e("mapApp", exception.toString());
         }
     }
@@ -160,7 +154,7 @@ public class overViewActivity extends ActionBarActivity {
     /**
      * Adds a marker to the map
      */
-    private void addMarker(){
+    private void addMarker() {
 
         /** Make sure that the map has been initialised **/
         /** if(null != googleMap){
@@ -188,7 +182,7 @@ public class overViewActivity extends ActionBarActivity {
     }
     */
 
-    private void initLocation(){
+    private void initLocation() {
         GPSTracker gpsTracker = new GPSTracker(this);
         Location location = gpsTracker.getLocation();
         googleMap.addMarker(new MarkerOptions()
@@ -199,7 +193,7 @@ public class overViewActivity extends ActionBarActivity {
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(location.getLatitude(), location.getLongitude())), 15));
     }
 
-    private void newLocation(Location l){
+    private void newLocation(Location l) {
         googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(l.getLatitude(), l.getLongitude()))
                 .draggable(false));
@@ -233,13 +227,12 @@ public class overViewActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
         */
 
-        if(drawerToggle.onOptionsItemSelected(item)){
+        if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
 
     }
-
 
 
 }

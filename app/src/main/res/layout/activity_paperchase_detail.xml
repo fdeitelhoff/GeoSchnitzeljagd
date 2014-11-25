@@ -3,5 +3,5 @@
     android:id="@+id/paperchase_detail_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="mobi.fhdo.geoschnitzeljagd.PaperchaseDetailActivity"
+    tools:context="mobi.fhdo.geoschnitzeljagd.Activities.PaperchaseDetailActivity"
     tools:ignore="MergeRootFrame" />
