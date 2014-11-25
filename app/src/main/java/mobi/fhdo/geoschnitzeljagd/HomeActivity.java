@@ -45,8 +45,6 @@ public class HomeActivity extends Activity {
                 }
             });
 
-
-
             // Settings Button.
             Button settings = (Button) findViewById(R.id.button_settings);
             settings.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +82,16 @@ public class HomeActivity extends Activity {
                 public void onClick(View view) {
                     Intent myIntent = new Intent(view.getContext(), NearbyActivity.class);
                     startActivity(myIntent);
+                }
+            });
+
+            // Own paperchases button.
+            Button ownPaperchases = (Button) findViewById(R.id.button_own_paperchases);
+            ownPaperchases.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(view.getContext(), PaperchaseListActivity.class);
+                    startActivity(intent);
                 }
             });
 

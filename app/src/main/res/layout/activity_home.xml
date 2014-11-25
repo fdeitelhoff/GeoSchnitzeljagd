@@ -28,11 +28,11 @@
         android:text="@string/activity_home_button_create_paperchase" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/button_own_paperchases"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/activity_home_button_delete_paperchase" />
+        android:text="@string/activity_home_button_own_paperchases" />
 
     <Button
         android:id="@+id/button_overView"
@@ -40,6 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/activity_home_button_paperchase_overview" />
+
     <Button
         android:id="@+id/create"
         android:layout_width="fill_parent"
