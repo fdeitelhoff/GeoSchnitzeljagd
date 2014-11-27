@@ -36,6 +36,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="mobi.fhdo.geoschnitzeljagd.Activities.RegistrationActivity"
+            android:label="@string/title_activity_user_profile" />
+        <activity
             android:name="mobi.fhdo.geoschnitzeljagd.Activities.UserProfileActivity"
             android:label="@string/title_activity_user_profile" />
         <activity

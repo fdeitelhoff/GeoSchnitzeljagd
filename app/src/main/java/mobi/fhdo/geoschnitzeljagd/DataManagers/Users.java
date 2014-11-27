@@ -105,7 +105,7 @@ public class Users extends DataManager
         return user;
     }
 
-    public boolean Create(User user)
+    public boolean Create(User user)  throws Exception
     {
         SQLiteDatabase database = null;
         Cursor userCursor = null;
@@ -114,13 +114,17 @@ public class Users extends DataManager
         {
             database = getReadableDatabase();
 
-            String sql = "Insert into "+_USER+" ("+_USERNAME+","+_PASSWORD+") values('"+user.getUsername().toString()+"','"+user.getPassword().toString()+"')";
+            userCursor = database.rawQuery(
+                    "SELECT " + _USERNAME + " FROM " + _USER + " WHERE username=?",
+                    new String[]{user.getUsername().toString()});
+
+            if (userCursor.getCount() >= 1)
+            {
+                throw new Exception("Der Benutzer mit dem Namen '" + user.getUsername().toString() + "' existiert bereits!");
+            }
+
+            String sql = "Insert into " + _USER + " (" + _USERNAME + "," + _PASSWORD + ") values('" + user.getUsername().toString() + "','" + user.getPassword().toString() + "')";
             database.execSQL(sql);
-        }
-        catch (Exception e)
-        {
-            Log.w("OnCreate", e.toString());
-            return false;
         }
         finally
         {
