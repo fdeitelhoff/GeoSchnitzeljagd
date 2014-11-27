@@ -1,4 +1,4 @@
-package mobi.fhdo.geoschnitzeljagd;
+package mobi.fhdo.geoschnitzeljagd.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
 import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserNotExistsException;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
+import mobi.fhdo.geoschnitzeljagd.R;
 
 public class HomeActivity extends Activity {
 
@@ -44,8 +45,6 @@ public class HomeActivity extends Activity {
                     setContentView(R.layout.activity_user_profile);
                 }
             });
-
-
 
             // Settings Button.
             Button settings = (Button) findViewById(R.id.button_settings);
@@ -84,6 +83,16 @@ public class HomeActivity extends Activity {
                 public void onClick(View view) {
                     Intent myIntent = new Intent(view.getContext(), NearbyActivity.class);
                     startActivity(myIntent);
+                }
+            });
+
+            // Own paperchases button.
+            Button ownPaperchases = (Button) findViewById(R.id.button_own_paperchases);
+            ownPaperchases.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(view.getContext(), PaperchaseListActivity.class);
+                    startActivity(intent);
                 }
             });
 

@@ -16,6 +16,7 @@
     <string name="close">close</string>
     <string name="create">neue Schnitzeljagd erstellen</string>
     <string name="overview">Übersicht Schnitzeljagd</string>
-
+    <string name="title_paperchase_list">Paperchases</string>
+    <string name="title_paperchase_detail">Paperchase Detail</string>
 
 </resources>

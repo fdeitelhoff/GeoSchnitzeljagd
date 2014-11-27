@@ -1,9 +1,6 @@
 package mobi.fhdo.geoschnitzeljagd.DataManagers;
 
-import android.provider.BaseColumns;
-
-public interface Constants
-{
+public interface Constants {
     // Tabelle
     public static final String _USER = "user";
     // Spalten
@@ -13,19 +10,19 @@ public interface Constants
 
 
     // Tabelle
-    public static final String _MARKIERUNG = "markierung";
+    public static final String _MARKIERUNG = "mark";
     // Spalten
     public static final String _MID = "MID";
     public static final String _GPSDATA = "gpsdata";
-    public static final String _HINWEIS = "hinweis";
-    public static final String _REIHENFOLGE = "reihenfolge";
+    public static final String _HINWEIS = "hint";
+    public static final String _REIHENFOLGE = "sequence";
 
 
     // Tabelle
-    public static final String _SCHNITZELJAGD = "schnitzeljagd";
+    public static final String _SCHNITZELJAGD = "paperchase";
     // Spalten
-    public static final String _SID = "SID";
-    public static final String _NAME = "Name";
+    public static final String _PID = "PID";
+    public static final String _NAME = "name";
 
 
     // Tabelle
