@@ -13,13 +13,13 @@ import mobi.fhdo.geoschnitzeljagd.DataManagers.Paperchases;
 import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 
-public class PaperchaseListFragment extends ListFragment {
+public class PaperchaseListFragment_alt extends ListFragment {
 
     private Callbacks callbacks;
     private Paperchases paperchases;
     private List<Paperchase> ownPaperchases;
 
-    public PaperchaseListFragment() {
+    public PaperchaseListFragment_alt() {
     }
 
     @Override

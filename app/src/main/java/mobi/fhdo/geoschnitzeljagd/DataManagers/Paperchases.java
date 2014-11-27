@@ -28,7 +28,6 @@ public class Paperchases extends DataManager {
             database = getReadableDatabase();
 
             paperchaseCursor = database.rawQuery(
-                    //"SELECT paperchase.PID, name, MID, gpsdata, hint, sequence FROM paperchase INNER JOIN mark ON Paperchase.PID = Mark.MID WHERE UID=?",
                     "SELECT PID, name FROM paperchase WHERE UID=?",
                     new String[]{user.getId() + ""});
 
