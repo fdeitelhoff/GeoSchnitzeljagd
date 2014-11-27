@@ -21,7 +21,9 @@ import mobi.fhdo.geoschnitzeljagd.DataManagers.GPSTracker;
 
 public class NearbyActivity extends Activity
 {
-    /** Local variables **/
+    /**
+     * Local variables *
+     */
     GoogleMap googleMap;
 
     protected void onCreate(Bundle savedInstanceState)
@@ -32,7 +34,7 @@ public class NearbyActivity extends Activity
         createMapView();
         addMarker();
         initLocation();
-}
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
@@ -50,13 +52,16 @@ public class NearbyActivity extends Activity
     /**
      * Initialises the mapview
      */
-    private void createMapView(){
+    private void createMapView()
+    {
         /**
          * Catch the null pointer exception that
          * may be thrown when initialising the map
          */
-        try {
-            if(null == googleMap){
+        try
+        {
+            if (null == googleMap)
+            {
                 googleMap = ((MapFragment) getFragmentManager().findFragmentById(
                         R.id.mapView)).getMap();
 
@@ -64,12 +69,15 @@ public class NearbyActivity extends Activity
                  * If the map is still null after attempted initialisation,
                  * show an error to the user
                  */
-                if(null == googleMap) {
+                if (null == googleMap)
+                {
                     Toast.makeText(getApplicationContext(),
                             "Error creating map", Toast.LENGTH_SHORT).show();
                 }
             }
-        } catch (NullPointerException exception){
+        }
+        catch (NullPointerException exception)
+        {
             Log.e("mapApp", exception.toString());
         }
     }
@@ -77,48 +85,61 @@ public class NearbyActivity extends Activity
     /**
      * Adds a marker to the map
      */
-    private void addMarker(){
+    private void addMarker()
+    {
 
         /** Make sure that the map has been initialised **/
         /** if(null != googleMap){
-            googleMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(0, 0))
-                            .title("Marker")
-                            .draggable(true)
-            );
-        }
+         googleMap.addMarker(new MarkerOptions()
+         .position(new LatLng(0, 0))
+         .title("Marker")
+         .draggable(true)
+         );
+         }
          */
     }
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
+        {
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void initLocation(){
-        GPSTracker gpsTracker = new GPSTracker(this);
-        Location location = gpsTracker.getLocation();
-        googleMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                            .title("aktueller Standort")
-                            .draggable(true));
+    private void initLocation()
+    {
+        try
+        {
+            GPSTracker gpsTracker = new GPSTracker(this);
+            Location location = gpsTracker.getLocation();
+            googleMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.mapView)).getMap();
+            googleMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                    .title("aktueller Standort")
+                    .draggable(true));
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(location.getLatitude(), location.getLongitude())),15));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(location.getLatitude(), location.getLongitude())), 15));
+        }
+        catch (Exception exception)
+        {
+            Log.e("mapApp", exception.toString());
+        }
     }
 
 
