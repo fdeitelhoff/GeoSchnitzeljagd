@@ -17,6 +17,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import mobi.fhdo.geoschnitzeljagd.Activities.HomeActivity;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.GPSTracker;
 
 public class NearbyActivity extends Activity

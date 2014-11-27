@@ -11,6 +11,7 @@ import android.widget.TextView;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
 import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserNotExistsException;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
+import mobi.fhdo.geoschnitzeljagd.NearbyActivity;
 import mobi.fhdo.geoschnitzeljagd.R;
 
 public class HomeActivity extends Activity {
