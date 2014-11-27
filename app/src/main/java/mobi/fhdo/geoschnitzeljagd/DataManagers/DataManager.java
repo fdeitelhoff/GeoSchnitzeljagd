@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class DataManager extends SQLiteOpenHelper implements Constants {
     private static final String DATABASE_NAME = "mobi.fhdo.geoschnitzeljagd.sqlite.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     public DataManager(Context ctx) {
         super(ctx, DATABASE_NAME, null, DATABASE_VERSION);
@@ -21,7 +21,8 @@ public class DataManager extends SQLiteOpenHelper implements Constants {
             db.execSQL("CREATE TABLE \"" + _MARKIERUNG + "\" (" +
                     "\"" + _MID + "\" INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "\"" + _PID + "\" INTEGER REFERENCES \"" + _SCHNITZELJAGD + "\" (\"" + _PID + "\"), " +
-                    "\"" + _GPSDATA + "\" TEXT NOT NULL, " +
+                    "\"" + _LATITUDE + "\" INTEGER NOT NULL, " +
+                    "\"" + _LONGITUDE + "\" INTEGER NOT NULL, " +
                     "\"" + _HINWEIS + "\" TEXT, " +
                     "\"" + _REIHENFOLGE + "\" SMALLINT NOT NULL);\n");
 
@@ -59,10 +60,10 @@ public class DataManager extends SQLiteOpenHelper implements Constants {
             db.execSQL("INSERT INTO \"paperchase\" ( \"UID\",\"name\" ) VALUES ( 1, 'Beispiel Schnitzeljagd 2' );");
 
             // Beispiel Markierungen.
-            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"gpsdata\",\"hint\",\"sequence\" ) VALUES ( 1, 'GPS Daten 1','Hinweis 1', 1 );");
-            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"gpsdata\",\"hint\",\"sequence\" ) VALUES ( 1, 'GPS Daten 2','Hinweis 2', 2 );");
-            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"gpsdata\",\"hint\",\"sequence\" ) VALUES ( 2, 'GPS Daten A','Hinweis A', 1 );");
-            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"gpsdata\",\"hint\",\"sequence\" ) VALUES ( 2, 'GPS Daten B','Hinweis B', 2 );");
+            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ( 1, 1, 1,'Hinweis 1', 1 );");
+            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ( 1, 1, 1,'Hinweis 2', 2 );");
+            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ( 2, 1, 1,'Hinweis A', 1 );");
+            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ( 2, 1, 1,'Hinweis B', 2 );");
         } catch (Exception e) {
             Log.w("onCreate", e.toString());
         }

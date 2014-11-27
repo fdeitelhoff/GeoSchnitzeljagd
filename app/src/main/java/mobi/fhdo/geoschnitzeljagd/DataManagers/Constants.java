@@ -13,7 +13,8 @@ public interface Constants {
     public static final String _MARKIERUNG = "mark";
     // Spalten
     public static final String _MID = "MID";
-    public static final String _GPSDATA = "gpsdata";
+    public static final String _LATITUDE = "latitude";
+    public static final String _LONGITUDE = "longitude ";
     public static final String _HINWEIS = "hint";
     public static final String _REIHENFOLGE = "sequence";
 
