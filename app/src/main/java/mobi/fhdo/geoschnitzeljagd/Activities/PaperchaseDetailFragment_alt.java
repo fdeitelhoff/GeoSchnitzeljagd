@@ -14,14 +14,14 @@ import mobi.fhdo.geoschnitzeljagd.R;
 
 /**
  * A fragment representing a single Paperchase detail screen.
- * This fragment is either contained in a {@link PaperchaseListActivity}
- * in two-pane mode (on tablets) or a {@link PaperchaseDetailActivity}
+ * This fragment is either contained in a {@link PaperchaseListActivity_alt}
+ * in two-pane mode (on tablets) or a {@link PaperchaseDetailActivity_alt}
  * on handsets.
  */
-public class PaperchaseDetailFragment extends Fragment {
+public class PaperchaseDetailFragment_alt extends Fragment {
     private Marks marks;
 
-    public PaperchaseDetailFragment() {
+    public PaperchaseDetailFragment_alt() {
     }
 
     @Override
@@ -30,15 +30,18 @@ public class PaperchaseDetailFragment extends Fragment {
 
         marks = new Marks(getActivity());
 
-        if (getArguments().containsKey("PaperchaseId")) {
-            List<Mark> paperchaseMarks = marks.ForPaperchaseId(Integer.getInteger(getArguments().getString("PaperchaseId")));
+        Bundle extras = getActivity().getIntent().getExtras();
+        if (extras != null) {
+            Integer id = extras.getInt("PaperchaseId");
+
+            List<Mark> paperchaseMarks = marks.ForPaperchaseId(id);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_paperchase_detail, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_paperchase_detail_alt, container, false);
 
         return rootView;
     }

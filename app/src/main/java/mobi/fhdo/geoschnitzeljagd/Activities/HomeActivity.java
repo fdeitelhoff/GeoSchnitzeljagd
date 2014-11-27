@@ -17,7 +17,7 @@ public class HomeActivity extends Activity
 {
 
     private Users users;
-    private User user;
+    private User loggedInUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -35,10 +35,10 @@ public class HomeActivity extends Activity
             {
                 Integer id = extras.getInt("UserID");
 
-                user = users.Get(id);
+                loggedInUser = users.Get(id);
 
                 TextView userName = (TextView) findViewById(R.id.textViewUser);
-                userName.setText("Hallo '" + user.getUsername() + "'!");
+                userName.setText("Hallo '" + loggedInUser.getUsername() + "'!");
             }
 
             // User Profile Button.
@@ -97,6 +97,7 @@ public class HomeActivity extends Activity
                 public void onClick(View view)
                 {
                     Intent intent = new Intent(view.getContext(), PaperchaseListActivity.class);
+                    intent.putExtra("UserID", loggedInUser.getId());
                     startActivity(intent);
                 }
             });

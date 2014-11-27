@@ -26,31 +26,29 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light">
         <activity
-            android:name=".Activities.LoginActivity"
+            android:name="mobi.fhdo.geoschnitzeljagd.Activities.LoginActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize|stateVisible">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.UserProfileActivity"
+            android:name="mobi.fhdo.geoschnitzeljagd.Activities.UserProfileActivity"
             android:label="@string/title_activity_user_profile" />
         <activity
-            android:name=".Activities.RegistrationActivity"
+            android:name="mobi.fhdo.geoschnitzeljagd.Activities.HomeActivity"
             android:label="@string/title_activity_home" />
         <activity
-            android:name=".Activities.HomeActivity"
+            android:name="mobi.fhdo.geoschnitzeljagd.Activities.SettingsActivity"
             android:label="@string/title_activity_home" />
         <activity
-            android:name=".Activities.SettingsActivity"
+            android:name="mobi.fhdo.geoschnitzeljagd.Activities.NearbyActivity"
             android:label="@string/title_activity_home" />
         <activity
-            android:name=".Activities.NearbyActivity"
-            android:label="@string/title_activity_home" />
-        <activity
-            android:name=".Activities.SearchActivity"
+            android:name="mobi.fhdo.geoschnitzeljagd.Activities.SearchActivity"
             android:label="@string/title_activity_home" />
 
         <!-- Gooogle Maps API -->
@@ -67,16 +65,19 @@
             Marcel-KEy: AIzaSyDzfYRJYuZi3pIy87AV4iaZUflFYD74j7o
         -->
         <activity
-            android:name=".Activities.PaperchaseListActivity"
+            android:name="mobi.fhdo.geoschnitzeljagd.Activities.PaperchaseListActivity_alt"
             android:label="@string/title_paperchase_list" />
         <activity
-            android:name=".Activities.PaperchaseDetailActivity"
+            android:name="mobi.fhdo.geoschnitzeljagd.Activities.PaperchaseDetailActivity_alt"
             android:label="@string/title_paperchase_detail"
-            android:parentActivityName=".Activities.PaperchaseListActivity">
+            android:parentActivityName="mobi.fhdo.geoschnitzeljagd.Activities.PaperchaseListActivity_alt">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="mobi.fhdo.geoschnitzeljagd.PaperchaseListActivity" />
         </activity>
+        <activity
+            android:name="mobi.fhdo.geoschnitzeljagd.Activities.PaperchaseListActivity"
+            android:label="@string/title_activity_paperchase_list" />
     </application>
 
 </manifest>

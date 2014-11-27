@@ -1,9 +1,11 @@
 package mobi.fhdo.geoschnitzeljagd.Model;
 
+import java.io.Serializable;
+
 /**
  * Created by Fabian Deitelhoff on 25.11.2014.
  */
-public class Paperchase {
+public class Paperchase implements Serializable {
 
     private int id;
     private User user;
