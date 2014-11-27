@@ -64,9 +64,6 @@
             Marcel-KEy: AIzaSyDzfYRJYuZi3pIy87AV4iaZUflFYD74j7o
         -->
         <activity
-            android:name=".Activities.overViewActivity"
-            android:label="@string/overview" />
-        <activity
             android:name=".Activities.PaperchaseListActivity"
             android:label="@string/title_paperchase_list" />
         <activity

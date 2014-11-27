@@ -11,17 +11,19 @@ import android.widget.TextView;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
 import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserNotExistsException;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
-import mobi.fhdo.geoschnitzeljagd.NearbyActivity;
 import mobi.fhdo.geoschnitzeljagd.R;
 
-public class HomeActivity extends Activity {
+public class HomeActivity extends Activity
+{
 
     private Users users;
     private User user;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        try {
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        try
+        {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_home);
 
@@ -29,7 +31,8 @@ public class HomeActivity extends Activity {
 
             // Die UserID ermitteln.
             Bundle extras = getIntent().getExtras();
-            if (extras != null) {
+            if (extras != null)
+            {
                 Integer id = extras.getInt("UserID");
 
                 user = users.Get(id);
@@ -40,38 +43,35 @@ public class HomeActivity extends Activity {
 
             // User Profile Button.
             Button userProfile = (Button) findViewById(R.id.buton_user_profile);
-            userProfile.setOnClickListener(new View.OnClickListener() {
+            userProfile.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View view) {
-                    setContentView(R.layout.activity_user_profile);
+                public void onClick(View view)
+                {
+                    Intent myIntent = new Intent(view.getContext(), UserProfileActivity.class);
+                    startActivity(myIntent);
                 }
             });
 
             // Settings Button.
             Button settings = (Button) findViewById(R.id.button_settings);
-            settings.setOnClickListener(new View.OnClickListener() {
+            settings.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View view)
+                {
                     Intent myIntent = new Intent(view.getContext(), SettingsActivity.class);
-                    startActivity(myIntent);
-                }
-            });
-
-            // neue Schnitzeljagd Button.
-            Button overView = (Button) findViewById(R.id.button_overView);
-            overView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent myIntent = new Intent(view.getContext(), overViewActivity.class);
                     startActivity(myIntent);
                 }
             });
 
             // Search Button.
             Button search = (Button) findViewById(R.id.button_search);
-            search.setOnClickListener(new View.OnClickListener() {
+            search.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View view)
+                {
                     Intent myIntent = new Intent(view.getContext(), SearchActivity.class);
                     startActivity(myIntent);
                 }
@@ -79,31 +79,53 @@ public class HomeActivity extends Activity {
 
             // Nearby Button.
             Button nearby = (Button) findViewById(R.id.button_nearby);
-            nearby.setOnClickListener(new View.OnClickListener() {
+            nearby.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View view)
+                {
                     Intent myIntent = new Intent(view.getContext(), NearbyActivity.class);
                     startActivity(myIntent);
                 }
             });
 
-            // Own paperchases button.
+            // Eigene Schnitzeljagd button.
             Button ownPaperchases = (Button) findViewById(R.id.button_own_paperchases);
-            ownPaperchases.setOnClickListener(new View.OnClickListener() {
+            ownPaperchases.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View view)
+                {
                     Intent intent = new Intent(view.getContext(), PaperchaseListActivity.class);
                     startActivity(intent);
                 }
             });
 
-        } catch (UserNotExistsException e) {
+            // Exit button.
+            Button exit = (Button) findViewById(R.id.button_exit);
+            exit.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+            });
+
+
+        }
+        catch (UserNotExistsException e)
+        {
             e.printStackTrace();
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
