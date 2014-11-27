@@ -19,5 +19,6 @@
     <string name="title_paperchase_list">Paperchases</string>
     <string name="title_paperchase_detail">Paperchase Detail</string>
     <string name="title_activity_paperchase_list">PaperchaseListActivity</string>
+    <string name="title_activity_test">test</string>
 
 </resources>

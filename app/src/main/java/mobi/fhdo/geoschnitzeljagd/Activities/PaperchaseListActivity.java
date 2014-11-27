@@ -1,13 +1,14 @@
 package mobi.fhdo.geoschnitzeljagd.Activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.example.android.swipedismiss.SwipeDismissListViewTouchListener;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
 
     private Paperchases paperchases;
     private List<Paperchase> ownPaperchases;
+    private ArrayAdapter dataAdapter;
 
     private Users users;
     private User loggedInUser;
@@ -49,12 +51,32 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
             }
 
             ownPaperchases = paperchases.Own(loggedInUser);
-
-            paperchasesListView.setAdapter(new ArrayAdapter<Paperchase>(
-                    this,
+            dataAdapter = new ArrayAdapter<Paperchase>(this,
                     android.R.layout.simple_list_item_activated_1,
                     android.R.id.text1,
-                    ownPaperchases));
+                    ownPaperchases);
+
+            paperchasesListView.setAdapter(dataAdapter);
+
+            SwipeDismissListViewTouchListener touchListener =
+                    new SwipeDismissListViewTouchListener(
+                            paperchasesListView,
+                            new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                                @Override
+                                public boolean canDismiss(int position) {
+                                    return true;
+                                }
+
+                                public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                    for (int position : reverseSortedPositions) {
+                                        ownPaperchases.remove(position);
+                                    }
+
+                                    dataAdapter.notifyDataSetChanged();
+                                }
+                            });
+            paperchasesListView.setOnTouchListener(touchListener);
+            paperchasesListView.setOnScrollListener(touchListener.makeScrollListener());
 
         } catch (UserNotExistsException e) {
             e.printStackTrace();
@@ -67,30 +89,8 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
 
         Paperchase selectedPaperchase = (Paperchase) paperchasesListView.getAdapter().getItem(position);
 
-        Intent detailIntent = new Intent(this, PaperchaseDetailActivity_alt.class);
+        /*Intent detailIntent = new Intent(this, PaperchaseDetailActivity_alt.class);
         detailIntent.putExtra("PaperchaseId", selectedPaperchase);
-        startActivity(detailIntent);
+        startActivity(detailIntent);*/
     }
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_paperchase_list, menu);
-        return true;
-    }*/
-
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
 }
