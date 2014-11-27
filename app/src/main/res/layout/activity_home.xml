@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <TextView
         android:id="@+id/textViewUser"
@@ -11,62 +11,50 @@
         android:layout_height="wrap_content"
         android:text="Medium Text"
         android:textAlignment="center"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-    <Button
-        android:id="@+id/button_search"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/activity_home_button_start_paperchase" />
 
     <Button
         android:id="@+id/button_nearby"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/activity_home_button_create_paperchase" />
+        android:text="@string/activity_home_button_create_paperchase"/>
+
+    <Button
+        android:id="@+id/button_search"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/activity_home_button_start_paperchase"/>
 
     <Button
         android:id="@+id/button_own_paperchases"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/activity_home_button_own_paperchases" />
+        android:text="@string/activity_home_button_own_paperchases"/>
 
-    <Button
-        android:id="@+id/button_overView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/activity_home_button_paperchase_overview" />
-
-    <Button
-        android:id="@+id/create"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/create" />
 
     <Button
         android:id="@+id/buton_user_profile"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/activity_home_button_user_profil" />
+        android:text="@string/activity_home_button_user_profil"/>
 
     <Button
         android:id="@+id/button_settings"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/activity_home_button_options" />
+        android:text="@string/activity_home_button_options"/>
 
     <Button
-        android:id="@+id/button7"
+        android:id="@+id/button_exit"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/activity_home_button_exit" />
+        android:text="@string/activity_home_button_exit"/>
 
 </LinearLayout>

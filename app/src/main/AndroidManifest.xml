@@ -57,16 +57,13 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBq54GhaWCPxdYAli74fQqHausHh3zmgo4" />
+            android:value="AIzaSyDzfYRJYuZi3pIy87AV4iaZUflFYD74j7o" />
         <!--
             -
             !!!!! JW: Um das Projekt bei mir ausführen zu könnne musste ich einen neuen Key generieren!!!!
             JW-KEy: AIzaSyBq54GhaWCPxdYAli74fQqHausHh3zmgo4
             Marcel-KEy: AIzaSyDzfYRJYuZi3pIy87AV4iaZUflFYD74j7o
         -->
-        <activity
-            android:name="mobi.fhdo.geoschnitzeljagd.Activities.overViewActivity"
-            android:label="@string/overview" />
         <activity
             android:name="mobi.fhdo.geoschnitzeljagd.Activities.PaperchaseListActivity_alt"
             android:label="@string/title_paperchase_list" />
