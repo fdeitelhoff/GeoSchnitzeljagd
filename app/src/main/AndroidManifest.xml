@@ -38,6 +38,9 @@
             android:name=".Activities.UserProfileActivity"
             android:label="@string/title_activity_user_profile" />
         <activity
+            android:name=".Activities.RegistrationActivity"
+            android:label="@string/title_activity_home" />
+        <activity
             android:name=".Activities.HomeActivity"
             android:label="@string/title_activity_home" />
         <activity
