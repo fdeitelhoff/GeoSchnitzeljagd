@@ -81,6 +81,10 @@
         <activity
             android:name="mobi.fhdo.geoschnitzeljagd.Activities.PaperchaseListActivity"
             android:label="@string/title_activity_paperchase_list" />
+        <activity
+            android:name=".Activities.newpaperchase"
+            android:label="@string/paperchase_create" >
+        </activity>
     </application>
 
 </manifest>

@@ -116,6 +116,15 @@ public class HomeActivity extends Activity
                 }
             });
 
+            Button newPaperchase = (Button) findViewById(R.id.button_new_paperchases);
+            newPaperchase.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(view.getContext(), newpaperchase.class);
+                    startActivity(intent);
+                }
+            });
+
 
         }
         catch (UserNotExistsException e)

@@ -35,6 +35,13 @@
         android:layout_gravity="center_horizontal"
         android:text="@string/activity_home_button_own_paperchases"/>
 
+    <Button
+        android:id="@+id/button_new_paperchases"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/paperchase_create"/>
+
 
     <Button
         android:id="@+id/buton_user_profile"
