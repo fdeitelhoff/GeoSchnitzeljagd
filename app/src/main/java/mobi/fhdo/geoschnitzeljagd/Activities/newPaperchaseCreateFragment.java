@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+
+import com.google.android.gms.maps.model.Marker;
 
 import mobi.fhdo.geoschnitzeljagd.R;
 
@@ -17,6 +20,7 @@ import mobi.fhdo.geoschnitzeljagd.R;
 public class newPaperchaseCreateFragment extends Fragment {
 
     private ViewPager viewPager;
+    //public Marker chosenMarker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,7 +34,7 @@ public class newPaperchaseCreateFragment extends Fragment {
         b_location_one.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                 viewPager.setCurrentItem(1);
+                viewPager.setCurrentItem(1);
             }
         });
 
@@ -38,4 +42,8 @@ public class newPaperchaseCreateFragment extends Fragment {
         return rootView;
     }
 
+    public void SetChosenMarker(Marker currentMarker) {
+        EditText locationOne = (EditText) getActivity().findViewById(R.id.et_paperchase_location_one);
+        locationOne.setText("Werte aus dem Marker");
+    }
 }

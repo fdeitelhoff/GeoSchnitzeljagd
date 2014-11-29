@@ -14,6 +14,8 @@ import mobi.fhdo.geoschnitzeljagd.Activities.newPaperchaseCreateMapFragment;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 
+    private newPaperchaseCreateFragment newPaperchaseCreateFragment;
+    private newPaperchaseCreateMapFragment newPaperchaseCreateMapFragment;
 
     public TabsPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -25,10 +27,18 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
         switch (index) {
             case 0:
                 // Top Rated fragment activity
-                return new newPaperchaseCreateFragment();
+                if (newPaperchaseCreateFragment == null) {
+                    newPaperchaseCreateFragment = new newPaperchaseCreateFragment();
+                }
+
+                return newPaperchaseCreateFragment;
             case 1:
                 // Games fragment activity
-                return new newPaperchaseCreateMapFragment();
+                if (newPaperchaseCreateMapFragment == null) {
+                    newPaperchaseCreateMapFragment = new newPaperchaseCreateMapFragment();
+                }
+
+                return newPaperchaseCreateMapFragment;
 
         }
 

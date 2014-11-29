@@ -19,7 +19,9 @@ public class newpaperchase extends FragmentActivity implements ActionBar.TabList
 
     private String[] tabs = {"Bearbeiten", "Karte"};
 
-   @Override
+    //public Marker chosenMarker;
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newpaperchase);
@@ -62,16 +64,13 @@ public class newpaperchase extends FragmentActivity implements ActionBar.TabList
 
     }
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        // mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+    // Create the adapter that will return a fragment for each of the three
+    // primary sections of the activity.
+    // mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
-        // mViewPager = (ViewPager) findViewById(R.id.pager);
-        // mViewPager.setAdapter(mSectionsPagerAdapter);
-
-
-
+    // Set up the ViewPager with the sections adapter.
+    // mViewPager = (ViewPager) findViewById(R.id.pager);
+    // mViewPager.setAdapter(mSectionsPagerAdapter);
 
 
     @Override

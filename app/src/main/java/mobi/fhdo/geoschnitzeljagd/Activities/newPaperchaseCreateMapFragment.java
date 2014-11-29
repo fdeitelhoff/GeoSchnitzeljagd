@@ -20,16 +20,17 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import mobi.fhdo.geoschnitzeljagd.DataManagers.GPSTracker;
 import mobi.fhdo.geoschnitzeljagd.R;
+import mobi.fhdo.geoschnitzeljagd.adapter.TabsPagerAdapter;
 
 
 /**
  * Created by JW on 26.11.2014.
  */
-public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMap.OnMapClickListener, GoogleMap.OnMarkerDragListener{
+public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMap.OnMapClickListener, GoogleMap.OnMarkerDragListener {
 
     GoogleMap googleMap;
-   private ViewPager viewPager;
     Marker currentMarker;
+    private ViewPager viewPager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,7 +44,16 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
         b_save_location.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-            viewPager.setCurrentItem(0);
+                viewPager.setCurrentItem(0);
+
+                // Die aktuelle Markierung der Activity übergeben.
+                // Dann kann sie auch vom anderen Fragment genutzt werden.
+//                newpaperchase activity = (newpaperchase) getActivity();
+                //              activity.chosenMarker = currentMarker;
+                TabsPagerAdapter adapter = (TabsPagerAdapter) viewPager.getAdapter();
+                newPaperchaseCreateFragment fragment = (newPaperchaseCreateFragment) adapter.getItem(0);
+                //fragment.chosenMarker = currentMarker;
+                fragment.SetChosenMarker(currentMarker);
             }
         });
 
@@ -56,8 +66,9 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
         });
 
         createMapView();
-        initLocation();
 
+        // TODO: Von mir (Fabian) rausgenommen. Habe immer noch nicht die Maps am Laufen.
+        //initLocation();
 
 
         return rootView;
@@ -73,11 +84,12 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
     public void onMarkerDrag(Marker marker) {
 
     }
+
     @Override
     public void onMarkerDragEnd(Marker marker) {
         Log.i("GoogleMapActivity", "onMarkerClick");
         Toast.makeText(getActivity(),
-                "Marker Clicked: " + marker.getTitle()+ marker.getPosition(), Toast.LENGTH_LONG)
+                "Marker Clicked: " + marker.getTitle() + marker.getPosition(), Toast.LENGTH_LONG)
                 .show();
         currentMarker = marker;
 
@@ -86,13 +98,13 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
     /**
      * Initialises the mapview
      */
-    private void createMapView(){
+    private void createMapView() {
         /**
          * Catch the null pointer exception that
          * may be thrown when initialising the map
          */
         try {
-            if(null == googleMap){
+            if (null == googleMap) {
 
 
                 googleMap = ((MapFragment) getActivity().getFragmentManager().findFragmentById(
@@ -109,13 +121,12 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
                 googleMap.setOnMarkerDragListener(this);
 
 
-
-                if(null == googleMap) {
-                    Toast.makeText( getActivity(),
+                if (null == googleMap) {
+                    Toast.makeText(getActivity(),
                             "Error creating map", Toast.LENGTH_SHORT).show();
                 }
             }
-        } catch (NullPointerException exception){
+        } catch (NullPointerException exception) {
             Log.e("mapApp", exception.toString());
         }
     }
@@ -123,7 +134,7 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
     /**
      * Adds a marker to the map
      */
-    private void addMarker(){
+    private void addMarker() {
 
         /** Make sure that the map has been initialised **/
         /** if(null != googleMap){
@@ -151,7 +162,7 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
     }
     */
 
-    private void initLocation(){
+    private void initLocation() {
 
 
         GPSTracker gpsTracker = new GPSTracker(getActivity());
@@ -165,7 +176,8 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(location.getLatitude(), location.getLongitude())), 15));
     }
-    private void initLocation(Marker m){
+
+    private void initLocation(Marker m) {
 
 
         GPSTracker gpsTracker = new GPSTracker(getActivity());
@@ -182,7 +194,7 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(location.getLatitude(), location.getLongitude())), 15));
     }
 
-    private void newLocation(Location l){
+    private void newLocation(Location l) {
         createMapView();
         currentMarker = googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(l.getLatitude(), l.getLongitude()))
