@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/review_title"
+                android:textSize="30sp"
+                android:id="@+id/textView"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/review_Schwierigkeit"
+                android:id="@+id/textView0"
+                />
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ratingDifficulty"
+                android:layout_gravity="center_horizontal"
+                android:numStars="5"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/review_Spannung"
+                android:id="@+id/textView2"
+                />
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ratingExciting"
+                android:layout_gravity="center_horizontal"
+                android:numStars="5"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/review_Umgebung"
+                android:id="@+id/textView3"
+                />
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ratingEnvironment"
+                android:layout_gravity="center_horizontal"
+                android:numStars="5"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/review_Laenge"
+                android:id="@+id/textView4"
+                />
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ratingLength"
+                android:layout_gravity="center_horizontal"
+                android:numStars="5"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/review_Kommentar"
+                android:id="@+id/textView5"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText_Comment"
+                android:layout_gravity="center_horizontal"
+                android:lines="4"
+                android:hint="@string/review_Kommentar"/>
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/review_button"
+                android:id="@+id/button"
+                android:layout_gravity="center_horizontal"/>
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ratingBar"
+                android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
