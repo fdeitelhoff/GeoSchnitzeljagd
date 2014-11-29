@@ -31,6 +31,14 @@ public class HomeActivity extends Activity {
             userName.setText("Hallo '" + loggedInUser.getUsername() + "'!");
         }
 
+        // TODO: Nur ein Beispiel für das Anlegen von einer Schnitzeljagd und drei zugehörigen Markierungen.
+        // Rausnehmen, wenn kein Bedarf mehr ist.
+        /*Paperchase p = new Paperchase(loggedInUser, "neues paperchase");
+        p.addMark(new Mark(1.11, 1.22, "Hinweis 1", 1));
+        p.addMark(new Mark(2.22, 3.33, "Hinweis 2", 2));
+        p.addMark(new Mark(3.33, 4.44, "Hinweis 3", 3));
+        new Paperchases(this).Create(p);*/
+
         // User Profile Button.
         Button userProfile = (Button) findViewById(R.id.buton_user_profile);
         userProfile.setOnClickListener(new View.OnClickListener() {

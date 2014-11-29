@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class DataManager extends SQLiteOpenHelper implements Constants {
     private static final String DATABASE_NAME = "mobi.fhdo.geoschnitzeljagd.sqlite.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 9;
 
     public DataManager(Context ctx) {
         super(ctx, DATABASE_NAME, null, DATABASE_VERSION);
@@ -21,8 +21,8 @@ public class DataManager extends SQLiteOpenHelper implements Constants {
             db.execSQL("CREATE TABLE \"" + _MARKIERUNG + "\" (" +
                     "\"" + _MID + "\" INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "\"" + _PID + "\" INTEGER REFERENCES \"" + _SCHNITZELJAGD + "\" (\"" + _PID + "\"), " +
-                    "\"" + _LATITUDE + "\" INTEGER NOT NULL, " +
-                    "\"" + _LONGITUDE + "\" INTEGER NOT NULL, " +
+                    "\"" + _LATITUDE + "\" DOUBLE NOT NULL, " +
+                    "\"" + _LONGITUDE + "\" DOUBLE NOT NULL, " +
                     "\"" + _HINWEIS + "\" TEXT, " +
                     "\"" + _REIHENFOLGE + "\" SMALLINT NOT NULL);\n");
 

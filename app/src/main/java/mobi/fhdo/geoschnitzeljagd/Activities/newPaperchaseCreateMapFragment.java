@@ -20,7 +20,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import mobi.fhdo.geoschnitzeljagd.DataManagers.GPSTracker;
 import mobi.fhdo.geoschnitzeljagd.R;
-import mobi.fhdo.geoschnitzeljagd.adapter.TabsPagerAdapter;
 
 
 /**
@@ -50,10 +49,10 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
                 // Dann kann sie auch vom anderen Fragment genutzt werden.
 //                newpaperchase activity = (newpaperchase) getActivity();
                 //              activity.chosenMarker = currentMarker;
-                TabsPagerAdapter adapter = (TabsPagerAdapter) viewPager.getAdapter();
+                /*TabsPagerAdapter adapter = (TabsPagerAdapter) viewPager.getAdapter();
                 newPaperchaseCreateFragment fragment = (newPaperchaseCreateFragment) adapter.getItem(0);
                 //fragment.chosenMarker = currentMarker;
-                fragment.SetChosenMarker(currentMarker);
+                fragment.SetChosenMarker(currentMarker);*/
             }
         });
 

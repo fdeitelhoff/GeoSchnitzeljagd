@@ -14,7 +14,7 @@ public interface Constants {
     // Spalten
     public static final String _MID = "MID";
     public static final String _LATITUDE = "latitude";
-    public static final String _LONGITUDE = "longitude ";
+    public static final String _LONGITUDE = "longitude";
     public static final String _HINWEIS = "hint";
     public static final String _REIHENFOLGE = "sequence";
 
