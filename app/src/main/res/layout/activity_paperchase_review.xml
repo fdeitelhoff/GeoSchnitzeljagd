@@ -35,7 +35,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/ratingDifficulty"
                 android:layout_gravity="center_horizontal"
-                android:numStars="5"/>
+                android:numStars="5"
+                android:stepSize="1"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -50,7 +51,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/ratingExciting"
                 android:layout_gravity="center_horizontal"
-                android:numStars="5"/>
+                android:numStars="5"
+                android:stepSize="1"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -65,7 +67,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/ratingEnvironment"
                 android:layout_gravity="center_horizontal"
-                android:numStars="5"/>
+                android:numStars="5"
+                android:stepSize="1"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -81,7 +84,7 @@
                 android:id="@+id/ratingLength"
                 android:layout_gravity="center_horizontal"
                 android:numStars="5"
-                />
+                android:stepSize="1"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -103,13 +106,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/review_button"
-                android:id="@+id/button"
-                android:layout_gravity="center_horizontal"/>
-
-            <RatingBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ratingBar"
+                android:id="@+id/review_button"
                 android:layout_gravity="center_horizontal"/>
         </LinearLayout>
     </ScrollView>

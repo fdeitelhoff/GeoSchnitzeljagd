@@ -3,15 +3,22 @@ package mobi.fhdo.geoschnitzeljagd.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Paperchases;
 import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
+import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
 
 public class SearchActivity extends Activity
@@ -21,6 +28,7 @@ public class SearchActivity extends Activity
     private ListView searchList;
 
     private Paperchases paperchases;
+    private List<Paperchase> list;
 
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -33,10 +41,33 @@ public class SearchActivity extends Activity
 
         paperchases = new Paperchases(this);
 
-        List<Paperchase> list = paperchases.Search(searchText.getText().toString());
+
+        seachButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                list = paperchases.Search(searchText.getText().toString());
+
+                ArrayAdapter<Paperchase> adapter = new ArrayAdapter<Paperchase>(view.getContext(), android.R.layout.simple_list_item_1, list);
+
+                searchList.setAdapter(adapter);
+            }
+        });
 
 
-
+        searchList.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            public void onItemClick(AdapterView parent, View view, int position, long id)
+            {
+                if (list.get(position) != null)
+                {
+                    Intent intent = new Intent(view.getContext(), PaperchaseStart.class);
+                    intent.putExtra("PaperchaseID", list.get(position).getId());
+                    startActivity(intent);
+                }
+            }
+        });
 
     }
 

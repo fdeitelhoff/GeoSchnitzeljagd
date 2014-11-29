@@ -74,13 +74,11 @@ public class Paperchases extends DataManager
         {
             database = getReadableDatabase();
 
-            paperchaseCursor = database.rawQuery("SELECT PID, UID, name FROM paperchase WHERE name LIKE '%?%'",new String[]{text});
+            paperchaseCursor = database.rawQuery("SELECT * FROM paperchase WHERE name LIKE '%" + text.toString() + "%'", null);
 
             while (paperchaseCursor.moveToNext())
             {
-                User user = users.Get(paperchaseCursor.getInt(1));
-
-                Paperchase paperchase = new Paperchase(paperchaseCursor.getInt(0), user, paperchaseCursor.getString(2));
+                Paperchase paperchase = new Paperchase(paperchaseCursor.getInt(0), null, paperchaseCursor.getString(2));
 
                 paperchases.add(paperchase);
             }

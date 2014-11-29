@@ -53,6 +53,12 @@
         <activity
             android:name="mobi.fhdo.geoschnitzeljagd.Activities.SearchActivity"
             android:label="@string/title_activity_home" />
+        <activity
+            android:name="mobi.fhdo.geoschnitzeljagd.Activities.PaperchaseReview"
+            android:label="@string/title_activity_home" />
+        <activity
+            android:name="mobi.fhdo.geoschnitzeljagd.Activities.PaperchaseStart"
+            android:label="@string/title_activity_home" />
 
         <!-- Gooogle Maps API -->
         <meta-data
