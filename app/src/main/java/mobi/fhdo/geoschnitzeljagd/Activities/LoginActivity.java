@@ -81,7 +81,7 @@ public class LoginActivity extends Activity {
 
             // Die User-ID übergeben, um den User auf anderen Aktivitäten wieder ermitteln zu können.
             Intent intent = new Intent(getBaseContext(), HomeActivity.class);
-            intent.putExtra("UserID", loggedInUser.getId());
+            intent.putExtra("User", loggedInUser);
             startActivity(intent);
         } catch (UserLoginException e) {
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();

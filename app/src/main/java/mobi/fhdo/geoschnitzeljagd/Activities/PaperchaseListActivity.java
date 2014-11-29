@@ -32,55 +32,48 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        try {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_paperchase_list);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_paperchase_list);
 
-            paperchasesListView = (ListView) findViewById(R.id.paperchasesListView);
-            paperchasesListView.setOnItemClickListener(this);
+        paperchasesListView = (ListView) findViewById(R.id.paperchasesListView);
+        paperchasesListView.setOnItemClickListener(this);
 
-            users = new Users(this);
-            paperchases = new Paperchases(this);
+        users = new Users(this);
+        paperchases = new Paperchases(this);
 
-            // Die UserID ermitteln.
-            Bundle extras = getIntent().getExtras();
-            if (extras != null) {
-                Integer id = extras.getInt("UserID");
-
-                loggedInUser = users.Get(id);
-            }
-
-            ownPaperchases = paperchases.Own(loggedInUser);
-            dataAdapter = new ArrayAdapter<Paperchase>(this,
-                    android.R.layout.simple_list_item_activated_1,
-                    android.R.id.text1,
-                    ownPaperchases);
-
-            paperchasesListView.setAdapter(dataAdapter);
-
-            SwipeDismissListViewTouchListener touchListener =
-                    new SwipeDismissListViewTouchListener(
-                            paperchasesListView,
-                            new SwipeDismissListViewTouchListener.DismissCallbacks() {
-                                @Override
-                                public boolean canDismiss(int position) {
-                                    return true;
-                                }
-
-                                public void onDismiss(ListView listView, int[] reverseSortedPositions) {
-                                    for (int position : reverseSortedPositions) {
-                                        ownPaperchases.remove(position);
-                                    }
-
-                                    dataAdapter.notifyDataSetChanged();
-                                }
-                            });
-            paperchasesListView.setOnTouchListener(touchListener);
-            paperchasesListView.setOnScrollListener(touchListener.makeScrollListener());
-
-        } catch (UserNotExistsException e) {
-            e.printStackTrace();
+        // Die UserID ermitteln.
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            loggedInUser = (User) extras.getSerializable("User");
         }
+
+        ownPaperchases = paperchases.Own(loggedInUser);
+        dataAdapter = new ArrayAdapter<Paperchase>(this,
+                android.R.layout.simple_list_item_activated_1,
+                android.R.id.text1,
+                ownPaperchases);
+
+        paperchasesListView.setAdapter(dataAdapter);
+
+        SwipeDismissListViewTouchListener touchListener =
+                new SwipeDismissListViewTouchListener(
+                        paperchasesListView,
+                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                            @Override
+                            public boolean canDismiss(int position) {
+                                return true;
+                            }
+
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    ownPaperchases.remove(position);
+                                }
+
+                                dataAdapter.notifyDataSetChanged();
+                            }
+                        });
+        paperchasesListView.setOnTouchListener(touchListener);
+        paperchasesListView.setOnScrollListener(touchListener.makeScrollListener());
     }
 
     @Override
