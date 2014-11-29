@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="review_title">Bewertung</string>
+    <string name="review_Schwierigkeit">Schwierigkeit</string>
+    <string name="review_Spannung">Spannung</string>
+    <string name="review_Umgebung">Umgebung</string>
+    <string name="review_Laenge">Laenge</string>
+    <string name="review_Kommentar">Kommentar</string>
+    <string name="review_button">Bewerten</string>
+</resources>

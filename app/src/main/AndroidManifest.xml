@@ -36,6 +36,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="mobi.fhdo.geoschnitzeljagd.Activities.RegistrationActivity"
+            android:label="@string/title_activity_user_profile" />
+        <activity
             android:name="mobi.fhdo.geoschnitzeljagd.Activities.UserProfileActivity"
             android:label="@string/title_activity_user_profile" />
         <activity
@@ -49,6 +52,12 @@
             android:label="@string/title_activity_home" />
         <activity
             android:name="mobi.fhdo.geoschnitzeljagd.Activities.SearchActivity"
+            android:label="@string/title_activity_home" />
+        <activity
+            android:name="mobi.fhdo.geoschnitzeljagd.Activities.PaperchaseReview"
+            android:label="@string/title_activity_home" />
+        <activity
+            android:name="mobi.fhdo.geoschnitzeljagd.Activities.PaperchaseStart"
             android:label="@string/title_activity_home" />
 
         <!-- Gooogle Maps API -->
@@ -78,6 +87,10 @@
         <activity
             android:name="mobi.fhdo.geoschnitzeljagd.Activities.PaperchaseListActivity"
             android:label="@string/title_activity_paperchase_list" />
+        <activity
+            android:name=".Activities.newpaperchase"
+            android:label="@string/paperchase_create" >
+        </activity>
     </application>
 
 </manifest>
