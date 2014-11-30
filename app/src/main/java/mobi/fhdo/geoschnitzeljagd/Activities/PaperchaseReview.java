@@ -9,15 +9,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.RatingBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import mobi.fhdo.geoschnitzeljagd.DataManagers.DataManager;
-import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
-import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserLoginException;
-import mobi.fhdo.geoschnitzeljagd.Model.User;
+import mobi.fhdo.geoschnitzeljagd.DataManagers.PaperchaseReviews;
+import mobi.fhdo.geoschnitzeljagd.Model.Review;
 import mobi.fhdo.geoschnitzeljagd.R;
 
 public class PaperchaseReview extends Activity
@@ -28,6 +24,8 @@ public class PaperchaseReview extends Activity
     RatingBar ratingLength;
     EditText comment;
     Button ratingButton;
+
+    private PaperchaseReviews reviews;
 
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -42,6 +40,8 @@ public class PaperchaseReview extends Activity
             //Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
         }
 
+        reviews = new PaperchaseReviews(this);
+
         ratingDifficulty = (RatingBar) findViewById(R.id.ratingDifficulty);
         ratingExciting = (RatingBar) findViewById(R.id.ratingExciting);
         ratingEnvironment = (RatingBar) findViewById(R.id.ratingEnvironment);
@@ -54,8 +54,10 @@ public class PaperchaseReview extends Activity
             @Override
             public void onClick(View view)
             {
-
-
+                //TODO: Noch die passenden IDs übergeben
+                //Review r = new Review(0,null,null,(int)ratingDifficulty.getRating(),(int)ratingExciting.getRating(),(int)ratingEnvironment.getRating(),(int)ratingLength.getRating(), comment.getText().toString());
+                //reviews.Creaete(r);
+                Toast.makeText(getBaseContext(), "Angelegt", Toast.LENGTH_SHORT).show();
             }
         });
     }
