@@ -107,6 +107,7 @@ public class HomeActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), newpaperchase.class);
+                intent.putExtra("User", loggedInUser);
                 startActivity(intent);
             }
         });

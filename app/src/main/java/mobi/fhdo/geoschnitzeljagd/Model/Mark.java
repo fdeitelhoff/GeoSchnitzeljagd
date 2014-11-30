@@ -9,6 +9,9 @@ public class Mark {
     private int paperchaseId;
     private double latitude;
     private double longitude;
+
+
+
     private String hint;
     private int sequence;
 
@@ -22,6 +25,11 @@ public class Mark {
         this.hint = hint;
         this.sequence = sequence;
     }
+
+    public Mark(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+   }
 
     public int getId() {
         return id;
@@ -41,6 +49,10 @@ public class Mark {
 
     public String getHint() {
         return hint;
+    }
+
+    public void setHint(String hint) {
+        this.hint = hint;
     }
 
     public int getSequence() {

@@ -18,8 +18,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import mobi.fhdo.geoschnitzeljagd.DataManagers.GPSTracker;
+import mobi.fhdo.geoschnitzeljagd.Model.Mark;
 import mobi.fhdo.geoschnitzeljagd.R;
+import mobi.fhdo.geoschnitzeljagd.adapter.TabsPagerAdapter;
 
 
 /**
@@ -30,6 +35,7 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
     GoogleMap googleMap;
     Marker currentMarker;
     private ViewPager viewPager;
+    private List<Marker> markers;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,21 +44,54 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
         View rootView = inflater.inflate(R.layout.fragment_newpaperchase_map, container, false);
 
         viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
+        markers = new ArrayList<Marker>();
+
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i2) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                if (i == 1){
+                    if (markers != null && markers.size()>0){
+                        for (int l = 0; l< markers.size(); l++){
+                            setCreatedMarker(markers.get(l), l);
+                        }
+                    }
+                }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+
+
 
         Button b_save_location = (Button) rootView.findViewById(R.id.b_save_location);
         b_save_location.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Perform action on click
-                viewPager.setCurrentItem(0);
 
                 // Die aktuelle Markierung der Activity übergeben.
                 // Dann kann sie auch vom anderen Fragment genutzt werden.
-//                newpaperchase activity = (newpaperchase) getActivity();
-                //              activity.chosenMarker = currentMarker;
-                /*TabsPagerAdapter adapter = (TabsPagerAdapter) viewPager.getAdapter();
+
+                final newpaperchase activity = (newpaperchase) getActivity();
+
+                Mark mark = new Mark(currentMarker.getPosition().latitude, currentMarker.getPosition().longitude);
+                activity.paperchase.addMark(mark);
+                markers.add(currentMarker);
+
+                TabsPagerAdapter adapter = (TabsPagerAdapter) viewPager.getAdapter();
                 newPaperchaseCreateFragment fragment = (newPaperchaseCreateFragment) adapter.getItem(0);
                 //fragment.chosenMarker = currentMarker;
-                fragment.SetChosenMarker(currentMarker);*/
+                fragment.SetChosenMarker(currentMarker);
+                // Perform action on click
+                viewPager.setCurrentItem(0);
+
             }
         });
 
@@ -60,18 +99,29 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
         b_refresh_location.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                initLocation(currentMarker);
+                initLocation();
             }
         });
 
         createMapView();
-
+       
         // TODO: Von mir (Fabian) rausgenommen. Habe immer noch nicht die Maps am Laufen.
         //initLocation();
 
 
         return rootView;
 
+    }
+
+    @Override
+    public void onResume(){
+
+        if (markers != null && markers.size()>0){
+            for (int i = 0; i< markers.size(); i++){
+                setCreatedMarker(markers.get(i), i);
+            }
+        }
+        super.onResume();
     }
 
     @Override
@@ -163,34 +213,33 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
 
     private void initLocation() {
 
-
         GPSTracker gpsTracker = new GPSTracker(getActivity());
         Location location = gpsTracker.getLocation();
-        currentMarker = googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                .title("aktueller Standort")
-                .draggable(true));
+        if (currentMarker != null){
+            currentMarker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
+        }
+        else{
+            currentMarker = googleMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                    .title("aktueller Standort")
+                    .draggable(true));
+    }
 
         Log.d("aktuelles Standort", "aktuelles Standort: " + "Lat: " + location.getLatitude() + "Long: " + location.getLongitude());
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(location.getLatitude(), location.getLongitude())), 15));
     }
 
-    private void initLocation(Marker m) {
+    private void setCreatedMarker(Marker m, int i) {
 
+        //m.setPosition(latLng);
+        m = googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(m.getPosition().latitude, m.getPosition().longitude))
+                .title("" + i)
+                .draggable(false));
+        m.showInfoWindow();
 
-        GPSTracker gpsTracker = new GPSTracker(getActivity());
-        Location location = gpsTracker.getLocation();
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        m.setPosition(latLng);
-       /* googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                .title("aktueller Standort")
-                .draggable(true));
-    */
-        Log.d("aktuelles Standort", "aktuelles Standort: " + "Lat: " + location.getLatitude() + "Long: " + location.getLongitude());
-
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(location.getLatitude(), location.getLongitude())), 15));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(m.getPosition().latitude, m.getPosition().longitude)), 15));
     }
 
     private void newLocation(Location l) {
