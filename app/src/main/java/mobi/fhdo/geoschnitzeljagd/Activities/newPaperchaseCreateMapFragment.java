@@ -54,9 +54,9 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
 
             @Override
             public void onPageSelected(int i) {
-                if (i == 1){
-                    if (markers != null && markers.size()>0){
-                        for (int l = 0; l< markers.size(); l++){
+                if (i == 1) {
+                    if (markers != null && markers.size() > 0) {
+                        for (int l = 0; l < markers.size(); l++) {
                             setCreatedMarker(markers.get(l), l);
                         }
                     }
@@ -71,7 +71,6 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
         });
 
 
-
         Button b_save_location = (Button) rootView.findViewById(R.id.b_save_location);
         b_save_location.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -81,7 +80,8 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
 
                 final newpaperchase activity = (newpaperchase) getActivity();
 
-                Mark mark = new Mark(currentMarker.getPosition().latitude, currentMarker.getPosition().longitude);
+                //Mark mark = new Mark(currentMarker.getPosition().latitude, currentMarker.getPosition().longitude);
+                Mark mark = new Mark(1.11, 2.22);
                 activity.paperchase.addMark(mark);
                 markers.add(currentMarker);
 
@@ -103,21 +103,19 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
             }
         });
 
-        createMapView();
-       
         // TODO: Von mir (Fabian) rausgenommen. Habe immer noch nicht die Maps am Laufen.
+        //createMapView();
         //initLocation();
-
 
         return rootView;
 
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
 
-        if (markers != null && markers.size()>0){
-            for (int i = 0; i< markers.size(); i++){
+        if (markers != null && markers.size() > 0) {
+            for (int i = 0; i < markers.size(); i++) {
                 setCreatedMarker(markers.get(i), i);
             }
         }
@@ -215,15 +213,14 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
 
         GPSTracker gpsTracker = new GPSTracker(getActivity());
         Location location = gpsTracker.getLocation();
-        if (currentMarker != null){
+        if (currentMarker != null) {
             currentMarker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
-        }
-        else{
+        } else {
             currentMarker = googleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(location.getLatitude(), location.getLongitude()))
                     .title("aktueller Standort")
                     .draggable(true));
-    }
+        }
 
         Log.d("aktuelles Standort", "aktuelles Standort: " + "Lat: " + location.getLatitude() + "Long: " + location.getLongitude());
 
