@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class DataManager extends SQLiteOpenHelper implements Constants {
     private static final String DATABASE_NAME = "mobi.fhdo.geoschnitzeljagd.sqlite.db";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     public DataManager(Context ctx) {
         super(ctx, DATABASE_NAME, null, DATABASE_VERSION);

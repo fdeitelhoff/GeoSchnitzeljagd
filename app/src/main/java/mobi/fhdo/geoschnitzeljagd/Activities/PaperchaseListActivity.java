@@ -1,6 +1,7 @@
 package mobi.fhdo.geoschnitzeljagd.Activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,7 +15,6 @@ import java.util.List;
 
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Paperchases;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
-import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserNotExistsException;
 import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
@@ -82,8 +82,8 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
 
         Paperchase selectedPaperchase = (Paperchase) paperchasesListView.getAdapter().getItem(position);
 
-        /*Intent detailIntent = new Intent(this, PaperchaseDetailActivity_alt.class);
-        detailIntent.putExtra("PaperchaseId", selectedPaperchase);
-        startActivity(detailIntent);*/
+        Intent detailIntent = new Intent(this, newpaperchase.class);
+        detailIntent.putExtra("Paperchase", selectedPaperchase);
+        startActivity(detailIntent);
     }
 }

@@ -88,7 +88,7 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
                 TabsPagerAdapter adapter = (TabsPagerAdapter) viewPager.getAdapter();
                 newPaperchaseCreateFragment fragment = (newPaperchaseCreateFragment) adapter.getItem(0);
                 //fragment.chosenMarker = currentMarker;
-                fragment.SetChosenMarker(currentMarker);
+                fragment.SetChosenMarker(mark);
                 // Perform action on click
                 viewPager.setCurrentItem(0);
 

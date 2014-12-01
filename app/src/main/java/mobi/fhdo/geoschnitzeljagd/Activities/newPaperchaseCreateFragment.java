@@ -13,12 +13,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.Marker;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Paperchases;
+import mobi.fhdo.geoschnitzeljagd.Model.Mark;
+import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
 import mobi.fhdo.geoschnitzeljagd.R;
 
 
@@ -98,8 +98,9 @@ public class newPaperchaseCreateFragment extends Fragment implements View.OnClic
             }
         });
 
-
-
+        if (activity.paperchase != null) {
+            RefreshPaperchaseData(activity.paperchase, rootView);
+        }
 
         return rootView;
     }
@@ -124,35 +125,73 @@ public class newPaperchaseCreateFragment extends Fragment implements View.OnClic
                 viewPager.setCurrentItem(1);
                 break;
         }
-
     }
 
-
-    public void SetChosenMarker(Marker currentMarker) {
+    // Todo: Von Marker auf Mark umgebaut, damit es (meiner Meinung nach) beim Editieren nutzbar ist.
+    public void SetChosenMarker(Mark currentMark) {
         newpaperchase activity = (newpaperchase) getActivity();
         int currentIndex = activity.paperchase.getMarks().size();
         switch(currentIndex){
             case 1:
                 EditText locationOne = (EditText) getActivity().findViewById(R.id.et_paperchase_location_1);
-                locationOne.setText("Werte aus dem Marker: " + currentMarker.getPosition());
+                locationOne.setText("Longitude: " + currentMark.getLongitude() + " - Latitude: " + currentMark.getLatitude());
                 break;
             case 2:
                 EditText locationTwo = (EditText) getActivity().findViewById(R.id.et_paperchase_location_2);
-                locationTwo.setText("Werte aus dem Marker: " + currentMarker.getPosition());
+                locationTwo.setText("Longitude: " + currentMark.getLongitude() + " - Latitude: " + currentMark.getLatitude());
                 break;
             case 3:
                 EditText locationThree = (EditText) getActivity().findViewById(R.id.et_paperchase_location_3);
-                locationThree.setText("Werte aus dem Marker: " + currentMarker.getPosition());
+                locationThree.setText("Longitude: " + currentMark.getLongitude() + " - Latitude: " + currentMark.getLatitude());
                 break;
             case 4:
                 EditText locationFour = (EditText) getActivity().findViewById(R.id.et_paperchase_location_4);
-                locationFour.setText("Werte aus dem Marker: " + currentMarker.getPosition());
+                locationFour.setText("Longitude: " + currentMark.getLongitude() + " - Latitude: " + currentMark.getLatitude());
                 break;
             case 5:
                 EditText locationFive = (EditText) getActivity().findViewById(R.id.et_paperchase_location_5);
-                locationFive.setText("Werte aus dem Marker: " + currentMarker.getPosition());
+                locationFive.setText("Longitude: " + currentMark.getLongitude() + " - Latitude: " + currentMark.getLatitude());
                 break;
         }
 
+    }
+
+    public void RefreshPaperchaseData(Paperchase paperchase, View view) {
+        for (int i = 0; i < paperchase.getMarks().size(); i++) {
+            Mark currentMark = paperchase.getMarks().get(i);
+
+            switch (i) {
+                case 0:
+                    EditText locationOne = (EditText) view.findViewById(R.id.et_paperchase_location_1);
+                    locationOne.setText("Longitude: " + currentMark.getLongitude() + " - Latitude: " + currentMark.getLatitude());
+                    EditText hintOne = (EditText) view.findViewById(R.id.et_paperchase_location_1_hint);
+                    hintOne.setText(currentMark.getHint());
+                    break;
+                case 1:
+                    EditText locationTwo = (EditText) view.findViewById(R.id.et_paperchase_location_2);
+                    locationTwo.setText("Longitude: " + currentMark.getLongitude() + " - Latitude: " + currentMark.getLatitude());
+                    EditText hintTwo = (EditText) view.findViewById(R.id.et_paperchase_location_2_hint);
+                    hintTwo.setText(currentMark.getHint());
+                    break;
+                case 2:
+                    EditText locationThree = (EditText) view.findViewById(R.id.et_paperchase_location_3);
+                    locationThree.setText("Longitude: " + currentMark.getLongitude() + " - Latitude: " + currentMark.getLatitude());
+                    EditText hintThree = (EditText) view.findViewById(R.id.et_paperchase_location_3_hint);
+                    hintThree.setText(currentMark.getHint());
+                    break;
+                case 3:
+                    EditText locationFour = (EditText) view.findViewById(R.id.et_paperchase_location_4);
+                    locationFour.setText("Longitude: " + currentMark.getLongitude() + " - Latitude: " + currentMark.getLatitude());
+                    EditText hintFour = (EditText) view.findViewById(R.id.et_paperchase_location_4_hint);
+                    hintFour.setText(currentMark.getHint());
+                    break;
+                case 4:
+                    EditText locationFive = (EditText) view.findViewById(R.id.et_paperchase_location_5);
+                    locationFive.setText("Longitude: " + currentMark.getLongitude() + " - Latitude: " + currentMark.getLatitude());
+                    EditText hintFive = (EditText) view.findViewById(R.id.et_paperchase_location_5_hint);
+                    hintFive.setText(currentMark.getHint());
+                    break;
+            }
+        }
     }
 }

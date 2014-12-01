@@ -11,17 +11,16 @@ public class Mark {
     private double longitude;
 
 
-
     private String hint;
     private int sequence;
 
     public Mark(int id, double latitude, double longitude, String hint, int sequence) {
         this(latitude, longitude, hint, sequence);
+        this.id = id;
     }
 
     public Mark(double latitude, double longitude, String hint, int sequence) {
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this(latitude, longitude);
         this.hint = hint;
         this.sequence = sequence;
     }
@@ -29,7 +28,7 @@ public class Mark {
     public Mark(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
-   }
+    }
 
     public int getId() {
         return id;

@@ -6,31 +6,33 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import mobi.fhdo.geoschnitzeljagd.Model.Mark;
+import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
 
 public class Marks extends DataManager {
     public Marks(Context ctx) {
         super(ctx);
     }
 
-    public List<Mark> ForPaperchaseId(int id) {
+    public Paperchase ForPaperchase(Paperchase paperchase) {
         SQLiteDatabase database = null;
         Cursor markCursor = null;
-        List<Mark> marks = new ArrayList<Mark>();
 
         try {
             database = getReadableDatabase();
 
             markCursor = database.rawQuery(
-                    "SELECT MID, gpsdata, hint, sequence FROM Mark WHERE PID=?",
-                    new String[]{id + ""});
+                    "SELECT MID, latitude, longitude, hint, sequence FROM Mark WHERE PID=?",
+                    new String[]{paperchase.getId() + ""});
 
             while (markCursor.moveToNext()) {
-                //Mark mark = new Mark();
+                Mark mark = new Mark(markCursor.getInt(0), markCursor.getDouble(1),
+                        markCursor.getDouble(2), markCursor.getString(3), markCursor.getInt(4));
+
+                paperchase.getMarks().add(mark);
             }
+        } catch (Exception e) {
+            Log.w("Exception", e);
         } finally {
             if (markCursor != null) {
                 markCursor.close();
@@ -41,7 +43,7 @@ public class Marks extends DataManager {
             }
         }
 
-        return marks;
+        return paperchase;
     }
 
     public Mark Create(Mark mark) {
@@ -51,6 +53,7 @@ public class Marks extends DataManager {
             database = getWritableDatabase();
 
             ContentValues values = new ContentValues();
+            values.put("pid", mark.getPaperchaseId());
             values.put("latitude", mark.getLatitude());
             values.put("longitude", mark.getLongitude());
             values.put("hint", mark.getHint());

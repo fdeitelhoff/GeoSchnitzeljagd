@@ -7,9 +7,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 
-import mobi.fhdo.geoschnitzeljagd.DataManagers.Paperchases;
+import mobi.fhdo.geoschnitzeljagd.DataManagers.Marks;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
-import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserNotExistsException;
 import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
@@ -18,18 +17,17 @@ import mobi.fhdo.geoschnitzeljagd.adapter.TabsPagerAdapter;
 
 public class newpaperchase extends FragmentActivity implements ActionBar.TabListener {
 
+    public Paperchase paperchase;
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
-
-    public Paperchase paperchase;
     private Users users;
     private User loggedInUser;
 
 
     private String[] tabs = {"Bearbeiten", "Karte"};
 
-    //public Marker chosenMarker;
+    private Marks marks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +50,18 @@ public class newpaperchase extends FragmentActivity implements ActionBar.TabList
         actionBar.show();
 
         users = new Users(this);
+        marks = new Marks(this);
 
         // Die UserID ermitteln.
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             loggedInUser = (User) extras.getSerializable("User");
+            paperchase = (Paperchase) extras.getSerializable("Paperchase");
+
+            paperchase = marks.ForPaperchase(paperchase);
+        } else {
+            paperchase = new Paperchase(loggedInUser.getId(), loggedInUser, "");
         }
-
-       paperchase = new Paperchase(loggedInUser.getId(), loggedInUser,"");
-
 
         /**
          * on swiping the viewpager make respective tab selected

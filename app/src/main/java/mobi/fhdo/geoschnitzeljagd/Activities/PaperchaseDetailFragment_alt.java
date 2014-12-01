@@ -6,10 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Marks;
-import mobi.fhdo.geoschnitzeljagd.Model.Mark;
 import mobi.fhdo.geoschnitzeljagd.R;
 
 /**
@@ -34,7 +31,7 @@ public class PaperchaseDetailFragment_alt extends Fragment {
         if (extras != null) {
             Integer id = extras.getInt("PaperchaseId");
 
-            List<Mark> paperchaseMarks = marks.ForPaperchaseId(id);
+            //List<Mark> paperchaseMarks = marks.ForPaperchaseId(id);
         }
     }
 
