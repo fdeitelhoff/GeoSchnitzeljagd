@@ -57,7 +57,9 @@ public class newpaperchase extends FragmentActivity implements ActionBar.TabList
         if (extras != null) {
             loggedInUser = (User) extras.getSerializable("User");
             paperchase = (Paperchase) extras.getSerializable("Paperchase");
+        }
 
+        if (paperchase != null) {
             paperchase = marks.ForPaperchase(paperchase);
         } else {
             paperchase = new Paperchase(loggedInUser.getId(), loggedInUser, "");

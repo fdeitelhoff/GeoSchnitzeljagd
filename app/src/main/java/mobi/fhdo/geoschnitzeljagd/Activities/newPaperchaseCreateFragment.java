@@ -22,11 +22,11 @@ import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
 import mobi.fhdo.geoschnitzeljagd.R;
 
 
-public class newPaperchaseCreateFragment extends Fragment implements View.OnClickListener{
+public class newPaperchaseCreateFragment extends Fragment implements View.OnClickListener {
 
     private ViewPager viewPager;
     //public Marker chosenMarker;
-   // final newpaperchase activity = (newpaperchase) getActivity();
+    // final newpaperchase activity = (newpaperchase) getActivity();
     private Paperchases new_paperchase;
 
 
@@ -36,7 +36,7 @@ public class newPaperchaseCreateFragment extends Fragment implements View.OnClic
 
         View rootView = inflater.inflate(R.layout.fragment_newpaperchase_create, container, false);
         viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
-       newpaperchase activity = (newpaperchase) getActivity();
+        newpaperchase activity = (newpaperchase) getActivity();
 
         Button b_location_one = (Button) rootView.findViewById(R.id.b_set_location_1);
         Button b_location_two = (Button) rootView.findViewById(R.id.b_set_location_2);
@@ -55,8 +55,8 @@ public class newPaperchaseCreateFragment extends Fragment implements View.OnClic
             public void onClick(View v) {
                 // Perform action on click
                 newpaperchase activity = (newpaperchase) getActivity();
-                for (int i = 0; i < activity.paperchase.getMarks().size(); i++){
-                    Toast.makeText(getActivity().getBaseContext(), "Inhalt paperchase: " + activity.paperchase.getMarks().get(i).getLatitude() + activity.paperchase.getMarks().get(i).getLongitude() , Toast.LENGTH_SHORT).show();
+                for (int i = 0; i < activity.paperchase.getMarks().size(); i++) {
+                    Toast.makeText(getActivity().getBaseContext(), "Inhalt paperchase: " + activity.paperchase.getMarks().get(i).getLatitude() + activity.paperchase.getMarks().get(i).getLongitude(), Toast.LENGTH_SHORT).show();
                 }
 
                 EditText et_paperchase_name = (EditText) getActivity().findViewById(R.id.et_paperchase_name);
@@ -65,32 +65,29 @@ public class newPaperchaseCreateFragment extends Fragment implements View.OnClic
                 EditText et_paperchase_hint1 = (EditText) getActivity().findViewById(R.id.et_paperchase_location_1_hint);
                 paperchase_hint.add(et_paperchase_name.getText().toString());
                 EditText et_paperchase_hint2 = (EditText) getActivity().findViewById(R.id.et_paperchase_location_2_hint);
-                paperchase_hint.add( et_paperchase_name.getText().toString());
+                paperchase_hint.add(et_paperchase_name.getText().toString());
                 EditText et_paperchase_hint3 = (EditText) getActivity().findViewById(R.id.et_paperchase_location_3_hint);
-                paperchase_hint.add( et_paperchase_name.getText().toString());
+                paperchase_hint.add(et_paperchase_name.getText().toString());
                 EditText et_paperchase_hint4 = (EditText) getActivity().findViewById(R.id.et_paperchase_location_4_hint);
-                paperchase_hint.add( et_paperchase_name.getText().toString());
+                paperchase_hint.add(et_paperchase_name.getText().toString());
                 EditText et_paperchase_hint5 = (EditText) getActivity().findViewById(R.id.et_paperchase_location_5_hint);
-                paperchase_hint.add( et_paperchase_name.getText().toString());
+                paperchase_hint.add(et_paperchase_name.getText().toString());
 
 
-
-                for(int i = 0; i < activity.paperchase.getMarks().size(); i++){
+                for (int i = 0; i < activity.paperchase.getMarks().size(); i++) {
                     activity.paperchase.getMarks().get(i).setHint(paperchase_hint.get(i));
 
                 }
 
-                if (paperchase_name.equals("")){
+                if (paperchase_name.equals("")) {
                     activity.paperchase.setName("Schnitzeljagd");
-                }
-                else{
+                } else {
                     activity.paperchase.setName(paperchase_name);
                 }
-                if(activity.paperchase.getMarks().size()< 2){
-                    Toast.makeText(getActivity().getBaseContext(), "Die Schnitzeljagd muss mindestens 2 Markierungen enthalten!" , Toast.LENGTH_LONG).show();
-                   return;
-                }
-                else{
+                if (activity.paperchase.getMarks().size() < 2) {
+                    Toast.makeText(getActivity().getBaseContext(), "Die Schnitzeljagd muss mindestens 2 Markierungen enthalten!", Toast.LENGTH_LONG).show();
+                    return;
+                } else {
                     new_paperchase = new Paperchases(getActivity().getApplicationContext());
                     new_paperchase.Create(activity.paperchase);
                 }
@@ -108,7 +105,7 @@ public class newPaperchaseCreateFragment extends Fragment implements View.OnClic
     @Override
     public void onClick(View v) {
         // Perform action on click
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.b_set_location_1:
                 viewPager.setCurrentItem(1);
                 break;
@@ -131,7 +128,7 @@ public class newPaperchaseCreateFragment extends Fragment implements View.OnClic
     public void SetChosenMarker(Mark currentMark) {
         newpaperchase activity = (newpaperchase) getActivity();
         int currentIndex = activity.paperchase.getMarks().size();
-        switch(currentIndex){
+        switch (currentIndex) {
             case 1:
                 EditText locationOne = (EditText) getActivity().findViewById(R.id.et_paperchase_location_1);
                 locationOne.setText("Longitude: " + currentMark.getLongitude() + " - Latitude: " + currentMark.getLatitude());
@@ -157,6 +154,9 @@ public class newPaperchaseCreateFragment extends Fragment implements View.OnClic
     }
 
     public void RefreshPaperchaseData(Paperchase paperchase, View view) {
+        EditText paperchaseName = (EditText) view.findViewById(R.id.et_paperchase_name);
+        paperchaseName.setText(paperchase.getName());
+
         for (int i = 0; i < paperchase.getMarks().size(); i++) {
             Mark currentMark = paperchase.getMarks().get(i);
 
