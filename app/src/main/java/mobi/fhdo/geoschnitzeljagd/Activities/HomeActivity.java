@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import mobi.fhdo.geoschnitzeljagd.Contexts.UserContext;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
@@ -22,14 +23,10 @@ public class HomeActivity extends Activity {
 
         users = new Users(this);
 
-        // Den übergebenen User ermitteln.
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            loggedInUser = (User) extras.getSerializable("User");
+        loggedInUser = UserContext.getInstance().getLoggedInUser();
 
-            TextView userName = (TextView) findViewById(R.id.textViewUser);
-            userName.setText("Hallo '" + loggedInUser.getUsername() + "'!");
-        }
+        TextView userName = (TextView) findViewById(R.id.textViewUser);
+        userName.setText("Hallo '" + loggedInUser.getUsername() + "'!");
 
         // TODO: Nur ein Beispiel für das Anlegen von einer Schnitzeljagd und drei zugehörigen Markierungen.
         // Rausnehmen, wenn kein Bedarf mehr ist.
@@ -85,7 +82,6 @@ public class HomeActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), PaperchaseListActivity.class);
-                intent.putExtra("User", loggedInUser);
                 startActivity(intent);
             }
         });
@@ -107,7 +103,6 @@ public class HomeActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), newpaperchase.class);
-                intent.putExtra("User", loggedInUser);
                 startActivity(intent);
             }
         });

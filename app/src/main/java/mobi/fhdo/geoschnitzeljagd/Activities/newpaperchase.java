@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 
+import mobi.fhdo.geoschnitzeljagd.Contexts.UserContext;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Marks;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
 import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
@@ -52,10 +53,11 @@ public class newpaperchase extends FragmentActivity implements ActionBar.TabList
         users = new Users(this);
         marks = new Marks(this);
 
+        loggedInUser = UserContext.getInstance().getLoggedInUser();
+
         // Die UserID ermitteln.
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            loggedInUser = (User) extras.getSerializable("User");
             paperchase = (Paperchase) extras.getSerializable("Paperchase");
         }
 

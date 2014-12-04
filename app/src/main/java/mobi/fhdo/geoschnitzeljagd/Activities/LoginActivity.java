@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import mobi.fhdo.geoschnitzeljagd.Contexts.UserContext;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.DataManager;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
 import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserLoginException;
@@ -20,18 +21,18 @@ import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
 
 public class LoginActivity extends Activity {
-    // UI references.
     private AutoCompleteTextView usernameView;
     private EditText passwordView;
 
     private Users users;
+    private DataManager dataManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        DataManager dataManager = new DataManager(this);
+        dataManager = new DataManager(this);
         users = new Users(this);
 
         // Set up the login form.
@@ -74,13 +75,12 @@ public class LoginActivity extends Activity {
 
     public void ClickLogin() {
         try {
-            // Login versuchen und im positiven Fall zur home activity wechseln.
             User user = new User(usernameView.getText().toString(),
                     passwordView.getText().toString());
 
-            // Den eingeloggten User als Objekt übergeben. Deutlich einfacher als nur die ID!
+            UserContext.getInstance().userLoggedIn(users.Login(user));
+
             Intent intent = new Intent(getBaseContext(), HomeActivity.class);
-            intent.putExtra("User", users.Login(user));
             startActivity(intent);
         } catch (UserLoginException e) {
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();

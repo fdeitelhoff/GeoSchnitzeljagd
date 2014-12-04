@@ -13,6 +13,7 @@ import com.example.android.swipedismiss.SwipeDismissListViewTouchListener;
 
 import java.util.List;
 
+import mobi.fhdo.geoschnitzeljagd.Contexts.UserContext;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Paperchases;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
 import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
@@ -41,11 +42,7 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
         users = new Users(this);
         paperchases = new Paperchases(this);
 
-        // Die UserID ermitteln.
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            loggedInUser = (User) extras.getSerializable("User");
-        }
+        loggedInUser = UserContext.getInstance().getLoggedInUser();
 
         ownPaperchases = paperchases.Own(loggedInUser);
         dataAdapter = new ArrayAdapter<Paperchase>(this,
