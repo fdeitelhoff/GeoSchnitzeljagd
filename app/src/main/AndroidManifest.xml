@@ -14,8 +14,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <uses-library android:name="com.google.android.maps"/>
-
     <!-- android:theme="@style/AppTheme" -->
     <application
         android:allowBackup="true"
