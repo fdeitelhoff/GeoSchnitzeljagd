@@ -1,11 +1,13 @@
 package mobi.fhdo.geoschnitzeljagd.Activities;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.JsonWriter;
@@ -29,6 +31,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -38,6 +41,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import mobi.fhdo.geoschnitzeljagd.Contexts.UserContext;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.DataManager;
@@ -58,6 +62,7 @@ public class LoginActivity extends Activity
     // Given a URL, establishes an HttpUrlConnection and retrieves
 // the web page content as a InputStream, which it returns as
 // a string.
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private String downloadUrl(String myurl) throws IOException
     {
         InputStream is = null;
@@ -72,13 +77,12 @@ public class LoginActivity extends Activity
             String encode = new String(Base64.encode("marcel:test".getBytes(), Base64.DEFAULT));
             conn.setRequestProperty("Authorization", "Basic " + encode);
 
-            conn.setRequestProperty("Content-Type","application/json");
+            conn.setRequestProperty("Content-Type", "application/json");
 
-            Log.d("Test",encode);
+            Log.d("Test", encode);
 
             conn.setReadTimeout(10000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
-
 
 
             // Holen
@@ -93,17 +97,13 @@ public class LoginActivity extends Activity
             conn.setDoInput(true);
             conn.setDoOutput(true);
 
-            OutputStreamWriter bw = new OutputStreamWriter(conn.getOutputStream());
-            JsonWriter writer = new JsonWriter(bw);
+            User buffer = new User("dgs", "fff");
+            buffer.objectToOutputStream(conn.getOutputStream());
 
-            writer.beginObject();
-            writer.name("name").value("test");
-            writer.endObject();
-            writer.flush();
-            bw.flush();
-            writer.close();
-            bw.close();
-
+            String exampleString = "{\"id\":0,\"username\":\"dgs\",\"password\":\"fff\"}";
+            InputStream stream = new ByteArrayInputStream(exampleString.getBytes(StandardCharsets.UTF_8));
+            User result = buffer.jsonToObject(stream);
+            Log.d("User",result.getUsername());
 
             // Starts the query
             conn.connect();
@@ -168,8 +168,6 @@ public class LoginActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-
 
 
         String stringUrl = "http://schnitzeljagd.fabiandeitelhoff.de/api/v1/paperchases/22";
