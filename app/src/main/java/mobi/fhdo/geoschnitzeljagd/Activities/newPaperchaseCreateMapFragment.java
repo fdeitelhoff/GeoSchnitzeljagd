@@ -104,8 +104,8 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
         });
 
         // TODO: Von mir (Fabian) rausgenommen. Habe immer noch nicht die Maps am Laufen.
-        //createMapView();
-        //initLocation();
+        // createMapView();
+        // initLocation();
 
         return rootView;
 
@@ -216,15 +216,19 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
         if (currentMarker != null) {
             currentMarker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
         } else {
+            /*Latitude : 51.3000
+            Longitude : 7.2800*/
             currentMarker = googleMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                    //.position(new LatLng(location.getLatitude(), location.getLongitude()))
+                    .position(new LatLng(51.3000, 7.2800))
                     .title("aktueller Standort")
                     .draggable(true));
         }
 
-        Log.d("aktuelles Standort", "aktuelles Standort: " + "Lat: " + location.getLatitude() + "Long: " + location.getLongitude());
+        //Log.d("aktuelles Standort", "aktuelles Standort: " + "Lat: " + location.getLatitude() + "Long: " + location.getLongitude());
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(location.getLatitude(), location.getLongitude())), 15));
+        //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(location.getLatitude(), location.getLongitude())), 15));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.3000, 7.2800), 15));
     }
 
     private void setCreatedMarker(Marker m, int i) {

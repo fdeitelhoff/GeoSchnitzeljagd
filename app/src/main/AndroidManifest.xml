@@ -2,11 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="mobi.fhdo.geoschnitzeljagd">
 
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-
     <!-- Gooogle Maps API -->
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -66,7 +61,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDzfYRJYuZi3pIy87AV4iaZUflFYD74j7o" />
+            android:value="AIzaSyDbKPAAp70_v65QegY0af_S6-XmkH5Roac" />
         <!--
             -
             !!!!! JW: Um das Projekt bei mir ausführen zu könnne musste ich einen neuen Key generieren!!!!
