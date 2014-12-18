@@ -86,17 +86,17 @@ public class LoginActivity extends Activity
 
 
             // Holen
-            //conn.setRequestMethod("GET");
+            conn.setRequestMethod("GET");
             // Update
             //conn.setRequestMethod("PUT");
-            // Create
-            conn.setRequestMethod("POST");
+            // Create 201 erfolg + user
+            //conn.setRequestMethod("POST");
             // Delete
             //conn.setRequestMethod("DELETE");
 
             conn.setDoInput(true);
             conn.setDoOutput(true);
-
+/*
             User buffer = new User("dgs", "fff");
             buffer.objectToOutputStream(conn.getOutputStream());
 
@@ -104,7 +104,7 @@ public class LoginActivity extends Activity
             InputStream stream = new ByteArrayInputStream(exampleString.getBytes(StandardCharsets.UTF_8));
             User result = buffer.jsonToObject(stream);
             Log.d("User",result.getUsername());
-
+*/
             // Starts the query
             conn.connect();
             int response = conn.getResponseCode();
@@ -170,7 +170,7 @@ public class LoginActivity extends Activity
         setContentView(R.layout.activity_login);
 
 
-        String stringUrl = "http://schnitzeljagd.fabiandeitelhoff.de/api/v1/paperchases/22";
+        String stringUrl = "http://schnitzeljagd.fabiandeitelhoff.de/api/v1/users";
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();

@@ -5,6 +5,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserLoginException;
 import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserNotExistsException;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
@@ -27,7 +30,7 @@ public class Users extends DataManager
             database = getReadableDatabase();
 
             userCursor = database.rawQuery(
-                    "SELECT UID, username, password FROM User WHERE username=? AND password=?",
+                    "SELECT UID, username, password, timestamp FROM User WHERE username=? AND password=?",
                     new String[]{user.getUsername(), user.getPassword()});
 
             if (userCursor.getCount() != 1)
@@ -37,9 +40,11 @@ public class Users extends DataManager
 
             while (userCursor.moveToNext())
             {
+
+
                 loggedInUser = new User(userCursor.getInt(0),
                         userCursor.getString(1),
-                        userCursor.getString(2));
+                        userCursor.getString(2), new Timestamp(userCursor.getLong(3)));
             }
         }
         finally
@@ -74,7 +79,7 @@ public class Users extends DataManager
             database = getReadableDatabase();
 
             userCursor = database.rawQuery(
-                    "SELECT UID, username, password FROM User WHERE UID=?",
+                    "SELECT UID, username, password, timestamp FROM User WHERE UID=?",
                     new String[]{userId.toString()});
 
             if (userCursor.getCount() != 1)
@@ -86,7 +91,8 @@ public class Users extends DataManager
             {
                 user = new User(userCursor.getInt(0),
                         userCursor.getString(1),
-                        userCursor.getString(2));
+                        userCursor.getString(2),
+                        new Timestamp(userCursor.getLong(3)));
             }
         }
         finally

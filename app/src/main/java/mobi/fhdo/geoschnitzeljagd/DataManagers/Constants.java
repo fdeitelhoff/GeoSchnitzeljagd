@@ -7,6 +7,7 @@ public interface Constants {
     public static final String _UID = "UID";
     public static final String _USERNAME = "username";
     public static final String _PASSWORD = "password";
+    public static final String _TIMESTAMP = "timestamp";
 
 
     // Tabelle

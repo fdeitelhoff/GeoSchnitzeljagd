@@ -28,7 +28,7 @@ public class PaperchaseListFragment_alt extends ListFragment {
 
         paperchases = new Paperchases(getActivity());
 
-        ownPaperchases = paperchases.Own(new User(1, "Fabian", "test"));
+        //ownPaperchases = paperchases.Own(new User(1, "Fabian", "test", ));
 
         setListAdapter(new ArrayAdapter<Paperchase>(
                 getActivity(),
