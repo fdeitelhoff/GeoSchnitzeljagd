@@ -93,7 +93,7 @@ public class User implements Serializable
             writer.name("UID").value(this.getId());
             writer.name("Username").value(this.getUsername());
             writer.name("Password").value(this.getPassword());
-            writer.name("Timestamp").value(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(this.getTimestamp()));
+            writer.name("Timestamp").value(this.getTimestamp().toString());
 
 
 /*

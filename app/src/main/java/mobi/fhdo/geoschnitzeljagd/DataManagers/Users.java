@@ -129,7 +129,7 @@ public class Users extends DataManager
                 throw new Exception("Der Benutzer mit dem Namen '" + user.getUsername().toString() + "' existiert bereits!");
             }
 
-            String sql = "Insert into " + _USER + " (" + _USERNAME + "," + _PASSWORD + ") values('" + user.getUsername().toString() + "','" + user.getPassword().toString() + "')";
+            String sql = "Insert into " + _USER + " (" + _USERNAME + "," + _PASSWORD + "," + _TIMESTAMP +  ") values('" + user.getUsername().toString() + "','" + user.getPassword().toString() + "','" + user.getTimestamp() +"')";
             database.execSQL(sql);
         }
         finally

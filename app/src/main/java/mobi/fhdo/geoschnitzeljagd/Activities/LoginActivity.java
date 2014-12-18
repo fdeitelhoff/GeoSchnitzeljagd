@@ -47,6 +47,7 @@ import mobi.fhdo.geoschnitzeljagd.Contexts.UserContext;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.DataManager;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
 import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserLoginException;
+import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserNotExistsException;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
 
@@ -170,6 +171,7 @@ public class LoginActivity extends Activity
         setContentView(R.layout.activity_login);
 
 
+
         String stringUrl = "http://schnitzeljagd.fabiandeitelhoff.de/api/v1/users";
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -185,6 +187,7 @@ public class LoginActivity extends Activity
 
         dataManager = new DataManager(this);
         users = new Users(this);
+
 
         // Set up the login form.
         usernameView = (AutoCompleteTextView) findViewById(R.id.username);
