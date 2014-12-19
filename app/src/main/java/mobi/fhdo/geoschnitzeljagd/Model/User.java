@@ -14,7 +14,9 @@ import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class User implements Serializable
 {
@@ -146,7 +148,16 @@ public class User implements Serializable
                 password = reader.nextString();
             }else if (name.equals("Timestamp"))
             {
-                timestamp = new Timestamp(reader.nextInt());
+                try
+                {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    Date parsedTimeStamp = dateFormat.parse(reader.nextString());
+                    timestamp = new Timestamp(parsedTimeStamp.getTime());
+                }
+                catch (ParseException e)
+                {
+                    e.printStackTrace();
+                }
             } else
             {
                 reader.skipValue();

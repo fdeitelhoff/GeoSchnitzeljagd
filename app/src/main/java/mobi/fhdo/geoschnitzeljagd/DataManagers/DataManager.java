@@ -24,6 +24,9 @@ public class DataManager extends SQLiteOpenHelper implements Constants
         {
             Log.w("onCreate", "Creating a new database");
 
+
+            //uniqueidentifier
+
             db.execSQL("CREATE TABLE \"" + _MARKIERUNG + "\" (" +
                     "\"" + _MID + "\" INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "\"" + _PID + "\" INTEGER REFERENCES \"" + _SCHNITZELJAGD + "\" (\"" + _PID + "\"), " +
