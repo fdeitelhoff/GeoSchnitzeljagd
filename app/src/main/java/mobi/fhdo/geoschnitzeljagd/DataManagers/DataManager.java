@@ -6,11 +6,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 public class DataManager extends SQLiteOpenHelper implements Constants
 {
     private static final String DATABASE_NAME = "mobi.fhdo.geoschnitzeljagd.sqlite.db";
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 19;
 
     public DataManager(Context ctx)
     {
@@ -28,29 +29,29 @@ public class DataManager extends SQLiteOpenHelper implements Constants
             //uniqueidentifier
 
             db.execSQL("CREATE TABLE \"" + _MARKIERUNG + "\" (" +
-                    "\"" + _MID + "\" INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "\"" + _PID + "\" INTEGER REFERENCES \"" + _SCHNITZELJAGD + "\" (\"" + _PID + "\"), " +
+                    "\"" + _MID + "\" TEXT PRIMARY KEY, " +
+                    "\"" + _PID + "\" TEXT REFERENCES \"" + _SCHNITZELJAGD + "\" (\"" + _PID + "\"), " +
                     "\"" + _LATITUDE + "\" DOUBLE NOT NULL, " +
                     "\"" + _LONGITUDE + "\" DOUBLE NOT NULL, " +
                     "\"" + _HINWEIS + "\" TEXT, " +
                     "\"" + _REIHENFOLGE + "\" SMALLINT NOT NULL);\n");
 
             db.execSQL("CREATE TABLE \"" + _SCHNITZELJAGD + "\" (" +
-                    "\"" + _PID + "\" INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "\"" + _UID + "\" INTEGER REFERENCES \"" + _USER + "\" (\"" + _UID + "\"), " +
+                    "\"" + _PID + "\" TEXT PRIMARY KEY, " +
+                    "\"" + _UID + "\" TEXT REFERENCES \"" + _USER + "\" (\"" + _UID + "\"), " +
                     "\"" + _NAME + "\" TEXT NOT NULL, \"" +
                     _TIMESTAMP + "\" DATETIME DEFAULT CURRENT_TIMESTAMP\n);\n");
 
             db.execSQL("CREATE TABLE \"" + _SCHNITZELJAGD_ABSOLVIERT + "\" (" +
-                    "\"" + _UID + "\" INTEGER REFERENCES \"" + _USER + "\" (\"" + _UID + "\"), " +
-                    "\"" + _PID + "\" INTEGER REFERENCES \"" + _SCHNITZELJAGD + "\" (\"" + _PID + "\"), " +
+                    "\"" + _UID + "\" TEXT REFERENCES \"" + _USER + "\" (\"" + _UID + "\"), " +
+                    "\"" + _PID + "\" TEXT REFERENCES \"" + _SCHNITZELJAGD + "\" (\"" + _PID + "\"), " +
                     "\"" + _STARTZEIT + "\" TIMESTAMP NOT NULL, " +
                     "\"" + _ENDZEIT + "\" TIMESTAMP);\n");
 
             db.execSQL("CREATE TABLE \"" + _SCHNITZELJAGD_BEWERTUNG + "\" (" +
-                    "\"" + _SBID + "\" INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "\"" + _PID + "\" INTEGER REFERENCES \"" + _SCHNITZELJAGD + "\" (\"" + _PID + "\"), " +
-                    "\"" + _UID + "\" INTEGER REFERENCES \"" + _USER + "\" (\"" + _UID + "\"), " +
+                    "\"" + _SBID + "\" TEXT PRIMARY KEY, " +
+                    "\"" + _PID + "\" TEXT REFERENCES \"" + _SCHNITZELJAGD + "\" (\"" + _PID + "\"), " +
+                    "\"" + _UID + "\" TEXT REFERENCES \"" + _USER + "\" (\"" + _UID + "\"), " +
                     "\"" + _SCHWIERIGKEIT + "\" SMALLINT NOT NULL, " +
                     "\"" + _SPANNUNG + "\" SMALLINT NOT NULL, " +
                     "\"" + _UMGEBUNG + "\" SMALLINT NOT NULL, " +
@@ -59,24 +60,27 @@ public class DataManager extends SQLiteOpenHelper implements Constants
                     _TIMESTAMP + "\" DATETIME DEFAULT CURRENT_TIMESTAMP\n);\n");
 
             db.execSQL("CREATE TABLE \"" + _USER + "\" (\"" +
-                    _UID + "\" INTEGER PRIMARY KEY AUTOINCREMENT, \"" +
+                    _UID + "\" TEXT PRIMARY KEY, \"" +
                     _USERNAME + "\" TEXT NOT NULL UNIQUE, \"" +
                     _PASSWORD + "\" TEXT NOT NULL, \"" +
                     _TIMESTAMP + "\" DATETIME DEFAULT CURRENT_TIMESTAMP\n);\n");
 
             java.util.Date date = new java.util.Date();
+
+            UUID fabianID= UUID.randomUUID();
+
             // Einen Beispielbenutzer.
-            db.execSQL("INSERT INTO \"User\" ( \"Username\",\"Password\",\"Timestamp\" ) VALUES ( 'Fabian','test', '" + new Timestamp(date.getTime()) + "');");
+            db.execSQL("INSERT INTO \"User\" ( \"UID\",\"Username\",\"Password\",\"Timestamp\" ) VALUES ('" + fabianID.toString() + "', 'Fabian','test', '" + new Timestamp(date.getTime()) + "');");
 
             // Beispiel Schnitzeljagden.
-            db.execSQL("INSERT INTO \"paperchase\" ( \"UID\",\"name\" ) VALUES ( 1, 'Beispiel Schnitzeljagd 1' );");
-            db.execSQL("INSERT INTO \"paperchase\" ( \"UID\",\"name\" ) VALUES ( 1, 'Beispiel Schnitzeljagd 2' );");
+            db.execSQL("INSERT INTO \"paperchase\" ( \"UID\",\"name\" ) VALUES ( '" + UUID.randomUUID().toString() + "', 'Beispiel Schnitzeljagd 1' );");
+            db.execSQL("INSERT INTO \"paperchase\" ( \"UID\",\"name\" ) VALUES ( '" + UUID.randomUUID().toString() + "', 'Beispiel Schnitzeljagd 2' );");
 
             // Beispiel Markierungen.
-            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ( 1, 1, 1,'Hinweis 1', 1 );");
-            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ( 1, 1, 1,'Hinweis 2', 2 );");
-            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ( 2, 1, 1,'Hinweis A', 1 );");
-            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ( 2, 1, 1,'Hinweis B', 2 );");
+            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ( '" + fabianID.toString() + "', 1, 1,'Hinweis 1', 1 );");
+            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ( '" + fabianID.toString() + "', 1, 1,'Hinweis 2', 2 );");
+            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ( '" + UUID.randomUUID().toString() + "', 1, 1,'Hinweis A', 1 );");
+            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ( '" + UUID.randomUUID().toString() + "', 1, 1,'Hinweis B', 2 );");
         }
         catch (Exception e)
         {

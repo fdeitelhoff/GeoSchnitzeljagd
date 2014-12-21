@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.List;
+import java.util.UUID;
 
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Paperchases;
 import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
@@ -59,6 +60,6 @@ public class PaperchaseListFragment_alt extends ListFragment {
     }
 
     public interface Callbacks {
-        public void onItemSelected(int id);
+        public void onItemSelected(UUID id);
     }
 }

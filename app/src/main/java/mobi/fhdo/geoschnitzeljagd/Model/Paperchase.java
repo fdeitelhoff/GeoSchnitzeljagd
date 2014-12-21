@@ -3,18 +3,17 @@ package mobi.fhdo.geoschnitzeljagd.Model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-/**
- * Created by Fabian Deitelhoff on 25.11.2014.
- */
+
 public class Paperchase implements Serializable {
 
-    private int id;
+    private UUID id;
     private User user;
     private String name;
     private List<Mark> marks;
 
-    public Paperchase(int id, User user, String name) {
+    public Paperchase(UUID id, User user, String name) {
         this(user, name);
         this.id = id;
     }
@@ -26,11 +25,11 @@ public class Paperchase implements Serializable {
         marks = new ArrayList<Mark>();
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

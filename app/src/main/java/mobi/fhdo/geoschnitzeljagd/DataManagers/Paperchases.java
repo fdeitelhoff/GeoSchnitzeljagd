@@ -8,14 +8,13 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import mobi.fhdo.geoschnitzeljagd.Model.Mark;
 import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 
-/**
- * Created by Fabian Deitelhoff on 25.11.2014.
- */
+
 public class Paperchases extends DataManager {
 
     private Marks marks;
@@ -39,7 +38,7 @@ public class Paperchases extends DataManager {
                     new String[]{user.getId() + ""});
 
             while (paperchaseCursor.moveToNext()) {
-                Paperchase paperchase = new Paperchase(paperchaseCursor.getInt(0), user, paperchaseCursor.getString(1));
+                Paperchase paperchase = new Paperchase(UUID.fromString(paperchaseCursor.getString(0)), user, paperchaseCursor.getString(1));
 
                 paperchases.add(paperchase);
             }
@@ -71,7 +70,7 @@ public class Paperchases extends DataManager {
             paperchaseCursor = database.rawQuery("SELECT * FROM paperchase WHERE name LIKE '%" + text.toString() + "%'", null);
 
             while (paperchaseCursor.moveToNext()) {
-                Paperchase paperchase = new Paperchase(paperchaseCursor.getInt(0), null, paperchaseCursor.getString(2));
+                Paperchase paperchase = new Paperchase(UUID.fromString(paperchaseCursor.getString(0)), null, paperchaseCursor.getString(2));
 
                 paperchases.add(paperchase);
             }
@@ -96,13 +95,16 @@ public class Paperchases extends DataManager {
         try {
             database = getWritableDatabase();
 
+            UUID newPid = UUID.randomUUID();
+
             ContentValues values = new ContentValues();
-            values.put("uid", paperchase.getUser().getId());
+            values.put("pid", newPid.toString());
+            values.put("uid", paperchase.getUser().getId().toString());
             values.put("name", paperchase.getName());
 
-            int id = (int) database.insert("paperchase", null, values);
+            database.insert("paperchase", null, values);
 
-            paperchase.setId(id);
+            paperchase.setId(newPid);
 
             for (Mark mark : paperchase.getMarks()) {
                 mark.setPaperchaseId(paperchase.getId());

@@ -1,12 +1,11 @@
 package mobi.fhdo.geoschnitzeljagd.Model;
 
-/**
- * Created by Fabian Deitelhoff on 25.11.2014.
- */
+import java.util.UUID;
+
 public class Mark {
 
-    private int id;
-    private int paperchaseId;
+    private UUID id;
+    private UUID paperchaseId;
     private double latitude;
     private double longitude;
 
@@ -14,7 +13,7 @@ public class Mark {
     private String hint;
     private int sequence;
 
-    public Mark(int id, double latitude, double longitude, String hint, int sequence) {
+    public Mark(UUID id, double latitude, double longitude, String hint, int sequence) {
         this(latitude, longitude, hint, sequence);
         this.id = id;
     }
@@ -30,11 +29,11 @@ public class Mark {
         this.longitude = longitude;
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -58,11 +57,11 @@ public class Mark {
         return sequence;
     }
 
-    public int getPaperchaseId() {
+    public UUID getPaperchaseId() {
         return paperchaseId;
     }
 
-    public void setPaperchaseId(int paperchaseId) {
+    public void setPaperchaseId(UUID paperchaseId) {
         this.paperchaseId = paperchaseId;
     }
 }

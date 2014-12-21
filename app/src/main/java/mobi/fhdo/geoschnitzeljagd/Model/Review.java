@@ -1,8 +1,10 @@
 package mobi.fhdo.geoschnitzeljagd.Model;
 
+import java.util.UUID;
+
 public class Review
 {
-    private int id;
+    private UUID id;
     private User user;
     private Paperchase paperchase;
 
@@ -12,7 +14,7 @@ public class Review
     private int length;
     private String comment;
 
-    public Review(int id, User user, Paperchase paperchase, int difficulty, int exciting, int environment, int length, String comment)
+    public Review(UUID id, User user, Paperchase paperchase, int difficulty, int exciting, int environment, int length, String comment)
     {
         this.id = id;
         this.user = user;
@@ -24,7 +26,7 @@ public class Review
         this.comment = comment;
     }
 
-    public int getId()
+    public UUID getId()
     {
         return id;
     }
@@ -64,7 +66,7 @@ public class Review
         return comment;
     }
 
-    public void setId(int id)
+    public void setId(UUID id)
     {
         this.id = id;
     }

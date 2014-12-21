@@ -7,6 +7,7 @@ import android.util.Log;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.UUID;
 
 import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserLoginException;
 import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserNotExistsException;
@@ -40,9 +41,7 @@ public class Users extends DataManager
 
             while (userCursor.moveToNext())
             {
-
-
-                loggedInUser = new User(userCursor.getInt(0),
+                loggedInUser = new User(UUID.fromString(userCursor.getString(0)),
                         userCursor.getString(1),
                         userCursor.getString(2), new Timestamp(userCursor.getLong(3)));
             }
@@ -89,7 +88,7 @@ public class Users extends DataManager
 
             while (userCursor.moveToNext())
             {
-                user = new User(userCursor.getInt(0),
+                user = new User(UUID.fromString(userCursor.getString(0)),
                         userCursor.getString(1),
                         userCursor.getString(2),
                         new Timestamp(userCursor.getLong(3)));
@@ -120,16 +119,7 @@ public class Users extends DataManager
         {
             database = getReadableDatabase();
 
-            userCursor = database.rawQuery(
-                    "SELECT " + _USERNAME + " FROM " + _USER + " WHERE username=?",
-                    new String[]{user.getUsername().toString()});
-
-            if (userCursor.getCount() >= 1)
-            {
-                throw new Exception("Der Benutzer mit dem Namen '" + user.getUsername().toString() + "' existiert bereits!");
-            }
-
-            String sql = "Insert into " + _USER + " (" + _USERNAME + "," + _PASSWORD + "," + _TIMESTAMP +  ") values('" + user.getUsername().toString() + "','" + user.getPassword().toString() + "','" + user.getTimestamp() +"')";
+            String sql = "Insert into " + _USER + " (" + _UID + "," + _USERNAME + "," + _PASSWORD + "," + _TIMESTAMP +  ") values('" + user.getId().toString() + "','" + user.getUsername().toString() + "','" + user.getPassword().toString() + "','" + user.getTimestamp() +"')";
             database.execSQL(sql);
         }
         finally

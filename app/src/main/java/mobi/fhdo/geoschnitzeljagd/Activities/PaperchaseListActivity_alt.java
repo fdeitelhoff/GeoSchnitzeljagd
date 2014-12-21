@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
+import java.util.UUID;
+
 import mobi.fhdo.geoschnitzeljagd.R;
 
 public class PaperchaseListActivity_alt extends FragmentActivity
@@ -16,7 +18,7 @@ public class PaperchaseListActivity_alt extends FragmentActivity
     }
 
     @Override
-    public void onItemSelected(int id) {
+    public void onItemSelected(UUID id) {
         Intent detailIntent = new Intent(this, PaperchaseDetailActivity_alt.class);
         detailIntent.putExtra("PaperchaseId", id);
         startActivity(detailIntent);

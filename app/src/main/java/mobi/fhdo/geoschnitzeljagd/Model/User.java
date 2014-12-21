@@ -17,11 +17,12 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 public class User implements Serializable
 {
 
-    private int id;
+    private UUID id;
     private String username;
     private String password;
 
@@ -39,26 +40,27 @@ public class User implements Serializable
 
     public User(String username, String password)
     {
+        setId(UUID.randomUUID());
         setUsername(username);
         setPassword(password);
 
-        java.util.Date date= new java.util.Date();
+        java.util.Date date = new java.util.Date();
         setTimestamp(new Timestamp(date.getTime()));
     }
 
-    public User(int id, String username, String password, Timestamp timestamp)
+    public User(UUID id, String username, String password, Timestamp timestamp)
     {
         this(username, password);
         this.timestamp = timestamp;
         setId(id);
     }
 
-    public int getId()
+    public UUID getId()
     {
         return id;
     }
 
-    public void setId(int id)
+    public void setId(UUID id)
     {
         this.id = id;
     }
@@ -92,7 +94,7 @@ public class User implements Serializable
         {
             writer.beginObject();
 
-            writer.name("UID").value(this.getId());
+            writer.name("UID").value(this.getId().toString());
             writer.name("Username").value(this.getUsername());
             writer.name("Password").value(this.getPassword());
             writer.name("Timestamp").value(this.getTimestamp().toString());
@@ -125,7 +127,7 @@ public class User implements Serializable
 
     public User jsonToObject(InputStream is) throws IOException
     {
-        int id = -1;
+        UUID id = null;
         String username = null;
         String password = null;
         Timestamp timestamp = null;
@@ -139,14 +141,14 @@ public class User implements Serializable
             String name = reader.nextName();
             if (name.equals("UID"))
             {
-                id = reader.nextInt();
+                id = UUID.fromString(reader.nextString());
             } else if (name.equals("Username"))
             {
                 username = reader.nextString();
             } else if (name.equals("Password"))
             {
                 password = reader.nextString();
-            }else if (name.equals("Timestamp"))
+            } else if (name.equals("Timestamp"))
             {
                 try
                 {
