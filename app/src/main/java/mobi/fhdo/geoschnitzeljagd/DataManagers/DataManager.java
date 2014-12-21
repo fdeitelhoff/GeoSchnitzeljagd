@@ -11,7 +11,7 @@ import java.util.UUID;
 public class DataManager extends SQLiteOpenHelper implements Constants
 {
     private static final String DATABASE_NAME = "mobi.fhdo.geoschnitzeljagd.sqlite.db";
-    private static final int DATABASE_VERSION = 19;
+    private static final int DATABASE_VERSION = 22;
 
     public DataManager(Context ctx)
     {
@@ -64,7 +64,7 @@ public class DataManager extends SQLiteOpenHelper implements Constants
                     _USERNAME + "\" TEXT NOT NULL UNIQUE, \"" +
                     _PASSWORD + "\" TEXT NOT NULL, \"" +
                     _TIMESTAMP + "\" DATETIME DEFAULT CURRENT_TIMESTAMP\n);\n");
-
+/*
             java.util.Date date = new java.util.Date();
 
             UUID fabianID= UUID.randomUUID();
@@ -73,14 +73,15 @@ public class DataManager extends SQLiteOpenHelper implements Constants
             db.execSQL("INSERT INTO \"User\" ( \"UID\",\"Username\",\"Password\",\"Timestamp\" ) VALUES ('" + fabianID.toString() + "', 'Fabian','test', '" + new Timestamp(date.getTime()) + "');");
 
             // Beispiel Schnitzeljagden.
-            db.execSQL("INSERT INTO \"paperchase\" ( \"UID\",\"name\" ) VALUES ( '" + UUID.randomUUID().toString() + "', 'Beispiel Schnitzeljagd 1' );");
-            db.execSQL("INSERT INTO \"paperchase\" ( \"UID\",\"name\" ) VALUES ( '" + UUID.randomUUID().toString() + "', 'Beispiel Schnitzeljagd 2' );");
+            db.execSQL("INSERT INTO \"paperchase\" ( \"PID\",\"UID\",\"name\" ) VALUES ('" + UUID.randomUUID().toString() + "', '" + UUID.randomUUID().toString() + "', 'Beispiel Schnitzeljagd 1' );");
+            db.execSQL("INSERT INTO \"paperchase\" ( \"PID\",\"UID\",\"name\" ) VALUES ('" + UUID.randomUUID().toString() + "', '" + UUID.randomUUID().toString() + "', 'Beispiel Schnitzeljagd 2' );");
 
             // Beispiel Markierungen.
-            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ( '" + fabianID.toString() + "', 1, 1,'Hinweis 1', 1 );");
-            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ( '" + fabianID.toString() + "', 1, 1,'Hinweis 2', 2 );");
-            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ( '" + UUID.randomUUID().toString() + "', 1, 1,'Hinweis A', 1 );");
-            db.execSQL("INSERT INTO \"mark\" ( \"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ( '" + UUID.randomUUID().toString() + "', 1, 1,'Hinweis B', 2 );");
+            db.execSQL("INSERT INTO \"mark\" ( \"MID\",\"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ('" + UUID.randomUUID().toString() + "', '" + fabianID.toString() + "', 1, 1,'Hinweis 1', 1 );");
+            db.execSQL("INSERT INTO \"mark\" ( \"MID\",\"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ('" + UUID.randomUUID().toString() + "', '" + fabianID.toString() + "', 1, 1,'Hinweis 2', 2 );");
+            db.execSQL("INSERT INTO \"mark\" ( \"MID\",\"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ('" + UUID.randomUUID().toString() + "', '" + UUID.randomUUID().toString() + "', 1, 1,'Hinweis A', 1 );");
+            db.execSQL("INSERT INTO \"mark\" ( \"MID\",\"PID\",\"latitude\",\"longitude\",\"hint\",\"sequence\" ) VALUES ('" + UUID.randomUUID().toString() + "', '" + UUID.randomUUID().toString() + "', 1, 1,'Hinweis B', 2 );");
+        */
         }
         catch (Exception e)
         {

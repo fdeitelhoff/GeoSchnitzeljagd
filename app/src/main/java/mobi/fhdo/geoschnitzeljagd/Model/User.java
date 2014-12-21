@@ -99,18 +99,6 @@ public class User implements Serializable
             writer.name("Password").value(this.getPassword());
             writer.name("Timestamp").value(this.getTimestamp().toString());
 
-
-/*
-            SimpleDateFormat dateFormat = new SimpleDateFormat(
-                    "yyyy-MM-dd hh:mm:ss:SSS");
-
-            Date parsedTimeStamp = dateFormat.parse("2014-08-22 15:02:51:580");
-
-            Timestamp timestamp = new Timestamp(parsedTimeStamp.getTime());
-
-            assertEquals(1408737771580l, timestamp.getTime());
-*/
-
             writer.endObject();
 
 
@@ -125,15 +113,13 @@ public class User implements Serializable
         }
     }
 
-    public User jsonToObject(InputStream is) throws IOException
+    public static User jsonToObject(JsonReader reader) throws IOException
     {
         UUID id = null;
         String username = null;
         String password = null;
         Timestamp timestamp = null;
 
-        InputStreamReader isr = new InputStreamReader(is);
-        JsonReader reader = new JsonReader(isr);
 
         reader.beginObject();
         while (reader.hasNext())

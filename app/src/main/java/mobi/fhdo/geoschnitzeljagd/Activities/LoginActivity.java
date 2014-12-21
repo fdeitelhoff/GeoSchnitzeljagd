@@ -9,7 +9,10 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Base64;
+import android.util.JsonReader;
+import android.util.JsonToken;
 import android.util.JsonWriter;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -42,6 +45,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import mobi.fhdo.geoschnitzeljagd.Contexts.UserContext;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.DataManager;
@@ -96,16 +101,7 @@ public class LoginActivity extends Activity
             //conn.setRequestMethod("DELETE");
 
             conn.setDoInput(true);
-            conn.setDoOutput(true);
-/*
-            User buffer = new User("dgs", "fff");
-            buffer.objectToOutputStream(conn.getOutputStream());
 
-            String exampleString = "{\"id\":0,\"username\":\"dgs\",\"password\":\"fff\"}";
-            InputStream stream = new ByteArrayInputStream(exampleString.getBytes(StandardCharsets.UTF_8));
-            User result = buffer.jsonToObject(stream);
-            Log.d("User",result.getUsername());
-*/
             // Starts the query
             conn.connect();
             int response = conn.getResponseCode();
@@ -156,10 +152,62 @@ public class LoginActivity extends Activity
         }
 
         // onPostExecute displays the results of the AsyncTask.
+        @TargetApi(Build.VERSION_CODES.KITKAT)
         @Override
         protected void onPostExecute(String result)
         {
+            // Hier bekommt man das Ergebnis der HTTP anfrage
             Log.d("Test:", result);
+            JsonReader reader = null;
+            try
+            {
+                // String to JsonReader
+                InputStream input = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
+
+                reader = new JsonReader(new InputStreamReader(input, "UTF-8"));
+
+                // reader -> User Array
+                readMessagesArray(reader);
+            }
+            catch (Exception e)
+            {
+                Log.d("Exception:", e.getStackTrace().toString());
+            }
+            finally
+            {
+                try
+                {
+                    if (reader != null)
+                        reader.close();
+                }
+                catch (Exception e)
+                {
+                    Log.d("Exception:", e.getStackTrace().toString());
+                }
+            }
+        }
+
+        public List readMessagesArray(JsonReader reader) throws IOException
+        {
+            // Das Json Array auseinander nehmen!
+            List messages = new ArrayList();
+
+            reader.beginArray();
+            while (reader.hasNext())
+            {
+                try
+                {
+                    // User zur Datenbank hinzufügen
+                    User buffer = User.jsonToObject(reader);
+                    users.Create(buffer);
+                }
+                catch (Exception e)
+                {
+                    Log.d("Exception:", e.getStackTrace().toString());
+                }
+            }
+            reader.endArray();
+            return messages;
         }
     }
 
@@ -170,8 +218,7 @@ public class LoginActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
-
+        // HTTP Anfrage um alle Benutzer zu bekommen
         String stringUrl = "http://schnitzeljagd.fabiandeitelhoff.de/api/v1/users";
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
