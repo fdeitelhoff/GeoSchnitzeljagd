@@ -28,6 +28,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+import mobi.fhdo.geoschnitzeljagd.Contexts.UserContext;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.DataManager;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
 import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserLoginException;
@@ -69,7 +70,7 @@ public class RegistrationActivity extends Activity
     {
         try
         {
-            newUser = new User(registration_username.getText().toString(), registration_password.getText().toString());
+            newUser = new User(registration_username.getText().toString(), UserContext.getMd5(registration_password.getText().toString()));
 
 
 

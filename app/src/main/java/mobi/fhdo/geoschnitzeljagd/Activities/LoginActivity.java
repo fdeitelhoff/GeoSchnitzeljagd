@@ -285,8 +285,7 @@ public class LoginActivity extends Activity
     {
         try
         {
-            User user = new User(usernameView.getText().toString(),
-                    passwordView.getText().toString());
+            User user = new User(usernameView.getText().toString(), UserContext.getMd5(passwordView.getText().toString()));
 
             UserContext.getInstance().userLoggedIn(users.Login(user));
 
