@@ -110,7 +110,7 @@ public class Users extends DataManager
         return user;
     }
 
-    public boolean Create(User user)  throws Exception
+    public boolean CreateOrUpdate(User user) throws Exception
     {
         SQLiteDatabase database = null;
         Cursor userCursor = null;
@@ -119,8 +119,26 @@ public class Users extends DataManager
         {
             database = getReadableDatabase();
 
-            String sql = "Insert into " + _USER + " (" + _UID + "," + _USERNAME + "," + _PASSWORD + "," + _TIMESTAMP +  ") values('" + user.getId().toString() + "','" + user.getUsername().toString() + "','" + user.getPassword().toString() + "','" + user.getTimestamp() +"')";
-            database.execSQL(sql);
+            userCursor = database.rawQuery(
+                    "SELECT UID, username, password, timestamp FROM User WHERE UID=?",
+                    new String[]{user.getId().toString()});
+
+            // Wenn es noch keinen User gibt
+            if (userCursor.getCount() != 1)
+            {
+                String sql = "Insert into " + _USER + " (" + _UID + "," + _USERNAME + "," + _PASSWORD + "," + _TIMESTAMP + ") values('" + user.getId().toString() + "','" + user.getUsername().toString() + "','" + user.getPassword().toString() + "','" + user.getTimestamp() + "')";
+                database.execSQL(sql);
+            } else
+            {
+                String sql = "Update " + _USER +
+                        " set " + _USERNAME + " = '" + user.getUsername() + "',"
+                        + _PASSWORD + " = '" + user.getPassword() + "',"
+                        + _TIMESTAMP + " = '" + user.getTimestamp() + "'"
+                        + " where " + _UID + " = '" + user.getId() + "'";
+                database.execSQL(sql);
+            }
+
+
         }
         finally
         {

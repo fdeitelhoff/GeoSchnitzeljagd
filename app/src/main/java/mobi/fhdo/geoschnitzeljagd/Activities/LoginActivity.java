@@ -9,11 +9,8 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Message;
 import android.util.Base64;
 import android.util.JsonReader;
-import android.util.JsonToken;
-import android.util.JsonWriter;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,24 +22,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -52,7 +38,6 @@ import mobi.fhdo.geoschnitzeljagd.Contexts.UserContext;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.DataManager;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
 import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserLoginException;
-import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserNotExistsException;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
 
@@ -199,7 +184,7 @@ public class LoginActivity extends Activity
                 {
                     // User zur Datenbank hinzufügen
                     User buffer = User.jsonToObject(reader);
-                    users.Create(buffer);
+                    users.CreateOrUpdate(buffer);
                 }
                 catch (Exception e)
                 {

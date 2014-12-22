@@ -9,7 +9,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Base64;
+import android.util.JsonReader;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -27,11 +27,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import mobi.fhdo.geoschnitzeljagd.Contexts.UserContext;
-import mobi.fhdo.geoschnitzeljagd.DataManagers.DataManager;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
-import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserLoginException;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
 
@@ -73,8 +74,7 @@ public class RegistrationActivity extends Activity
             newUser = new User(registration_username.getText().toString(), UserContext.getMd5(registration_password.getText().toString()));
 
 
-
-            String stringUrl = "http://schnitzeljagd.fabiandeitelhoff.de/api/v1/user";
+            String stringUrl = "http://schnitzeljagd.fabiandeitelhoff.de/api/v1/register";
             ConnectivityManager connMgr = (ConnectivityManager)
                     getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -86,14 +86,14 @@ public class RegistrationActivity extends Activity
                 Toast.makeText(getBaseContext(), "No network connection available.", Toast.LENGTH_LONG).show();
             }
 
-            if (users.Create(newUser))
+
+            if (users.CreateOrUpdate(newUser))
             {
                 Toast.makeText(getBaseContext(), "Erfolgreich", Toast.LENGTH_LONG).show();
             } else
             {
                 Toast.makeText(getBaseContext(), "Fehler", Toast.LENGTH_LONG).show();
             }
-
 
 
             Intent myIntent = new Intent(this, LoginActivity.class);
@@ -130,8 +130,8 @@ public class RegistrationActivity extends Activity
         {
             URL url = new URL(myurl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            String encode = new String(Base64.encode("marcel:test".getBytes(), Base64.DEFAULT));
-            conn.setRequestProperty("Authorization", "Basic " + encode);
+            //String encode = new String(Base64.encode("marcel:test".getBytes(), Base64.DEFAULT));
+            //conn.setRequestProperty("Authorization", "Basic " + encode);
 
             conn.setRequestProperty("Content-Type", "application/json");
 
@@ -145,7 +145,6 @@ public class RegistrationActivity extends Activity
             conn.setDoOutput(true);
 
             newUser.objectToOutputStream(conn.getOutputStream());
-
 
 
             // Starts the query
@@ -198,10 +197,57 @@ public class RegistrationActivity extends Activity
         }
 
         // onPostExecute displays the results of the AsyncTask.
+        @TargetApi(Build.VERSION_CODES.KITKAT)
         @Override
         protected void onPostExecute(String result)
         {
             Log.d("Test:", result);
+            try
+            {
+                InputStream input = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
+
+                JsonReader reader = new JsonReader(new InputStreamReader(input, "UTF-8"));
+
+                reader.beginObject();
+                while (reader.hasNext())
+                {
+                    String name = reader.nextName();
+                    if (name.equals("data"))
+                    {
+                        reader.beginObject();
+                        while (reader.hasNext())
+                        {
+                            name = reader.nextName();
+                            if (name.equals("Timestamp"))
+                            {
+                                try
+                                {
+                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                    Date parsedTimeStamp = dateFormat.parse(reader.nextString());
+                                    newUser.setTimestamp(new Timestamp(parsedTimeStamp.getTime()));
+
+                                    users.CreateOrUpdate(newUser);
+                                }
+                                catch (Exception e)
+                                {
+                                    e.printStackTrace();
+                                }
+                            } else
+                            {
+                                reader.skipValue();
+                            }
+                        }
+                    } else
+                    {
+                        reader.skipValue();
+                    }
+                }
+                reader.endObject();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 }
