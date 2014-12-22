@@ -32,7 +32,7 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="Fabian"/>
+                    android:text="gg"/>
 
                 <EditText
                     android:id="@+id/password"
@@ -45,7 +45,7 @@
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="test"/>
+                    android:text="gg"/>
 
                 <Button
                     android:id="@+id/sign_in_button"

@@ -2,5 +2,6 @@
 <resources>
     <string name="activity_user_profile_label_username">Benutzername</string>
     <string name="activity_user_profile_label_points">Punkte</string>
-    <string name="activity_user_profile_button_back">Zurück</string>
+    <string name="activity_user_profile_button_delete">Löschen</string>
+    <string name="activity_user_profile_button_Save">Speichern</string>
 </resources>

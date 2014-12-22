@@ -101,7 +101,6 @@ public class User implements Serializable
 
             writer.endObject();
 
-
             writer.flush();
             osw.flush();
             writer.close();
