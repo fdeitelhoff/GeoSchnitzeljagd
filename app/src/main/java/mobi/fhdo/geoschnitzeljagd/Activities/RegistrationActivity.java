@@ -122,17 +122,11 @@ public class RegistrationActivity extends Activity
     private String downloadUrl(String myurl) throws IOException
     {
         InputStream is = null;
-        // Only display the first 500 characters of the retrieved
-        // web page content.
-        int len = 500;
 
         try
         {
             URL url = new URL(myurl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            //String encode = new String(Base64.encode("marcel:test".getBytes(), Base64.DEFAULT));
-            //conn.setRequestProperty("Authorization", "Basic " + encode);
-
             conn.setRequestProperty("Content-Type", "application/json");
 
             conn.setReadTimeout(10000 /* milliseconds */);
@@ -154,7 +148,7 @@ public class RegistrationActivity extends Activity
 
 
             // Convert the InputStream into a string
-            String contentAsString = readIt(is, len);
+            String contentAsString = UserContext.readIt(is);
             return contentAsString;
 
             // Makes sure that the InputStream is closed after the app is
@@ -167,16 +161,6 @@ public class RegistrationActivity extends Activity
                 is.close();
             }
         }
-    }
-
-    // Reads an InputStream and converts it to a String.
-    public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException
-    {
-        Reader reader = null;
-        reader = new InputStreamReader(stream, "UTF-8");
-        char[] buffer = new char[len];
-        reader.read(buffer);
-        return new String(buffer);
     }
 
     private class DownloadWebpageTask extends AsyncTask<String, Void, String>

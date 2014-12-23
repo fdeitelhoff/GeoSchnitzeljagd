@@ -184,4 +184,32 @@ public class Users extends DataManager
 
         return true;
     }
+
+    public boolean DeleteAllUsers() throws Exception
+    {
+        SQLiteDatabase database = null;
+        Cursor userCursor = null;
+
+        try
+        {
+            database = getReadableDatabase();
+
+            String sql = "Delete From " + _USER;
+            database.execSQL(sql);
+        }
+        finally
+        {
+            if (userCursor != null)
+            {
+                userCursor.close();
+            }
+
+            if (database != null)
+            {
+                database.close();
+            }
+        }
+
+        return true;
+    }
 }

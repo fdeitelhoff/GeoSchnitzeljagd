@@ -46,6 +46,6 @@
         android:text="@string/activity_user_profile_button_delete"
         android:id="@+id/delete"
         android:layout_gravity="center_horizontal"
-        android:visibility="invisible"/>
+        android:visibility="visible"/>
 
 </LinearLayout>

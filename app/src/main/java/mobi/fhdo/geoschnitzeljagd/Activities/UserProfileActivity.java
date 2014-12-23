@@ -133,9 +133,6 @@ public class UserProfileActivity extends Activity
     private String downloadUrl(String myurl) throws IOException
     {
         InputStream is = null;
-        // Only display the first 500 characters of the retrieved
-        // web page content.
-        int len = 500;
 
         try
         {
@@ -146,40 +143,47 @@ public class UserProfileActivity extends Activity
 
             conn.setRequestProperty("Content-Type", "application/json");
 
-            Log.d("Test", encode);
-
             conn.setReadTimeout(10000 /* milliseconds */);
             conn.setConnectTimeout(15000 /* milliseconds */);
+
+            conn.setDoInput(true);
 
             if (isSaveAktion)
             {
                 // Update
                 conn.setRequestMethod("PUT");
                 conn.setDoOutput(true);
-                UserContext.getInstance().getLoggedInUser().objectToOutputStream(conn.getOutputStream());
+                try
+                {
+                    UserContext.getInstance().getLoggedInUser().setUsername(usernameText.getText().toString());
+                    users.CreateOrUpdate(UserContext.getInstance().getLoggedInUser());
+                    UserContext.getInstance().getLoggedInUser().objectToOutputStream(conn.getOutputStream());
+                }
+                catch (Exception e)
+                {
+                }
             } else
             {
                 // Delete
                 conn.setRequestMethod("DELETE");
             }
 
-            conn.setDoInput(true);
-
-
             conn.connect();
             int response = conn.getResponseCode();
 
-            if(isSaveAktion)
+            if (isSaveAktion)
             {
-                if(response == 200)
+                if (response == 200)
                 {
-
+                    Toast.makeText(getBaseContext(), "Benutzername wurde erfolgreich geändert!", Toast.LENGTH_LONG).show();
+                } else
+                {
+                    Toast.makeText(getBaseContext(), "Benutzername wurde nicht geändert! Versuchen Sie es später nochmal.", Toast.LENGTH_LONG).show();
                 }
-            }
-            else
+            } else
             {
                 // Delete
-                if(response == 200)
+                if (response == 200)
                 {
                     try
                     {
@@ -201,7 +205,7 @@ public class UserProfileActivity extends Activity
 
 
             // Convert the InputStream into a string
-            String contentAsString = readIt(is, len);
+            String contentAsString = UserContext.readIt(is);
             return contentAsString;
 
             // Makes sure that the InputStream is closed after the app is
@@ -215,16 +219,6 @@ public class UserProfileActivity extends Activity
                 is.close();
             }
         }
-    }
-
-    // Reads an InputStream and converts it to a String.
-    public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException
-    {
-        Reader reader = null;
-        reader = new InputStreamReader(stream, "UTF-8");
-        char[] buffer = new char[len];
-        reader.read(buffer);
-        return new String(buffer);
     }
 
     private class DownloadWebpageTask extends AsyncTask<String, Void, String>
