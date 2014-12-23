@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import mobi.fhdo.geoschnitzeljagd.Model.Review;
+import mobi.fhdo.geoschnitzeljagd.Model.PaperchaseReview;
 
 public class PaperchaseReviews extends DataManager
 {
@@ -13,7 +13,7 @@ public class PaperchaseReviews extends DataManager
         super(ctx);
     }
 
-    public void Creaete(Review review)
+    public void Creaete(PaperchaseReview paperchaseReview)
     {
         SQLiteDatabase database = null;
         Cursor userCursor = null;
@@ -24,7 +24,7 @@ public class PaperchaseReviews extends DataManager
 
             String sql = "Insert into " + _SCHNITZELJAGD_BEWERTUNG + " " +
                     "(" + _PID + "," + _UID + "," + _SCHWIERIGKEIT + "," + _SPANNUNG + "," + _UMGEBUNG + "," + _LAENGE + "," + _KOMMENTAR + ") " +
-                    "values('" + review.getPaperchase().getId() + "','" + review.getUser().getId() + "','" + review.getDifficulty() + "','" + review.getExciting() + "','" + review.getEnvironment() + "','" + review.getLength() + "','" + review.getComment() + "')";
+                    "values('" + paperchaseReview.getPaperchase().getId() + "','" + paperchaseReview.getUser().getId() + "','" + paperchaseReview.getDifficulty() + "','" + paperchaseReview.getExciting() + "','" + paperchaseReview.getEnvironment() + "','" + paperchaseReview.getLength() + "','" + paperchaseReview.getComment() + "')";
             database.execSQL(sql);
         }
         finally

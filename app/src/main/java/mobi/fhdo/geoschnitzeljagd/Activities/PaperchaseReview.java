@@ -13,7 +13,6 @@ import android.widget.RatingBar;
 import android.widget.Toast;
 
 import mobi.fhdo.geoschnitzeljagd.DataManagers.PaperchaseReviews;
-import mobi.fhdo.geoschnitzeljagd.Model.Review;
 import mobi.fhdo.geoschnitzeljagd.R;
 
 public class PaperchaseReview extends Activity

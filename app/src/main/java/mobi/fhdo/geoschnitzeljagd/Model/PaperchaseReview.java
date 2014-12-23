@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-public class Review
+public class PaperchaseReview
 {
     private UUID id;
     private User user;
@@ -26,7 +26,7 @@ public class Review
     private int length;
     private String comment;
 
-    public Review(UUID id, User user, Paperchase paperchase, int difficulty, int exciting, int environment, int length, String comment)
+    public PaperchaseReview(UUID id, User user, Paperchase paperchase, int difficulty, int exciting, int environment, int length, String comment)
     {
         this.id = id;
         this.user = user;
