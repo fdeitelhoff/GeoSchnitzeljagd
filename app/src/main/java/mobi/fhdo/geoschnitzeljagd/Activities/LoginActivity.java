@@ -172,16 +172,22 @@ public class LoginActivity extends Activity
             reader.beginArray();
             while (reader.hasNext())
             {
-                try
+
+                // User zur Datenbank hinzufügen
+                User buffer = User.jsonToObject(reader);
+                if (buffer != null)
                 {
-                    // User zur Datenbank hinzufügen
-                    User buffer = User.jsonToObject(reader);
-                    users.CreateOrUpdate(buffer);
+                    try
+                    {
+                        users.CreateOrUpdate(buffer);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.d("DB Fehler:", e.getMessage());
+                        break;
+                    }
                 }
-                catch (Exception e)
-                {
-                    Log.d("Exception:", e.getMessage());
-                }
+
             }
             reader.endArray();
             return messages;

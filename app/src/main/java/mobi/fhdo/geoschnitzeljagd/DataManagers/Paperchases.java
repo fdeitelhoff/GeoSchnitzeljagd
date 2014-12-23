@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -34,11 +35,11 @@ public class Paperchases extends DataManager {
             database = getReadableDatabase();
 
             paperchaseCursor = database.rawQuery(
-                    "SELECT PID, name FROM paperchase WHERE UID=?",
+                    "SELECT PID, name, timestamp FROM paperchase WHERE UID=?",
                     new String[]{user.getId() + ""});
 
             while (paperchaseCursor.moveToNext()) {
-                Paperchase paperchase = new Paperchase(UUID.fromString(paperchaseCursor.getString(0)), user, paperchaseCursor.getString(1));
+                Paperchase paperchase = new Paperchase(UUID.fromString(paperchaseCursor.getString(0)), user, paperchaseCursor.getString(1), Timestamp.valueOf(paperchaseCursor.getString(2)));
 
                 paperchases.add(paperchase);
             }
@@ -70,7 +71,7 @@ public class Paperchases extends DataManager {
             paperchaseCursor = database.rawQuery("SELECT * FROM paperchase WHERE name LIKE '%" + text.toString() + "%'", null);
 
             while (paperchaseCursor.moveToNext()) {
-                Paperchase paperchase = new Paperchase(UUID.fromString(paperchaseCursor.getString(0)), null, paperchaseCursor.getString(2));
+                Paperchase paperchase = new Paperchase(UUID.fromString(paperchaseCursor.getString(0)), null, paperchaseCursor.getString(2), Timestamp.valueOf(paperchaseCursor.getString(3)));
 
                 paperchases.add(paperchase);
             }

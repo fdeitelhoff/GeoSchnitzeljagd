@@ -30,9 +30,12 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import mobi.fhdo.geoschnitzeljagd.Contexts.UserContext;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
+import mobi.fhdo.geoschnitzeljagd.Model.Mark;
+import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
 
@@ -138,6 +141,13 @@ public class RegistrationActivity extends Activity
             conn.setDoInput(true);
             conn.setDoOutput(true);
 
+/*
+            Paperchase p = new Paperchase(UUID.randomUUID(),new User("ggg","hhhh"),"TestP",new Timestamp(555));
+            p.addMark(new Mark(1,1));
+            p.addMark(new Mark(2,2));
+            p.addMark(new Mark(3,3));
+            p.addMark(new Mark(4,4));
+            p.objectToOutputStream(conn.getOutputStream());*/
             newUser.objectToOutputStream(conn.getOutputStream());
 
 

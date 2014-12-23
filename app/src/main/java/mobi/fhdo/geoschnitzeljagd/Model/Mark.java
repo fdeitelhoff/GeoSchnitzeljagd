@@ -27,6 +27,7 @@ public class Mark {
     public Mark(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
+        this.id = UUID.randomUUID();
     }
 
     public UUID getId() {

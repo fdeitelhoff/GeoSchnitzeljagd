@@ -112,7 +112,7 @@ public class User implements Serializable
         }
     }
 
-    public static User jsonToObject(JsonReader reader) throws IOException
+    public static User jsonToObject(JsonReader reader)
     {
         UUID id = null;
         String username = null;
@@ -120,38 +120,52 @@ public class User implements Serializable
         Timestamp timestamp = null;
 
 
-        reader.beginObject();
-        while (reader.hasNext())
+        try
         {
-            String name = reader.nextName();
-            if (name.equals("UID"))
+            if (reader.peek() == JsonToken.BEGIN_OBJECT)
+                reader.beginObject();
+
+            while (reader.hasNext())
             {
-                id = UUID.fromString(reader.nextString());
-            } else if (name.equals("Username"))
-            {
-                username = reader.nextString();
-            } else if (name.equals("Password"))
-            {
-                password = reader.nextString();
-            } else if (name.equals("Timestamp"))
-            {
-                try
+                String name = reader.nextName();
+                if (name.equals("UID") && reader.hasNext())
                 {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    Date parsedTimeStamp = dateFormat.parse(reader.nextString());
-                    timestamp = new Timestamp(parsedTimeStamp.getTime());
-                }
-                catch (ParseException e)
+                    id = UUID.fromString(reader.nextString());
+                } else if (name.equals("Username") && reader.hasNext())
                 {
-                    e.printStackTrace();
+                    username = reader.nextString();
+                } else if (name.equals("Password") && reader.hasNext())
+                {
+                    password = reader.nextString();
+                } else if (name.equals("Timestamp") && reader.hasNext())
+                {
+                    try
+                    {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        Date parsedTimeStamp = dateFormat.parse(reader.nextString());
+                        timestamp = new Timestamp(parsedTimeStamp.getTime());
+                    }
+                    catch (ParseException e)
+                    {
+                        e.printStackTrace();
+                    }
+                } else
+                {
+                    reader.skipValue();
                 }
-            } else
-            {
-                reader.skipValue();
             }
+            reader.endObject();
         }
-        reader.endObject();
-        return new User(id, username, password, timestamp);
+        catch (Exception e)
+        {
+            Log.d("User", "User konnte nicht geparst werden.");
+            return null;
+        }
+
+        if (id != null && username != null && password != null && timestamp != null)
+            return new User(id, username, password, timestamp);
+        else
+            return null;
     }
 
 }

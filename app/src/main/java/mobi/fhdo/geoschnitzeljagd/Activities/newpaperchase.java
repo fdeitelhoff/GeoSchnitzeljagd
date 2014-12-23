@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 
+import java.sql.Timestamp;
+
 import mobi.fhdo.geoschnitzeljagd.Contexts.UserContext;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Marks;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
@@ -64,7 +66,8 @@ public class newpaperchase extends FragmentActivity implements ActionBar.TabList
         if (paperchase != null) {
             paperchase = marks.ForPaperchase(paperchase);
         } else {
-            paperchase = new Paperchase(loggedInUser.getId(), loggedInUser, "");
+            //TODO: Timestap richtig setzen
+            paperchase = new Paperchase(loggedInUser.getId(), loggedInUser, "", new Timestamp(555));
         }
 
         /**
