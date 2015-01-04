@@ -16,18 +16,19 @@
         android:id="@+id/b_save_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/mapView"
-        android:layout_alignTop="@+id/mapView"
+        android:layout_alignBottom="@+id/mapView"
+        android:layout_alignEnd="@+id/mapView"
+        android:layout_alignRight="@+id/mapView"
         android:text="@string/paperchase_save_location" />
 
     <Button
-        android:id="@+id/b_refresh_location"
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/b_save_location"
-        android:layout_alignBottom="@+id/b_save_location"
-        android:layout_alignRight="@+id/mapView"
-        android:layout_alignTop="@+id/b_save_location"
-        android:text="@string/paperchase_refresh_location" />
+        android:layout_alignBottom="@+id/mapView"
+        android:layout_alignLeft="@+id/mapView"
+        android:layout_alignStart="@+id/mapView"
+        android:text="Hinweis" />
+
 
 </RelativeLayout>
