@@ -4,15 +4,10 @@ import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.JsonWriter;
 import android.util.Log;
-
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Serializable;
-import java.io.StringWriter;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -85,6 +80,7 @@ public class User implements Serializable
         this.password = password;
     }
 
+    // Schreibt den User in den angegebenen OutputStream
     public void objectToOutputStream(OutputStream os)
     {
         OutputStreamWriter osw = new OutputStreamWriter(os);
@@ -112,6 +108,7 @@ public class User implements Serializable
         }
     }
 
+    // Macht aus einem Json Reader eine User Objekt
     public static User jsonToObject(JsonReader reader)
     {
         UUID id = null;
@@ -131,13 +128,16 @@ public class User implements Serializable
                 if (name.equals("UID") && reader.hasNext())
                 {
                     id = UUID.fromString(reader.nextString());
-                } else if (name.equals("Username") && reader.hasNext())
+                }
+                else if (name.equals("Username") && reader.hasNext())
                 {
                     username = reader.nextString();
-                } else if (name.equals("Password") && reader.hasNext())
+                }
+                else if (name.equals("Password") && reader.hasNext())
                 {
                     password = reader.nextString();
-                } else if (name.equals("Timestamp") && reader.hasNext())
+                }
+                else if (name.equals("Timestamp") && reader.hasNext())
                 {
                     try
                     {
@@ -149,7 +149,8 @@ public class User implements Serializable
                     {
                         e.printStackTrace();
                     }
-                } else
+                }
+                else
                 {
                     reader.skipValue();
                 }

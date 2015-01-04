@@ -83,6 +83,16 @@ public class RegistrationActivity extends Activity
             NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
             if (networkInfo != null && networkInfo.isConnected())
             {
+                // User Lokal anlegen
+                if (users.CreateOrUpdate(newUser))
+                {
+                    Toast.makeText(getBaseContext(), "Erfolgreich", Toast.LENGTH_LONG).show();
+                } else
+                {
+                    Toast.makeText(getBaseContext(), "Fehler", Toast.LENGTH_LONG).show();
+                }
+
+                // User auf dem Server hinterlegen
                 new DownloadWebpageTask().execute(stringUrl);
             } else
             {
@@ -90,13 +100,7 @@ public class RegistrationActivity extends Activity
             }
 
 
-            if (users.CreateOrUpdate(newUser))
-            {
-                Toast.makeText(getBaseContext(), "Erfolgreich", Toast.LENGTH_LONG).show();
-            } else
-            {
-                Toast.makeText(getBaseContext(), "Fehler", Toast.LENGTH_LONG).show();
-            }
+
 
 
             Intent myIntent = new Intent(this, LoginActivity.class);
@@ -141,15 +145,7 @@ public class RegistrationActivity extends Activity
             conn.setDoInput(true);
             conn.setDoOutput(true);
 
-/*
-            Paperchase p = new Paperchase(UUID.randomUUID(),new User("ggg","hhhh"),"TestP",new Timestamp(555));
-            p.addMark(new Mark(1,1));
-            p.addMark(new Mark(2,2));
-            p.addMark(new Mark(3,3));
-            p.addMark(new Mark(4,4));
-            p.objectToOutputStream(conn.getOutputStream());*/
             newUser.objectToOutputStream(conn.getOutputStream());
-
 
             // Starts the query
             conn.connect();

@@ -10,6 +10,8 @@ import java.security.NoSuchAlgorithmException;
 
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 
+// Für den Systemübergreifenden User zugriff
+// Beinhaltet immer den aktuell eingeloggten Benutzer
 public class UserContext {
 
     private static UserContext instance = null;
@@ -34,6 +36,7 @@ public class UserContext {
         this.user = user;
     }
 
+    // Erstellt einen MD5 Hash
     public static final String getMd5(final String s)
     {
         try

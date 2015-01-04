@@ -60,6 +60,7 @@ public class UserProfileActivity extends Activity
         pointsText = (EditText) findViewById(R.id.points);
 
         pointsText.setText("0");
+        // pointsText EditText Controll auf Read Only setzen
         pointsText.setKeyListener(null);
 
         usernameText.setText(UserContext.getInstance().getLoggedInUser().getUsername());
@@ -75,7 +76,7 @@ public class UserProfileActivity extends Activity
             {
                 isSaveAktion = false;
 
-                // HTTP Anfrage um den Namen zu ändern
+                // HTTP Anfrage um Benutzer zu löschen
                 String stringUrl = "http://schnitzeljagd.fabiandeitelhoff.de/api/v1/user/" + UserContext.getInstance().getLoggedInUser().getId().toString();
                 ConnectivityManager connMgr = (ConnectivityManager)
                         getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -161,6 +162,7 @@ public class UserProfileActivity extends Activity
                 }
                 catch (Exception e)
                 {
+                    Toast.makeText(getBaseContext(), "Benutzername wurde nicht geändert! Versuchen Sie es später nochmal.", Toast.LENGTH_LONG).show();
                 }
             } else
             {

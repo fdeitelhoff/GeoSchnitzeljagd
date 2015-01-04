@@ -9,7 +9,6 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.JsonReader;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -22,13 +21,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -50,10 +46,104 @@ public class LoginActivity extends Activity
     private Users users;
     private DataManager dataManager;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+
+        // Paperchase Parsen Beispiel
+        /*
+        String result = "{\"PID\":\"483a3460-335a-47d1-aeb7-8ed94719d344\",\"UID\":\"40dd6a65-3309-432d-bb2d-80d4aaa3914c\",\"Name\":\"TestP\",\"Timestamp\":\"1969-12-31 19:00:00.555\",\"Marks\":[{\"MID\":\"43a61ede-3c69-4560-b8e5-91fc45b35e2d\",\"PID\":\"483a3460-335a-47d1-aeb7-8ed94719d344\",\"Latitude\":1.0,\"Longitude\":1.0,\"Hint\":null,\"Sequence\":0},{\"MID\":\"c5414482-b348-4985-862b-9e07001f81ee\",\"PID\":\"483a3460-335a-47d1-aeb7-8ed94719d344\",\"Latitude\":2.0,\"Longitude\":2.0,\"Hint\":null,\"Sequence\":0},{\"MID\":\"3aacf317-c9e6-4eb7-8716-f9890afa1325\",\"PID\":\"483a3460-335a-47d1-aeb7-8ed94719d344\",\"Latitude\":3.0,\"Longitude\":3.0,\"Hint\":null,\"Sequence\":0},{\"MID\":\"d913fab5-a336-40f8-bb3a-d6ff6783e226\",\"PID\":\"483a3460-335a-47d1-aeb7-8ed94719d344\",\"Latitude\":4.0,\"Longitude\":4.0,\"Hint\":null,\"Sequence\":0}]}";
+        Paperchase p = Paperchase.jsonToObject(result, this);
+        Log.d("Paperchase:", p.toString());
+        */
+
+
+
+        // HTTP Anfrage um alle Benutzer zu bekommen
+        String stringUrl = "http://schnitzeljagd.fabiandeitelhoff.de/api/v1/users";
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected())
+        {
+            new DownloadWebpageTask().execute(stringUrl);
+        }
+        else
+        {
+            Log.d("No network connection available.", "No network connection available.");
+        }
+
+        dataManager = new DataManager(this);
+        users = new Users(this);
+
+
+        // Set up the login form.
+        usernameView = (AutoCompleteTextView) findViewById(R.id.username);
+
+        passwordView = (EditText) findViewById(R.id.password);
+        passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener()
+        {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent)
+            {
+                if (id == R.id.login || id == EditorInfo.IME_NULL)
+                {
+                    ClickLogin();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        // Login-Button
+        Button SignInButton;
+        SignInButton = (Button) findViewById(R.id.sign_in_button);
+        SignInButton.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                ClickLogin();
+            }
+        });
+
+        // Registration-Button
+        Button RegistrationButton;
+        RegistrationButton = (Button) findViewById(R.id.registration_button);
+        RegistrationButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(view.getContext(), RegistrationActivity.class);
+                startActivity(intent);
+            }
+
+        });
+    }
+
+    public void ClickLogin()
+    {
+        try
+        {
+            User user = new User(usernameView.getText().toString(), UserContext.getMd5(passwordView.getText().toString()));
+
+            UserContext.getInstance().userLoggedIn(users.Login(user));
+
+            Intent intent = new Intent(getBaseContext(), HomeActivity.class);
+            startActivity(intent);
+        }
+        catch (UserLoginException e)
+        {
+            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
 
     // Given a URL, establishes an HttpUrlConnection and retrieves
-// the web page content as a InputStream, which it returns as
-// a string.
+    // the web page content as a InputStream, which it returns as
+    // a string.
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private String downloadUrl(String myurl) throws IOException
     {
@@ -191,93 +281,6 @@ public class LoginActivity extends Activity
             }
             reader.endArray();
             return messages;
-        }
-    }
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        // HTTP Anfrage um alle Benutzer zu bekommen
-        String stringUrl = "http://schnitzeljagd.fabiandeitelhoff.de/api/v1/users";
-        ConnectivityManager connMgr = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected())
-        {
-            new DownloadWebpageTask().execute(stringUrl);
-        } else
-        {
-            Log.d("No network connection available.", "No network connection available.");
-        }
-
-
-        dataManager = new DataManager(this);
-        users = new Users(this);
-
-
-        // Set up the login form.
-        usernameView = (AutoCompleteTextView) findViewById(R.id.username);
-
-        passwordView = (EditText) findViewById(R.id.password);
-        passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener()
-        {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent)
-            {
-                if (id == R.id.login || id == EditorInfo.IME_NULL)
-                {
-                    ClickLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        // Login-Button
-        Button SignInButton;
-        SignInButton = (Button) findViewById(R.id.sign_in_button);
-        SignInButton.setOnClickListener(new OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                ClickLogin();
-            }
-        });
-
-        // Registration-Button
-        Button RegistrationButton;
-        RegistrationButton = (Button) findViewById(R.id.registration_button);
-        RegistrationButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                Intent intent = new Intent(view.getContext(), RegistrationActivity.class);
-                startActivity(intent);
-            }
-
-        });
-    }
-
-    public void ClickLogin()
-    {
-        try
-        {
-            User user = new User(usernameView.getText().toString(), UserContext.getMd5(passwordView.getText().toString()));
-
-            UserContext.getInstance().userLoggedIn(users.Login(user));
-
-            Intent intent = new Intent(getBaseContext(), HomeActivity.class);
-            startActivity(intent);
-        }
-        catch (UserLoginException e)
-        {
-            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 }

@@ -3,12 +3,8 @@ package mobi.fhdo.geoschnitzeljagd.DataManagers;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.UUID;
-
 import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserLoginException;
 import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserNotExistsException;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
@@ -62,11 +58,11 @@ public class Users extends DataManager
         return loggedInUser;
     }
 
-    public User Get(Integer userId) throws UserNotExistsException
+    public User Get(UUID userId) throws UserNotExistsException
     {
-        if (userId <= 0)
+        if (userId == null)
         {
-            throw new IllegalArgumentException("Die UserID darf nicht kleiner gleich Null sein!");
+            throw new IllegalArgumentException("Die UserID darf nicht gleich Null sein!");
         }
 
         SQLiteDatabase database = null;
