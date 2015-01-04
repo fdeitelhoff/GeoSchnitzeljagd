@@ -90,7 +90,7 @@
             android:label="@string/paperchase_create" />
         <activity
             android:name=".Activities.NewPaperchaseActivity"
-            android:label="@string/title_activity_new_paperchase"></activity>
+            android:label="@string/title_activity_new_paperchase" />
         <!--
         <activity
             android:name=".Activities.NewPaperchaseMarkMapActivity"
@@ -101,12 +101,12 @@
             android:name=".Activities.NewPaperchaseMarkMapActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen"
-            android:theme="@style/FullscreenTheme"></activity>
+            android:theme="@style/FullscreenTheme" />
         <activity
             android:name=".Activities.MarkMapActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_mark_map"
-            android:theme="@style/FullscreenTheme"></activity>
+            android:theme="@style/FullscreenTheme" />
     </application>
 
 </manifest>
