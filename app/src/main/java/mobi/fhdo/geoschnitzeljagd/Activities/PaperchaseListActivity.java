@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -82,5 +84,22 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
         Intent detailIntent = new Intent(this, newpaperchase.class);
         detailIntent.putExtra("Paperchase", selectedPaperchase);
         startActivity(detailIntent);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_paperchase_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.strings_activity_paperchase_list:
+                Intent intent = new Intent(this, NewPaperchaseActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

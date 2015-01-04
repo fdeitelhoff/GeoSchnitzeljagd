@@ -12,14 +12,12 @@ import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
 
-public class HomeActivity extends Activity
-{
+public class HomeActivity extends Activity {
     private Users users;
     private User loggedInUser;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
@@ -49,11 +47,9 @@ public class HomeActivity extends Activity
 
         // User Profile Button.
         Button userProfile = (Button) findViewById(R.id.buton_user_profile);
-        userProfile.setOnClickListener(new View.OnClickListener()
-        {
+        userProfile.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 Intent myIntent = new Intent(view.getContext(), UserProfileActivity.class);
                 startActivity(myIntent);
             }
@@ -61,11 +57,9 @@ public class HomeActivity extends Activity
 
         // Settings Button.
         Button settings = (Button) findViewById(R.id.button_settings);
-        settings.setOnClickListener(new View.OnClickListener()
-        {
+        settings.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 Intent myIntent = new Intent(view.getContext(), SettingsActivity.class);
                 startActivity(myIntent);
             }
@@ -73,11 +67,9 @@ public class HomeActivity extends Activity
 
         // Search Button.
         Button search = (Button) findViewById(R.id.button_search);
-        search.setOnClickListener(new View.OnClickListener()
-        {
+        search.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 Intent myIntent = new Intent(view.getContext(), SearchActivity.class);
                 startActivity(myIntent);
             }
@@ -85,11 +77,9 @@ public class HomeActivity extends Activity
 
         // Nearby Button.
         Button nearby = (Button) findViewById(R.id.button_nearby);
-        nearby.setOnClickListener(new View.OnClickListener()
-        {
+        nearby.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 Intent myIntent = new Intent(view.getContext(), NearbyActivity.class);
                 startActivity(myIntent);
             }
@@ -97,11 +87,9 @@ public class HomeActivity extends Activity
 
         // Eigene Schnitzeljagd button.
         Button ownPaperchases = (Button) findViewById(R.id.button_own_paperchases);
-        ownPaperchases.setOnClickListener(new View.OnClickListener()
-        {
+        ownPaperchases.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), PaperchaseListActivity.class);
                 startActivity(intent);
             }
@@ -109,11 +97,9 @@ public class HomeActivity extends Activity
 
         // Exit button.
         Button exit = (Button) findViewById(R.id.button_exit);
-        exit.setOnClickListener(new View.OnClickListener()
-        {
+        exit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_HOME);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -121,13 +107,12 @@ public class HomeActivity extends Activity
             }
         });
 
+        // New paperchase.
         Button newPaperchase = (Button) findViewById(R.id.button_new_paperchases);
-        newPaperchase.setOnClickListener(new View.OnClickListener()
-        {
+        newPaperchase.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-                Intent intent = new Intent(view.getContext(), newpaperchase.class);
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), NewPaperchaseActivity.class);
                 startActivity(intent);
             }
         });

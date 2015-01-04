@@ -21,7 +21,7 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Holo">
         <activity
-            android:name="mobi.fhdo.geoschnitzeljagd.Activities.LoginActivity"
+            android:name=".Activities.LoginActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize|stateVisible">
             <intent-filter>
@@ -31,28 +31,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="mobi.fhdo.geoschnitzeljagd.Activities.RegistrationActivity"
+            android:name=".Activities.RegistrationActivity"
             android:label="@string/title_activity_user_profile" />
         <activity
-            android:name="mobi.fhdo.geoschnitzeljagd.Activities.UserProfileActivity"
+            android:name=".Activities.UserProfileActivity"
             android:label="@string/title_activity_user_profile" />
         <activity
-            android:name="mobi.fhdo.geoschnitzeljagd.Activities.HomeActivity"
+            android:name=".Activities.HomeActivity"
             android:label="@string/title_activity_home" />
         <activity
-            android:name="mobi.fhdo.geoschnitzeljagd.Activities.SettingsActivity"
+            android:name=".Activities.SettingsActivity"
             android:label="@string/title_activity_home" />
         <activity
-            android:name="mobi.fhdo.geoschnitzeljagd.Activities.NearbyActivity"
+            android:name=".Activities.NearbyActivity"
             android:label="@string/title_activity_home" />
         <activity
-            android:name="mobi.fhdo.geoschnitzeljagd.Activities.SearchActivity"
+            android:name=".Activities.SearchActivity"
             android:label="@string/title_activity_home" />
         <activity
-            android:name="mobi.fhdo.geoschnitzeljagd.Activities.PaperchaseReview"
+            android:name=".Activities.PaperchaseReview"
             android:label="@string/title_activity_home" />
         <activity
-            android:name="mobi.fhdo.geoschnitzeljagd.Activities.PaperchaseStart"
+            android:name=".Activities.PaperchaseStart"
             android:label="@string/title_activity_home" />
 
         <!-- Gooogle Maps API -->
@@ -69,23 +69,44 @@
             Marcel-KEy: AIzaSyDzfYRJYuZi3pIy87AV4iaZUflFYD74j7o
             Fabian-Key: AIzaSyDbKPAAp70_v65QegY0af_S6-XmkH5Roac
         -->
+        <!--
         <activity
-            android:name="mobi.fhdo.geoschnitzeljagd.Activities.PaperchaseListActivity_alt"
+            android:name=".Activities.PaperchaseListActivity_alt"
             android:label="@string/title_paperchase_list" />
         <activity
-            android:name="mobi.fhdo.geoschnitzeljagd.Activities.PaperchaseDetailActivity_alt"
+            android:name=".Activities.PaperchaseDetailActivity_alt"
             android:label="@string/title_paperchase_detail"
-            android:parentActivityName="mobi.fhdo.geoschnitzeljagd.Activities.PaperchaseListActivity_alt">
+            android:parentActivityName=".Activities.PaperchaseListActivity_alt" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="mobi.fhdo.geoschnitzeljagd.PaperchaseListActivity" />
         </activity>
+        -->
         <activity
-            android:name="mobi.fhdo.geoschnitzeljagd.Activities.PaperchaseListActivity"
+            android:name=".Activities.PaperchaseListActivity"
             android:label="@string/title_activity_paperchase_list" />
         <activity
             android:name=".Activities.newpaperchase"
-            android:label="@string/paperchase_create"></activity>
+            android:label="@string/paperchase_create" />
+        <activity
+            android:name=".Activities.NewPaperchaseActivity"
+            android:label="@string/title_activity_new_paperchase"></activity>
+        <!--
+        <activity
+            android:name=".Activities.NewPaperchaseMarkMapActivity"
+            android:label="@string/title_activity_new_paperchase_mark_map_fragment" >
+        </activity>
+        -->
+        <activity
+            android:name=".Activities.NewPaperchaseMarkMapActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen"
+            android:theme="@style/FullscreenTheme"></activity>
+        <activity
+            android:name=".Activities.MarkMapActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_mark_map"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

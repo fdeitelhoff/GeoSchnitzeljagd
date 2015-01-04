@@ -1,0 +1,41 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="mobi.fhdo.geoschnitzeljagd.Activities.NewPaperchaseMarkMapActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <fragment
+            android:id="@+id/mapView"
+            android:name="com.google.android.gms.maps.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/b_save_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/mapView"
+            android:layout_alignTop="@+id/mapView"
+            android:text="@string/paperchase_save_location" />
+
+        <Button
+            android:id="@+id/b_refresh_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/b_save_location"
+            android:layout_alignBottom="@+id/b_save_location"
+            android:layout_alignRight="@+id/mapView"
+            android:layout_alignTop="@+id/b_save_location"
+            android:text="@string/paperchase_refresh_location" />
+    </RelativeLayout>
+
+</FrameLayout>

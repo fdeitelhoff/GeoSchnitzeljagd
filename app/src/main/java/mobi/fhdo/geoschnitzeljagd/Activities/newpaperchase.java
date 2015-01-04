@@ -27,7 +27,6 @@ public class newpaperchase extends FragmentActivity implements ActionBar.TabList
     private Users users;
     private User loggedInUser;
 
-
     private String[] tabs = {"Bearbeiten", "Karte"};
 
     private Marks marks;
@@ -90,7 +89,6 @@ public class newpaperchase extends FragmentActivity implements ActionBar.TabList
             public void onPageScrollStateChanged(int arg0) {
             }
         });
-
     }
 
     // Create the adapter that will return a fragment for each of the three
@@ -123,6 +121,4 @@ public class newpaperchase extends FragmentActivity implements ActionBar.TabList
         getMenuInflater().inflate(R.menu.newpaperchase, menu);
         return true;
     }
-
-
 }

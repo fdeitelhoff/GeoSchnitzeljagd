@@ -20,5 +20,10 @@
     <string name="title_paperchase_detail">Paperchase Detail</string>
     <string name="title_activity_paperchase_list">PaperchaseListActivity</string>
     <string name="title_activity_test">test</string>
+    <string name="title_activity_new_paperchase_mark_map_fragment">NewPaperchaseMarkMapFragment</string>
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_mark_map">MarkMapActivity</string>
 
 </resources>
