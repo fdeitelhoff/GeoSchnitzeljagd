@@ -38,8 +38,7 @@ import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserLoginException;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
 
-public class LoginActivity extends Activity
-{
+public class LoginActivity extends Activity {
     private AutoCompleteTextView usernameView;
     private EditText passwordView;
 
@@ -47,8 +46,7 @@ public class LoginActivity extends Activity
     private DataManager dataManager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -60,18 +58,14 @@ public class LoginActivity extends Activity
         */
 
 
-
         // HTTP Anfrage um alle Benutzer zu bekommen
         String stringUrl = "http://schnitzeljagd.fabiandeitelhoff.de/api/v1/users";
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected())
-        {
+        if (networkInfo != null && networkInfo.isConnected()) {
             new DownloadWebpageTask().execute(stringUrl);
-        }
-        else
-        {
+        } else {
             Log.d("No network connection available.", "No network connection available.");
         }
 
@@ -83,13 +77,10 @@ public class LoginActivity extends Activity
         usernameView = (AutoCompleteTextView) findViewById(R.id.username);
 
         passwordView = (EditText) findViewById(R.id.password);
-        passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener()
-        {
+        passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent)
-            {
-                if (id == R.id.login || id == EditorInfo.IME_NULL)
-                {
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == R.id.login || id == EditorInfo.IME_NULL) {
                     ClickLogin();
                     return true;
                 }
@@ -100,11 +91,9 @@ public class LoginActivity extends Activity
         // Login-Button
         Button SignInButton;
         SignInButton = (Button) findViewById(R.id.sign_in_button);
-        SignInButton.setOnClickListener(new OnClickListener()
-        {
+        SignInButton.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 ClickLogin();
             }
         });
@@ -112,11 +101,9 @@ public class LoginActivity extends Activity
         // Registration-Button
         Button RegistrationButton;
         RegistrationButton = (Button) findViewById(R.id.registration_button);
-        RegistrationButton.setOnClickListener(new View.OnClickListener()
-        {
+        RegistrationButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), RegistrationActivity.class);
                 startActivity(intent);
             }
@@ -124,19 +111,15 @@ public class LoginActivity extends Activity
         });
     }
 
-    public void ClickLogin()
-    {
-        try
-        {
+    public void ClickLogin() {
+        try {
             User user = new User(usernameView.getText().toString(), UserContext.getMd5(passwordView.getText().toString()));
 
             UserContext.getInstance().userLoggedIn(users.Login(user));
 
             Intent intent = new Intent(getBaseContext(), HomeActivity.class);
             startActivity(intent);
-        }
-        catch (UserLoginException e)
-        {
+        } catch (UserLoginException e) {
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
@@ -145,12 +128,10 @@ public class LoginActivity extends Activity
     // the web page content as a InputStream, which it returns as
     // a string.
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    private String downloadUrl(String myurl) throws IOException
-    {
+    private String downloadUrl(String myurl) throws IOException {
         InputStream is = null;
 
-        try
-        {
+        try {
             URL url = new URL(myurl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestProperty("Content-Type", "application/json");
@@ -182,29 +163,21 @@ public class LoginActivity extends Activity
 
             // Makes sure that the InputStream is closed after the app is
             // finished using it.
-        }
-        finally
-        {
-            if (is != null)
-            {
+        } finally {
+            if (is != null) {
                 is.close();
             }
         }
     }
 
-    private class DownloadWebpageTask extends AsyncTask<String, Void, String>
-    {
+    private class DownloadWebpageTask extends AsyncTask<String, Void, String> {
         @Override
-        protected String doInBackground(String... urls)
-        {
+        protected String doInBackground(String... urls) {
 
             // params comes from the execute() call: params[0] is the url.
-            try
-            {
+            try {
                 return downloadUrl(urls[0]);
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 return "Unable to retrieve web page. URL may be invalid.";
             }
         }
@@ -212,13 +185,11 @@ public class LoginActivity extends Activity
         // onPostExecute displays the results of the AsyncTask.
         @TargetApi(Build.VERSION_CODES.KITKAT)
         @Override
-        protected void onPostExecute(String result)
-        {
+        protected void onPostExecute(String result) {
             // Hier bekommt man das Ergebnis der HTTP anfrage
             Log.d("Test:", result);
             JsonReader reader = null;
-            try
-            {
+            try {
                 // String to JsonReader
                 InputStream input = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
 
@@ -226,53 +197,37 @@ public class LoginActivity extends Activity
 
                 // reader -> User Array
                 readMessagesArray(reader);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Log.d("Exception:", e.getStackTrace().toString());
-            }
-            finally
-            {
-                try
-                {
+            } finally {
+                try {
                     if (reader != null)
                         reader.close();
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     Log.d("Exception:", e.getStackTrace().toString());
                 }
             }
         }
 
-        public List readMessagesArray(JsonReader reader) throws IOException
-        {
+        public List readMessagesArray(JsonReader reader) throws IOException {
             // Das Json Array auseinander nehmen!
             List messages = new ArrayList();
 
-            try
-            {
+            try {
                 users.DeleteAllUsers();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
             reader.beginArray();
-            while (reader.hasNext())
-            {
+            while (reader.hasNext()) {
 
                 // User zur Datenbank hinzufügen
                 User buffer = User.jsonToObject(reader);
-                if (buffer != null)
-                {
-                    try
-                    {
+                if (buffer != null) {
+                    try {
                         users.CreateOrUpdate(buffer);
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         Log.d("DB Fehler:", e.getMessage());
                         break;
                     }

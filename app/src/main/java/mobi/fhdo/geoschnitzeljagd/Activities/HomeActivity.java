@@ -34,7 +34,7 @@ public class HomeActivity extends Activity {
         p.addMark(new Mark(1.11, 1.22, "Hinweis 1", 1));
         p.addMark(new Mark(2.22, 3.33, "Hinweis 2", 2));
         p.addMark(new Mark(3.33, 4.44, "Hinweis 3", 3));
-        new Paperchases(this).Create(p);
+        new Paperchases(this).create(p);
 
             Paperchase p = new Paperchase(UUID.randomUUID(),new User("ggg","hhhh"),"TestP",new Timestamp(555));
             p.addMark(new Mark(1,1));
@@ -43,7 +43,6 @@ public class HomeActivity extends Activity {
             p.addMark(new Mark(4,4));
             p.objectToOutputStream(conn.getOutputStream());
          */
-
 
         // User Profile Button.
         Button userProfile = (Button) findViewById(R.id.buton_user_profile);

@@ -7,8 +7,10 @@ import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,24 +22,86 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.UUID;
+
+import mobi.fhdo.geoschnitzeljagd.Contexts.UserContext;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.GPSTracker;
+import mobi.fhdo.geoschnitzeljagd.DataManagers.Paperchases;
+import mobi.fhdo.geoschnitzeljagd.Model.Mark;
+import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
+import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
 
-public class MarkMapActivity extends Activity implements GoogleMap.OnMapClickListener, GoogleMap.OnMarkerDragListener, GoogleMap.OnInfoWindowClickListener {
+public class MarkMapActivity extends Activity implements GoogleMap.OnMapClickListener,
+        GoogleMap.OnMarkerDragListener, GoogleMap.OnInfoWindowClickListener,
+        GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap googleMap;
+
+    private User loggedInUser;
+
+    private LinkedHashMap<Marker, UUID> waypoints;
+    private Marker currentWaypoint;
+
+    private Paperchases paperchases;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //Remove title bar
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         //Remove notification bar
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_mark_map);
+
+        // Save all waypoints.
+        Button saveWaypoints = (Button) findViewById(R.id.button_save_waypoints);
+        saveWaypoints.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                savePaperchase();
+
+                finish();
+            }
+        });
+
+        // Add a new waypoint.
+        Button addWaypoint = (Button) findViewById(R.id.button_add_waypoint);
+        addWaypoint.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                setLocation();
+            }
+        });
+
+        // Remove a new waypoint.
+        Button removeWaypoint = (Button) findViewById(R.id.button_remove_waypoint);
+        removeWaypoint.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                if (currentWaypoint != null) {
+                    waypoints.remove(currentWaypoint);
+
+                    currentWaypoint.remove();
+                    currentWaypoint = null;
+
+                    int waypointNumber = 0;
+                    for (Marker waypoint : waypoints.keySet()) {
+                        waypoint.setTitle(++waypointNumber + ". Wegpunkt");
+                    }
+                }
+            }
+        });
+
+        loggedInUser = UserContext.getInstance().getLoggedInUser();
+
+        waypoints = new LinkedHashMap<Marker, UUID>();
+
+        paperchases = new Paperchases(this);
 
         createMapView();
         setLocation();
@@ -69,6 +133,8 @@ public class MarkMapActivity extends Activity implements GoogleMap.OnMapClickLis
                 googleMap.setOnMapClickListener(this);
                 googleMap.setOnMarkerDragListener(this);
                 googleMap.setOnInfoWindowClickListener(this);
+                googleMap.setOnMapLongClickListener(this);
+                googleMap.setOnMarkerClickListener(this);
 
                 if (null == googleMap) {
                     Toast.makeText(this,
@@ -84,25 +150,7 @@ public class MarkMapActivity extends Activity implements GoogleMap.OnMapClickLis
         GPSTracker gpsTracker = new GPSTracker(this);
         Location location = gpsTracker.getLocation();
 
-        /*if (currentMarker != null) {
-            currentMarker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
-        } else {*/
-            /*Latitude : 51.3000
-            Longitude : 7.2800*/
-        Marker currentWaypoint = googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                        //.position(new LatLng(51.3000, 7.2800))
-                .title("Aktueller Wegpunkt")
-                .snippet("Aktuell kein Hinweis hinterlegt.")
-                .draggable(true));
-
-        currentWaypoint.showInfoWindow();
-        //}
-
-        //Log.d("aktuelles Standort", "aktuelles Standort: " + "Lat: " + location.getLatitude() + "Long: " + location.getLongitude());
-
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(location.getLatitude(), location.getLongitude())), 15));
-        //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.3000, 7.2800), 15));
+        addMarker(new LatLng(location.getLatitude(), location.getLongitude()), true);
     }
 
     @Override
@@ -148,8 +196,65 @@ public class MarkMapActivity extends Activity implements GoogleMap.OnMapClickLis
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 // Abbrechen...
+                                marker.showInfoWindow();
                             }
                         })
                 .show();
+    }
+
+    @Override
+    public void onMapLongClick(LatLng position) {
+        addMarker(position, false);
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        currentWaypoint = marker;
+        marker.showInfoWindow();
+        return true;
+    }
+
+    private void addMarker(LatLng position, boolean focusMap) {
+        Marker waypoint = googleMap.addMarker(new MarkerOptions()
+                .position(position)
+                .title((waypoints.size() + 1) + ". Wegpunkt")
+                .snippet("Tippen um Hinweis zu setzen...")
+                .draggable(true));
+
+        waypoints.put(waypoint, UUID.randomUUID());
+
+        waypoint.showInfoWindow();
+
+        if (focusMap) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
+        }
+    }
+
+    private void savePaperchase() {
+        EditText paperchaseName = (EditText) findViewById(R.id.editText_paperchase_name);
+        UUID paperchaseUID = UUID.randomUUID();
+
+        // TODO: Vorher an den Server schicken und bei Erfolg die lokale Datenbank aktualisieren.
+
+        // Collect the marks for the waypoints.
+        List<Mark> marker = new ArrayList<Mark>();
+        int sequence = 0;
+        for (Marker waypoint : waypoints.keySet()) {
+            Mark mark = new Mark(waypoints.get(waypoint),
+                    paperchaseUID,
+                    waypoint.getPosition().latitude,
+                    waypoint.getPosition().longitude,
+                    waypoint.getSnippet(),
+                    ++sequence);
+
+            marker.add(mark);
+        }
+
+        // Save the paperchase with waypoints into the local database.
+        // The timestamp is needed from the server!
+        Paperchase paperchase = new Paperchase(paperchaseUID, loggedInUser,
+                paperchaseName.getText().toString(), new Timestamp(555), marker);
+
+        paperchases.create(paperchase);
     }
 }

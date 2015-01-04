@@ -59,7 +59,7 @@ public class Marks extends DataManager
         return paperchase;
     }
 
-    public Mark Create(Mark mark)
+    public Mark create(Mark mark)
     {
         SQLiteDatabase database = null;
 

@@ -89,7 +89,7 @@ public class newPaperchaseCreateFragment extends Fragment implements View.OnClic
                     return;
                 } else {
                     new_paperchase = new Paperchases(getActivity().getApplicationContext());
-                    new_paperchase.Create(activity.paperchase);
+                    new_paperchase.create(activity.paperchase);
                 }
 
             }

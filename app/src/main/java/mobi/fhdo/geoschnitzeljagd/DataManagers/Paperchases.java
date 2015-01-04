@@ -90,29 +90,21 @@ public class Paperchases extends DataManager {
         return paperchases;
     }
 
-    public Paperchase Create(Paperchase paperchase) {
+    public Paperchase create(Paperchase paperchase) {
         SQLiteDatabase database = null;
 
         try {
             database = getWritableDatabase();
 
-            UUID newPid = UUID.randomUUID();
-
             ContentValues values = new ContentValues();
-            values.put("pid", newPid.toString());
+            values.put("pid", paperchase.getId().toString());
             values.put("uid", paperchase.getUser().getId().toString());
             values.put("name", paperchase.getName());
 
             database.insert("paperchase", null, values);
 
-            paperchase.setId(newPid);
-
             for (Mark mark : paperchase.getMarks()) {
-                mark.setPaperchaseId(paperchase.getId());
-
-                Mark newMark = marks.Create(mark);
-
-                mark.setId(newMark.getId());
+                marks.create(mark);
             }
         } catch (Exception e) {
             Log.w("Exception", e.toString());
