@@ -26,7 +26,7 @@ public class Paperchases extends DataManager {
         marks = new Marks(ctx);
     }
 
-    public List<Paperchase> Own(User user) {
+    public List<Paperchase> own(User user) {
         SQLiteDatabase database = null;
         Cursor paperchaseCursor = null;
         List<Paperchase> paperchases = new ArrayList<Paperchase>();
@@ -59,11 +59,10 @@ public class Paperchases extends DataManager {
     }
 
 
-    public List<Paperchase> Search(String text) {
+    public List<Paperchase> search(String text) {
         SQLiteDatabase database = null;
         Cursor paperchaseCursor = null;
         List<Paperchase> paperchases = new ArrayList<Paperchase>();
-        Users users = null;
 
         try {
             database = getReadableDatabase();
@@ -102,6 +101,33 @@ public class Paperchases extends DataManager {
             values.put("name", paperchase.getName());
 
             database.insert("paperchase", null, values);
+
+            for (Mark mark : paperchase.getMarks()) {
+                marks.create(mark);
+            }
+        } catch (Exception e) {
+            Log.w("Exception", e.toString());
+        } finally {
+            if (database != null) {
+                database.close();
+            }
+        }
+
+        return paperchase;
+    }
+
+    public Paperchase update(Paperchase paperchase) {
+        SQLiteDatabase database = null;
+
+        try {
+            database = getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            values.put("name", paperchase.getName());
+
+            database.update("paperchase", values, "pid = ?", new String[]{paperchase.getId() + ""});
+
+            marks.removeForPaperchase(paperchase);
 
             for (Mark mark : paperchase.getMarks()) {
                 marks.create(mark);

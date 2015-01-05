@@ -33,7 +33,7 @@ public class NewPaperchaseActivity extends Activity {
         int id = item.getItemId();
 
         if (id == R.id.strings_activity_new_paperchase) {
-            Intent intent = new Intent(this, MarkMapActivity.class);
+            Intent intent = new Intent(this, PaperchaseActivity.class);
             startActivity(intent);
             return true;
         }

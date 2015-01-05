@@ -16,6 +16,7 @@ import com.example.android.swipedismiss.SwipeDismissListViewTouchListener;
 import java.util.List;
 
 import mobi.fhdo.geoschnitzeljagd.Contexts.UserContext;
+import mobi.fhdo.geoschnitzeljagd.DataManagers.Marks;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Paperchases;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
 import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
@@ -27,6 +28,7 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
     private ListView paperchasesListView;
 
     private Paperchases paperchases;
+    private Marks marks;
     private List<Paperchase> ownPaperchases;
     private ArrayAdapter dataAdapter;
 
@@ -43,10 +45,12 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
 
         users = new Users(this);
         paperchases = new Paperchases(this);
+        marks = new Marks(this);
 
         loggedInUser = UserContext.getInstance().getLoggedInUser();
 
-        ownPaperchases = paperchases.Own(loggedInUser);
+        ownPaperchases = paperchases.own(loggedInUser);
+
         dataAdapter = new ArrayAdapter<Paperchase>(this,
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
@@ -81,9 +85,11 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
 
         Paperchase selectedPaperchase = (Paperchase) paperchasesListView.getAdapter().getItem(position);
 
-        Intent detailIntent = new Intent(this, newpaperchase.class);
-        detailIntent.putExtra("Paperchase", selectedPaperchase);
-        startActivity(detailIntent);
+        selectedPaperchase = marks.forPaperchase(selectedPaperchase);
+
+        Intent editPaperchaseIntent = new Intent(this, PaperchaseActivity.class);
+        editPaperchaseIntent.putExtra("Paperchase", selectedPaperchase);
+        startActivity(editPaperchaseIntent);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -95,7 +101,7 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.strings_activity_paperchase_list:
-                Intent intent = new Intent(this, NewPaperchaseActivity.class);
+                Intent intent = new Intent(this, PaperchaseActivity.class);
                 startActivity(intent);
                 return true;
             default:

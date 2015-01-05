@@ -63,7 +63,7 @@ public class newpaperchase extends FragmentActivity implements ActionBar.TabList
         }
 
         if (paperchase != null) {
-            paperchase = marks.ForPaperchase(paperchase);
+            paperchase = marks.forPaperchase(paperchase);
         } else {
             //TODO: Timestap richtig setzen
             paperchase = new Paperchase(loggedInUser.getId(), loggedInUser, "", new Timestamp(555));

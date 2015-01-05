@@ -94,6 +94,16 @@ public class HomeActivity extends Activity {
             }
         });
 
+        // New paperchase.
+        Button newPaperchase = (Button) findViewById(R.id.button_new_paperchases);
+        newPaperchase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), PaperchaseActivity.class);
+                startActivity(intent);
+            }
+        });
+
         // Exit button.
         Button exit = (Button) findViewById(R.id.button_exit);
         exit.setOnClickListener(new View.OnClickListener() {
@@ -102,16 +112,6 @@ public class HomeActivity extends Activity {
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_HOME);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
-        });
-
-        // New paperchase.
-        Button newPaperchase = (Button) findViewById(R.id.button_new_paperchases);
-        newPaperchase.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), NewPaperchaseActivity.class);
                 startActivity(intent);
             }
         });

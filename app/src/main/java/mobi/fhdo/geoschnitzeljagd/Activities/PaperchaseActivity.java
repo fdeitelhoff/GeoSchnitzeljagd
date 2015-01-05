@@ -36,9 +36,11 @@ import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
 
-public class MarkMapActivity extends Activity implements GoogleMap.OnMapClickListener,
+public class PaperchaseActivity extends Activity implements GoogleMap.OnMapClickListener,
         GoogleMap.OnMarkerDragListener, GoogleMap.OnInfoWindowClickListener,
         GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerClickListener {
+
+    private GPSTracker gpsTracker;
 
     private GoogleMap googleMap;
 
@@ -49,9 +51,15 @@ public class MarkMapActivity extends Activity implements GoogleMap.OnMapClickLis
 
     private Paperchases paperchases;
 
+    private Paperchase paperchase;
+
+    private EditText paperchaseName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        gpsTracker = new GPSTracker(this);
 
         //Remove title bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -59,7 +67,7 @@ public class MarkMapActivity extends Activity implements GoogleMap.OnMapClickLis
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.activity_mark_map);
+        setContentView(R.layout.activity_paperchase);
 
         // Save all waypoints.
         Button saveWaypoints = (Button) findViewById(R.id.button_save_waypoints);
@@ -75,7 +83,7 @@ public class MarkMapActivity extends Activity implements GoogleMap.OnMapClickLis
         Button addWaypoint = (Button) findViewById(R.id.button_add_waypoint);
         addWaypoint.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                setLocation();
+                addMarker(true);
             }
         });
 
@@ -97,6 +105,8 @@ public class MarkMapActivity extends Activity implements GoogleMap.OnMapClickLis
             }
         });
 
+        paperchaseName = (EditText) findViewById(R.id.editText_paperchase_name);
+
         loggedInUser = UserContext.getInstance().getLoggedInUser();
 
         waypoints = new LinkedHashMap<Marker, UUID>();
@@ -104,7 +114,27 @@ public class MarkMapActivity extends Activity implements GoogleMap.OnMapClickLis
         paperchases = new Paperchases(this);
 
         createMapView();
-        setLocation();
+
+        // If there's a paperchase present we want to display its data.
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            googleMap.clear();
+            waypoints.clear();
+
+            paperchase = (Paperchase) extras.getSerializable("Paperchase");
+
+            paperchaseName.setText(paperchase.getName());
+
+            int marks = 0;
+            for (Mark mark : paperchase.getMarks()) {
+                addMarker(new LatLng(mark.getLatitude(), mark.getLongitude()),
+                        (++marks >= paperchase.getMarks().size()) ? true : false,
+                        mark.getId());
+            }
+        } else {
+            // Without a paperchase we add an initial marker on the map.
+            addMarker(true);
+        }
     }
 
     private void createMapView() {
@@ -144,13 +174,6 @@ public class MarkMapActivity extends Activity implements GoogleMap.OnMapClickLis
         } catch (NullPointerException exception) {
             Log.e("mapApp", exception.toString());
         }
-    }
-
-    private void setLocation() {
-        GPSTracker gpsTracker = new GPSTracker(this);
-        Location location = gpsTracker.getLocation();
-
-        addMarker(new LatLng(location.getLatitude(), location.getLongitude()), true);
     }
 
     @Override
@@ -214,14 +237,24 @@ public class MarkMapActivity extends Activity implements GoogleMap.OnMapClickLis
         return true;
     }
 
+    private void addMarker(boolean focusMap) {
+        Location location = gpsTracker.getLocation();
+
+        addMarker(new LatLng(location.getLatitude(), location.getLongitude()), focusMap);
+    }
+
     private void addMarker(LatLng position, boolean focusMap) {
+        addMarker(position, focusMap, UUID.randomUUID());
+    }
+
+    private void addMarker(LatLng position, boolean focusMap, UUID uuid) {
         Marker waypoint = googleMap.addMarker(new MarkerOptions()
                 .position(position)
                 .title((waypoints.size() + 1) + ". Wegpunkt")
                 .snippet("Tippen um Hinweis zu setzen...")
                 .draggable(true));
 
-        waypoints.put(waypoint, UUID.randomUUID());
+        waypoints.put(waypoint, uuid);
 
         waypoint.showInfoWindow();
 
@@ -231,13 +264,22 @@ public class MarkMapActivity extends Activity implements GoogleMap.OnMapClickLis
     }
 
     private void savePaperchase() {
-        EditText paperchaseName = (EditText) findViewById(R.id.editText_paperchase_name);
+        // New paperchase!
+        if (paperchase == null) {
+            createPaperchase();
+            // Paperchase already exists. Update it!
+        } else {
+            updatePaperchase();
+        }
+    }
+
+    private void createPaperchase() {
         UUID paperchaseUID = UUID.randomUUID();
 
-        // TODO: Vorher an den Server schicken und bei Erfolg die lokale Datenbank aktualisieren.
+        // TODO: An dieser Stelle an den Server schicken und bei Erfolg die lokale Datenbank aktualisieren.
 
         // Collect the marks for the waypoints.
-        List<Mark> marker = new ArrayList<Mark>();
+        List<Mark> marks = new ArrayList<Mark>();
         int sequence = 0;
         for (Marker waypoint : waypoints.keySet()) {
             Mark mark = new Mark(waypoints.get(waypoint),
@@ -247,14 +289,37 @@ public class MarkMapActivity extends Activity implements GoogleMap.OnMapClickLis
                     waypoint.getSnippet(),
                     ++sequence);
 
-            marker.add(mark);
+            marks.add(mark);
         }
 
-        // Save the paperchase with waypoints into the local database.
         // The timestamp is needed from the server!
         Paperchase paperchase = new Paperchase(paperchaseUID, loggedInUser,
-                paperchaseName.getText().toString(), new Timestamp(555), marker);
+                paperchaseName.getText().toString(), new Timestamp(555), marks);
 
+        // Save the paperchase with waypoints into the local database.
         paperchases.create(paperchase);
+    }
+
+    private void updatePaperchase() {
+        // TODO: An dieser Stelle an den Server ein Update schicken Erfolg die lokale Datenbank aktualisieren.
+
+        // Collect the marks for the waypoints.
+        List<Mark> marks = new ArrayList<Mark>();
+        int sequence = 0;
+        for (Marker waypoint : waypoints.keySet()) {
+            Mark mark = new Mark(waypoints.get(waypoint),
+                    paperchase.getId(),
+                    waypoint.getPosition().latitude,
+                    waypoint.getPosition().longitude,
+                    waypoint.getSnippet(),
+                    ++sequence);
+
+            marks.add(mark);
+        }
+
+        paperchase.setName(paperchaseName.getText().toString());
+        paperchase.setMarks(marks);
+
+        paperchases.update(paperchase);
     }
 }

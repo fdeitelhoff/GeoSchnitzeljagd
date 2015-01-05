@@ -38,7 +38,7 @@ public class SearchActivity extends Activity {
         seachButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                list = paperchases.Search(searchText.getText().toString());
+                list = paperchases.search(searchText.getText().toString());
 
                 ArrayAdapter<Paperchase> adapter = new ArrayAdapter<Paperchase>(view.getContext(), android.R.layout.simple_list_item_1, list);
 
