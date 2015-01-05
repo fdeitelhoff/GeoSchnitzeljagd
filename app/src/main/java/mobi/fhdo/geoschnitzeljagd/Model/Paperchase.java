@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+import mobi.fhdo.geoschnitzeljagd.Activities.newpaperchase;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
 
 public class Paperchase implements Serializable
@@ -57,6 +58,38 @@ public class Paperchase implements Serializable
         this.timestamp = timestamp;
 
         marks = new ArrayList<Mark>();
+    }
+
+    public Paperchase(User user, String name)
+    {
+        this.user = user;
+        this.name = name;
+        setId(UUID.randomUUID());
+        java.util.Date date = new java.util.Date();
+        setTimestamp(new Timestamp(date.getTime()));
+
+        this.marks = new LinkedList<Mark>();
+        this.addMark(new Mark(1, 1));
+        this.addMark(new Mark(2, 2));
+        this.addMark(new Mark(3, 3));
+        this.addMark(new Mark(4, 4));
+    }
+
+    // Debug Constructor
+    public Paperchase(String name)
+    {
+        this.name = name;
+        setId(UUID.randomUUID());
+
+        java.util.Date date = new java.util.Date();
+        setTimestamp(new Timestamp(date.getTime()));
+        this.setUser(new User("Test", "Test"));
+
+        this.marks = new LinkedList<Mark>();
+        this.addMark(new Mark(1, 1));
+        this.addMark(new Mark(2, 2));
+        this.addMark(new Mark(3, 3));
+        this.addMark(new Mark(4, 4));
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -234,4 +267,11 @@ public class Paperchase implements Serializable
             Log.d("Paperchase", "Paperchase konnte nicht in Json überführt werden.");
         }
     }
+
+    // Paperchase Parsen Beispiel
+        /*
+        String result = "{\"PID\":\"483a3460-335a-47d1-aeb7-8ed94719d344\",\"UID\":\"40dd6a65-3309-432d-bb2d-80d4aaa3914c\",\"Name\":\"TestP\",\"Timestamp\":\"1969-12-31 19:00:00.555\",\"Marks\":[{\"MID\":\"43a61ede-3c69-4560-b8e5-91fc45b35e2d\",\"PID\":\"483a3460-335a-47d1-aeb7-8ed94719d344\",\"Latitude\":1.0,\"Longitude\":1.0,\"Hint\":null,\"Sequence\":0},{\"MID\":\"c5414482-b348-4985-862b-9e07001f81ee\",\"PID\":\"483a3460-335a-47d1-aeb7-8ed94719d344\",\"Latitude\":2.0,\"Longitude\":2.0,\"Hint\":null,\"Sequence\":0},{\"MID\":\"3aacf317-c9e6-4eb7-8716-f9890afa1325\",\"PID\":\"483a3460-335a-47d1-aeb7-8ed94719d344\",\"Latitude\":3.0,\"Longitude\":3.0,\"Hint\":null,\"Sequence\":0},{\"MID\":\"d913fab5-a336-40f8-bb3a-d6ff6783e226\",\"PID\":\"483a3460-335a-47d1-aeb7-8ed94719d344\",\"Latitude\":4.0,\"Longitude\":4.0,\"Hint\":null,\"Sequence\":0}]}";
+        Paperchase p = Paperchase.jsonToObject(result, this);
+        Log.d("Paperchase:", p.toString());
+        */
 }
