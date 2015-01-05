@@ -7,8 +7,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.sql.Timestamp;
+import java.util.UUID;
+
 import mobi.fhdo.geoschnitzeljagd.Contexts.UserContext;
+import mobi.fhdo.geoschnitzeljagd.DataManagers.Paperchases;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
+import mobi.fhdo.geoschnitzeljagd.Model.Mark;
+import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
 
@@ -28,21 +34,27 @@ public class HomeActivity extends Activity {
         TextView userName = (TextView) findViewById(R.id.textViewUser);
         userName.setText("Hallo '" + loggedInUser.getUsername() + "'!");
 
-        // TODO: Nur ein Beispiel für das Anlegen von einer Schnitzeljagd und drei zugehörigen Markierungen.
-        // Rausnehmen, wenn kein Bedarf mehr ist.
-        /* Paperchase p = new Paperchase(loggedInUser, "neues paperchase");
-        p.addMark(new Mark(1.11, 1.22, "Hinweis 1", 1));
-        p.addMark(new Mark(2.22, 3.33, "Hinweis 2", 2));
-        p.addMark(new Mark(3.33, 4.44, "Hinweis 3", 3));
-        new Paperchases(this).create(p);
 
-            Paperchase p = new Paperchase(UUID.randomUUID(),new User("ggg","hhhh"),"TestP",new Timestamp(555));
-            p.addMark(new Mark(1,1));
-            p.addMark(new Mark(2,2));
-            p.addMark(new Mark(3,3));
-            p.addMark(new Mark(4,4));
+        /*
+            // TODO: Nur ein Beispiel für das Anlegen von einer Schnitzeljagd und drei zugehörigen Markierungen.
+            // Rausnehmen, wenn kein Bedarf mehr ist.
+            Paperchase p = new Paperchase(UserContext.getInstance().getLoggedInUser(), "neues paperchase", new Timestamp(555));
+            p.addMark(new Mark(1.11, 1.22, "Hinweis 1", 1));
+            p.addMark(new Mark(2.22, 3.33, "Hinweis 2", 2));
+            p.addMark(new Mark(3.33, 4.44, "Hinweis 3", 3));
+            new Paperchases(this).create(p);
+
+
+                        conn.setDoOutput(true);
+            Paperchase p = new Paperchase(UUID.randomUUID(), new User("ggg", "hhhh"), "TestP", new Timestamp(555));
+            p.addMark(new Mark(1, 1));
+            p.addMark(new Mark(2, 2));
+            p.addMark(new Mark(3, 3));
+            p.addMark(new Mark(4, 4));
             p.objectToOutputStream(conn.getOutputStream());
-         */
+
+                     */
+
 
         // User Profile Button.
         Button userProfile = (Button) findViewById(R.id.buton_user_profile);
