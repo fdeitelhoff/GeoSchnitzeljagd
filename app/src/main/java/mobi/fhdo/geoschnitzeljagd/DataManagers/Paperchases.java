@@ -35,7 +35,7 @@ public class Paperchases extends DataManager {
             database = getReadableDatabase();
 
             paperchaseCursor = database.rawQuery(
-                    "SELECT PID, name, timestamp FROM paperchase WHERE UID=?",
+                    "SELECT PID, name, timestamp FROM paperchase WHERE UID=? ORDER BY name",
                     new String[]{user.getId() + ""});
 
             while (paperchaseCursor.moveToNext()) {

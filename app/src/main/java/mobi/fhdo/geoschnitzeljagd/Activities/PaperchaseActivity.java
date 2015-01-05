@@ -72,12 +72,24 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
         Button saveWaypoints = (Button) findViewById(R.id.button_save_waypoints);
         saveWaypoints.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                savePaperchase();
+                if (paperchaseName.getText().toString().trim().isEmpty()) {
+                    new AlertDialog.Builder(PaperchaseActivity.this)
+                            .setTitle("Fehlender Name")
+                            .setMessage("Die Schnitzeljagd kann nicht ohne Namen gespeichert werden!")
+                            .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                }
+                            })
+                            .show();
+                } else {
+                    savePaperchase();
 
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("Paperchase", paperchase);
-                setResult(RESULT_OK, returnIntent);
-                finish();
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("Paperchase", paperchase);
+                    setResult(RESULT_OK, returnIntent);
+
+                    finish();
+                }
             }
         });
 
@@ -131,7 +143,7 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
             for (Mark mark : paperchase.getMarks()) {
                 addMarker(new LatLng(mark.getLatitude(), mark.getLongitude()),
                         (++marks >= paperchase.getMarks().size()) ? true : false,
-                        mark.getId());
+                        mark.getId(), mark.getHint());
             }
         } else {
             // Without a paperchase we add an initial marker on the map.
@@ -210,14 +222,14 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
     }
 
     private void addMarker(LatLng position, boolean focusMap) {
-        addMarker(position, focusMap, UUID.randomUUID());
+        addMarker(position, focusMap, UUID.randomUUID(), "Tippen um Hinweis zu setzen...");
     }
 
-    private void addMarker(LatLng position, boolean focusMap, UUID uuid) {
+    private void addMarker(LatLng position, boolean focusMap, UUID uuid, String hint) {
         Marker waypoint = googleMap.addMarker(new MarkerOptions()
                 .position(position)
                 .title((waypoints.size() + 1) + ". Wegpunkt")
-                .snippet("Tippen um Hinweis zu setzen...")
+                .snippet(hint)
                 .draggable(true));
 
         waypoints.put(waypoint, uuid);
@@ -230,11 +242,11 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
     }
 
     private void savePaperchase() {
-        // New paperchase!
         if (paperchase == null) {
+            // New paperchase!
             createPaperchase();
-            // Paperchase already exists. Update it!
         } else {
+            // Paperchase already exists. Update it!
             updatePaperchase();
         }
     }
@@ -260,10 +272,12 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
 
         // The timestamp is needed from the server!
         Paperchase paperchase = new Paperchase(paperchaseUID, loggedInUser,
-                paperchaseName.getText().toString(), new Timestamp(555), marks);
+                paperchaseName.getText().toString().trim(), new Timestamp(555), marks);
 
         // Save the paperchase with waypoints into the local database.
         paperchases.create(paperchase);
+
+        this.paperchase = paperchase;
     }
 
     private void updatePaperchase() {
@@ -283,7 +297,7 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
             marks.add(mark);
         }
 
-        paperchase.setName(paperchaseName.getText().toString());
+        paperchase.setName(paperchaseName.getText().toString().trim());
         paperchase.setMarks(marks);
 
         paperchases.update(paperchase);

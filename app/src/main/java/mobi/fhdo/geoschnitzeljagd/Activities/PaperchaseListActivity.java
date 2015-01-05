@@ -12,12 +12,12 @@ import android.widget.ListView;
 
 import com.example.android.swipedismiss.SwipeDismissListViewTouchListener;
 
+import java.util.Comparator;
 import java.util.List;
 
 import mobi.fhdo.geoschnitzeljagd.Contexts.UserContext;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Marks;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Paperchases;
-import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
 import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
@@ -31,7 +31,6 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
     private List<Paperchase> ownPaperchases;
     private ArrayAdapter dataAdapter;
 
-    private Users users;
     private User loggedInUser;
 
     private int lastPosition = -1;
@@ -44,7 +43,6 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
         paperchasesListView = (ListView) findViewById(R.id.paperchasesListView);
         paperchasesListView.setOnItemClickListener(this);
 
-        users = new Users(this);
         paperchases = new Paperchases(this);
         marks = new Marks(this);
 
@@ -102,8 +100,8 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.strings_activity_paperchase_list:
-                Intent intent = new Intent(this, PaperchaseActivity.class);
-                startActivity(intent);
+                Intent newPaperchaseIntent = new Intent(this, PaperchaseActivity.class);
+                startActivityForResult(newPaperchaseIntent, 1);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -118,14 +116,17 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
 
                 if (lastPosition != -1) {
                     ownPaperchases.set(lastPosition, paperchase);
-
                     dataAdapter.notifyDataSetChanged();
-
-                    /*int visiblePosition = paperchasesListView.getFirstVisiblePosition();
-                    View view = paperchasesListView.getChildAt(lastPosition - visiblePosition);
-                    View v = paperchasesListView.getAdapter().getView(lastPosition, view, paperchasesListView);
-                    v.*/
+                } else {
+                    dataAdapter.add(paperchase);
                 }
+
+                dataAdapter.sort(new Comparator<Paperchase>() {
+                    @Override
+                    public int compare(Paperchase lhs, Paperchase rhs) {
+                        return lhs.getName().compareTo(rhs.getName());
+                    }
+                });
             }
         }
     }
