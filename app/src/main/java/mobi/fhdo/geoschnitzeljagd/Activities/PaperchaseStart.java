@@ -22,6 +22,7 @@ public class PaperchaseStart extends Activity
     private Button ratingButton;
 
     private int id;
+    private User loggedInUser;
 
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -33,6 +34,8 @@ public class PaperchaseStart extends Activity
         {
             id = extras.getInt("PaperchaseID");
             Log.w("Id", String.valueOf(id));
+            loggedInUser = (User) extras.getSerializable("User");
+
             //Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
         }
 
@@ -55,6 +58,7 @@ public class PaperchaseStart extends Activity
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
         {
             Intent myIntent = new Intent(this, SearchActivity.class);
+            myIntent.putExtra("User", loggedInUser);
             startActivity(myIntent);
             return true;
         }

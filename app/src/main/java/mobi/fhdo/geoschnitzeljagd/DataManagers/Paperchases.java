@@ -168,6 +168,48 @@ public class Paperchases extends DataManager
         return paperchases;
     }
 
+    public List<Paperchase> All() {
+        SQLiteDatabase database = null;
+        Cursor paperchaseCursor = null;
+        Cursor paperchaseMarksCursor = null;
+        List<Paperchase> paperchases = new ArrayList<Paperchase>();
+        Users users = null;
+
+        try {
+            database = getReadableDatabase();
+
+            paperchaseCursor = database.rawQuery("SELECT * FROM paperchase", null);
+
+            while (paperchaseCursor.moveToNext()) {
+                Paperchase paperchase = new Paperchase(UUID.fromString(paperchaseCursor.getString(0)), null, paperchaseCursor.getString(2), Timestamp.valueOf(paperchaseCursor.getString(3)));
+               paperchaseMarksCursor = database.rawQuery("SELECT mid,pid,latitude, longitude, hint, sequence from mark where pid=? order by sequence" ,
+                       new String[]{paperchase.getId() + ""});
+
+                while(paperchaseMarksCursor.moveToNext()){
+                    Mark mark = new Mark(UUID.fromString(paperchaseMarksCursor.getString(0)), UUID.fromString(paperchaseMarksCursor.getString(1)), paperchaseMarksCursor.getDouble(2), paperchaseMarksCursor.getDouble(3), paperchaseMarksCursor.getString(4), paperchaseMarksCursor.getInt(5));
+                    paperchase.addMark(mark);
+                }
+                paperchases.add(paperchase);
+            }
+        } catch (Exception e) {
+            Log.w("Exception", e.toString());
+        } finally {
+            if (paperchaseCursor != null) {
+                paperchaseCursor.close();
+            }
+            if (paperchaseMarksCursor != null){
+                paperchaseMarksCursor.close();
+            }
+
+            if (database != null) {
+                database.close();
+            }
+        }
+
+        return paperchases;
+    }
+
+
     public Paperchase create(Paperchase paperchase)
     {
         SQLiteDatabase database = null;

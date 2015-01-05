@@ -8,10 +8,13 @@ import android.util.Log;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Serializable;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
+
+import java.io.IOException;
 import java.util.UUID;
 
-public class Mark implements Serializable
-{
+public class Mark implements Serializable, ClusterItem {
 
     private UUID id;
     private UUID paperchaseId;
@@ -182,5 +185,10 @@ public class Mark implements Serializable
     public void setPaperchaseId(UUID paperchaseId)
     {
         this.paperchaseId = paperchaseId;
+    }
+
+    @Override
+    public LatLng getPosition() {
+        return new LatLng(this.getLatitude(), this.getLongitude());
     }
 }

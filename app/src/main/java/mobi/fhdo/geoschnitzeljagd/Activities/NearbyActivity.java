@@ -1,7 +1,10 @@
 package mobi.fhdo.geoschnitzeljagd.Activities;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -20,21 +23,56 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.SphericalUtil;
+import com.google.maps.android.clustering.ClusterManager;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
+import mobi.fhdo.geoschnitzeljagd.Contexts.UserContext;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.GPSTracker;
+import mobi.fhdo.geoschnitzeljagd.DataManagers.Paperchases;
+import mobi.fhdo.geoschnitzeljagd.Model.Mark;
+import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
+import mobi.fhdo.geoschnitzeljagd.Model.PaperchaseCompleted;
+import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
 
-public class NearbyActivity extends ActionBarActivity {
+public class NearbyActivity extends ActionBarActivity implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMyLocationChangeListener, GoogleMap.OnMarkerDragListener {
+    // ActionBarActivity
 
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle drawerToggle;
     public ListView listView;
     GoogleMap googleMap;
     ArrayList<Location> locations = new ArrayList<Location>();
+    private User loggedInUser;
+    private Paperchases paperchases;
+    private List<Paperchase> paperchaselist;
+    private ClusterManager<Mark> markClusterManager;
+    private List<Marker> paperchaseLocation = new ArrayList<Marker>();
+    private List<Marker> paperchaseMarksLocation = new ArrayList<Marker>();
+    private SphericalUtil sphericalUtil;
+    private Paperchase aktiveJagd;
+
+    private PaperchaseCompleted paperchaseCompleted;
+
+    private boolean jagdaktive;
+    private int aktuelleMarkierung;
+    private int anzMarkierung;
+    private boolean paperchaseFinished;
+
+    private GPSTracker gpsTracker;
+
+    private double DISTANCE_TO_MARK = 20.0;
+
 
     /*
     Bochum
@@ -54,8 +92,16 @@ public class NearbyActivity extends ActionBarActivity {
         setContentView(R.layout.activity_nearby);
 
         ActionBar actionBar = getActionBar();
+        jagdaktive = false;
+        aktuelleMarkierung = 0;
+        paperchaseFinished = false;
 
-        Location l1 = new Location("Bochumn");
+        loggedInUser = UserContext.getInstance().getLoggedInUser();
+
+        gpsTracker = new GPSTracker(this);
+
+
+       /* Location l1 = new Location("Paperchase 1");
         l1.setLatitude(51.4925);
         l1.setLongitude(7.3106);
         locations.add(l1);
@@ -67,6 +113,7 @@ public class NearbyActivity extends ActionBarActivity {
         l3.setLatitude(51.2800);
         l3.setLongitude(7.0200);
         locations.add(l3);
+        */
 
 
         drawerLayout = (DrawerLayout) findViewById(R.id.ganzesLayout);
@@ -74,32 +121,79 @@ public class NearbyActivity extends ActionBarActivity {
         // Navigationsleiste -> Drawer Öffnen
         drawerLayout.setDrawerListener(drawerToggle);
 
+        createMapView();
+
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        googleMap.setMyLocationEnabled(true);
+        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+        markClusterManager = new ClusterManager<Mark>(this, googleMap);
+        googleMap.setOnCameraChangeListener(markClusterManager);
+        //googleMap.setOnMarkerClickListener(markClusterManager);
+
+        googleMap.setOnMarkerClickListener(this);
+        googleMap.setOnMyLocationChangeListener(this);
+
+        googleMap.setOnMarkerDragListener(this);
+
+
+        paperchases = new Paperchases(this);
+        paperchaselist = paperchases.All();
+        List<Mark> marks;
+        Mark mark;
+        for (int i = 0; i < paperchaselist.size(); i++) {
+            Paperchase paperchase = paperchaselist.get(i);
+            String paperchaseName = paperchase.getName();
+            marks = paperchase.getMarks();
+            if (marks.size() > 0) {
+                mark = marks.get(0);
+                Location l = new Location(paperchaseName);
+                l.setLatitude(mark.getLatitude());
+                l.setLongitude(mark.getLongitude());
+                paperchaseLocation.add(googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(mark.getLatitude(), mark.getLongitude()))
+                        .title(paperchaseName)
+                        .snippet("Anzahl Wegpunkte: " + marks.size())
+                        .draggable(false)));
+
+                Circle circle = googleMap.addCircle(new CircleOptions()
+                        .center(new LatLng(mark.getLatitude(), mark.getLongitude()))
+                        .radius(20.0)
+                        .strokeColor(Color.RED)
+                        .fillColor(Color.TRANSPARENT));
+                markClusterManager.addItem(mark);
+                locations.add(l);
+            }
+
+        }
+
+        initLocation();
 
         listView = (ListView) findViewById(R.id.routenListe);
         ArrayAdapter<Location> routenListAdapater = new ArrayAdapter<Location>(this, android.R.layout.simple_list_item_1, locations);
         listView.setAdapter(routenListAdapater);
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (listView.getPositionForView(view)) {
                     case 0: {
-                        Toast.makeText(getApplicationContext(), "Bochum ausgewählt", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), locations.get(0).getProvider(), Toast.LENGTH_SHORT).show();
                         newLocation(locations.get(0));
                         drawerLayout.closeDrawers();
                         break;
                     }
                     case 1: {
-                        Toast.makeText(getApplicationContext(), "Dortmund ausgewählt", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), locations.get(1).getProvider(), Toast.LENGTH_SHORT).show();
                         newLocation(locations.get(1));
                         drawerLayout.closeDrawers();
                         break;
                     }
                     case 2: {
-                        Toast.makeText(getApplicationContext(), "Essen ausgewählt", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), locations.get(2).getProvider(), Toast.LENGTH_SHORT).show();
                         newLocation(locations.get(2));
                         drawerLayout.closeDrawers();
                         break;
@@ -183,7 +277,6 @@ public class NearbyActivity extends ActionBarActivity {
     */
 
     private void initLocation() {
-        GPSTracker gpsTracker = new GPSTracker(this);
         Location location = gpsTracker.getLocation();
         googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(location.getLatitude(), location.getLongitude()))
@@ -192,6 +285,7 @@ public class NearbyActivity extends ActionBarActivity {
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(location.getLatitude(), location.getLongitude())), 15));
     }
+
 
     private void newLocation(Location l) {
         googleMap.addMarker(new MarkerOptions()
@@ -235,6 +329,252 @@ public class NearbyActivity extends ActionBarActivity {
     }
 
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        Location myLocation = gpsTracker.getLocation();
+
+        LatLng latLngmyLocation = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+
+        Toast.makeText(getBaseContext(), "Die Entfernung zu der Schnitzeljagd beträgt: " + sphericalUtil.computeDistanceBetween(latLngmyLocation, marker.getPosition()) + " Meter", Toast.LENGTH_SHORT).show();
+
+        return false;
+    }
+
+    @Override
+    public void onMyLocationChange(Location location) {
+
+
+        if (!jagdaktive) {
+            LatLng latLngmyLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            List<Mark> marks;
+            Mark mark;
+            for (int i = 0; i < paperchaselist.size(); i++) {
+                final Paperchase paperchase = paperchaselist.get(i);
+                marks = paperchase.getMarks();
+                if (marks.size() > 0) {
+                    mark = marks.get(0);
+
+                    if (sphericalUtil.computeDistanceBetween(latLngmyLocation, new LatLng(mark.getLatitude(), mark.getLongitude())) < DISTANCE_TO_MARK) {
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder
+                                .setTitle("Schnitzeljagd starten")
+                                .setMessage("Soll die Schnitzeljagd gestartet werden?")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //Yes button clicked, do something
+
+                                        jagdaktive = true;
+                                        googleMap.clear();
+                                        aktiveJagd = paperchase;
+                                        Date date = new Date();
+                                        Timestamp now = new Timestamp(date.getTime());
+                                        paperchaseCompleted = new PaperchaseCompleted(loggedInUser, paperchase, now);
+
+                                        List<Mark> markierungen = paperchase.getMarks();
+                                        anzMarkierung = markierungen.size();
+                                        for (int j = 0; j < anzMarkierung; j++) {
+
+                                            MarkerOptions mo = new MarkerOptions();
+                                            mo.position(markierungen.get(j).getPosition());
+                                            mo.title((j + 1) + ". Wegpunkt");
+                                            mo.snippet("Hinweis: " + markierungen.get(j).getHint());
+                                            mo.draggable(false);
+
+                                            Marker m = googleMap.addMarker(mo);
+                                            paperchaseMarksLocation.add(m);
+
+                                            if (j == 0) {
+                                                m.showInfoWindow();
+                                            }
+
+                                        }
+
+                                        googleMap.addMarker(new MarkerOptions()
+                                                .position(new LatLng(gpsTracker.getLocation().getLatitude(), gpsTracker.getLocation().getLongitude()))
+                                                .draggable(true));
+                                        Toast.makeText(getApplicationContext(), markierungen.get(aktuelleMarkierung).getHint(),
+                                                Toast.LENGTH_SHORT).show();
+                                        aktuelleMarkierung++;
+
+                                    }
+                                })
+                                .setNegativeButton("Abbrechen", null)                        //Do nothing on no
+                                .show();
+
+
+                    }
+
+
+                }
+            }
+        } else {
+            LatLng latLngmyLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            double distanceToNextMark = 0.0;
+            if (aktuelleMarkierung < anzMarkierung) {
+                if (sphericalUtil.computeDistanceBetween(latLngmyLocation, aktiveJagd.getMarks().get(aktuelleMarkierung).getPosition()) < DISTANCE_TO_MARK) {
+                    if (aktuelleMarkierung != anzMarkierung - 1) {
+                        distanceToNextMark = sphericalUtil.computeDistanceBetween(aktiveJagd.getMarks().get(aktuelleMarkierung).getPosition(), aktiveJagd.getMarks().get(aktuelleMarkierung + 1).getPosition());
+                    } else {
+                        paperchaseFinished = true;
+                    }
+                    Toast.makeText(getApplicationContext(), "Hinweis: " + aktiveJagd.getMarks().get(aktuelleMarkierung).getHint() + "\n Entfernung zum nächsten Wegpunkt: " + distanceToNextMark + " in m",
+                            Toast.LENGTH_SHORT).show();
+                    String markSnippet = paperchaseMarksLocation.get(aktuelleMarkierung).getSnippet();
+                    paperchaseMarksLocation.get(aktuelleMarkierung).setSnippet(markSnippet + "\n Entfernung zum nächsten Wegpunkt: " + distanceToNextMark + " in m");
+                    paperchaseMarksLocation.get(aktuelleMarkierung).showInfoWindow();
+                    aktuelleMarkierung++;
+                }
+
+            }
+            if (paperchaseFinished) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder
+                        .setTitle("Schnitzeljagd beendet")
+                        .setMessage("Bewertung abgeben!")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Yes button clicked, do something
+                                Intent myIntent = new Intent(getApplicationContext(), PaperchaseReview.class);
+                                myIntent.putExtra("PaperchaseID", aktiveJagd.getId());
+                                startActivity(myIntent);
+                            }
+                        })
+                        .setNegativeButton("Abbrechen", null)                        //Do nothing on no
+                        .show();
+
+
+            }
+        }
+
+
+    }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+
+
+        if (!jagdaktive) {
+            LatLng latLngmyLocation = marker.getPosition();
+            List<Mark> marks;
+            Mark mark;
+            for (int i = 0; i < paperchaselist.size(); i++) {
+                final Paperchase paperchase = paperchaselist.get(i);
+                marks = paperchase.getMarks();
+                if (marks.size() > 0) {
+                    mark = marks.get(0);
+
+                    if (sphericalUtil.computeDistanceBetween(latLngmyLocation, new LatLng(mark.getLatitude(), mark.getLongitude())) < DISTANCE_TO_MARK) {
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder
+                                .setTitle("Schnitzeljagd starten")
+                                .setMessage("Soll die Schnitzeljagd gestartet werden?")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //Yes button clicked, do something
+
+                                        jagdaktive = true;
+                                        googleMap.clear();
+                                        aktiveJagd = paperchase;
+                                        Date date = new Date();
+                                        Timestamp now = new Timestamp(date.getTime());
+                                        paperchaseCompleted = new PaperchaseCompleted(loggedInUser, paperchase, now);
+
+                                        List<Mark> markierungen = paperchase.getMarks();
+                                        anzMarkierung = markierungen.size();
+                                        for (int j = 0; j < anzMarkierung; j++) {
+
+                                            MarkerOptions mo = new MarkerOptions();
+                                            mo.position(markierungen.get(j).getPosition());
+                                            mo.title((j + 1) + ". Wegpunkt");
+                                            mo.snippet("Hinweis: " + markierungen.get(j).getHint());
+                                            mo.draggable(false);
+
+                                            Marker m = googleMap.addMarker(mo);
+                                            paperchaseMarksLocation.add(m);
+
+                                            if (j == 0) {
+                                                m.showInfoWindow();
+                                            }
+
+                                        }
+
+                                        googleMap.addMarker(new MarkerOptions()
+                                                .position(new LatLng(gpsTracker.getLocation().getLatitude(), gpsTracker.getLocation().getLongitude()))
+                                                .draggable(true));
+                                        Toast.makeText(getApplicationContext(), markierungen.get(aktuelleMarkierung).getHint(),
+                                                Toast.LENGTH_SHORT).show();
+                                        aktuelleMarkierung++;
+
+                                    }
+                                })
+                                .setNegativeButton("Abbrechen", null)                        //Do nothing on no
+                                .show();
+
+
+                    }
+
+
+                }
+            }
+        } else {
+            LatLng latLngmyLocation = marker.getPosition();
+            double distanceToNextMark = 0.0;
+            if (aktuelleMarkierung < anzMarkierung) {
+                if (sphericalUtil.computeDistanceBetween(latLngmyLocation, aktiveJagd.getMarks().get(aktuelleMarkierung).getPosition()) < DISTANCE_TO_MARK) {
+                    if (aktuelleMarkierung != anzMarkierung - 1) {
+                        distanceToNextMark = sphericalUtil.computeDistanceBetween(aktiveJagd.getMarks().get(aktuelleMarkierung).getPosition(), aktiveJagd.getMarks().get(aktuelleMarkierung + 1).getPosition());
+                    } else {
+                        paperchaseFinished = true;
+                    }
+                    Toast.makeText(getApplicationContext(), "Hinweis: " + aktiveJagd.getMarks().get(aktuelleMarkierung).getHint() + "\n Entfernung zum nächsten Wegpunkt: " + distanceToNextMark + " in m",
+                            Toast.LENGTH_SHORT).show();
+                    String markSnippet = paperchaseMarksLocation.get(aktuelleMarkierung).getSnippet();
+                    paperchaseMarksLocation.get(aktuelleMarkierung).setSnippet(markSnippet + "\n Entfernung zum nächsten Wegpunkt: " + distanceToNextMark + " in m");
+                    paperchaseMarksLocation.get(aktuelleMarkierung).showInfoWindow();
+                    aktuelleMarkierung++;
+                }
+
+            }
+            if (paperchaseFinished) {
+                Date date = new Date();
+                paperchaseCompleted.setEndTime(new Timestamp(date.getTime()));
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder
+                        .setTitle("Schnitzeljagd beendet")
+                        .setMessage("Bewertung abgeben!")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Yes button clicked, do something
+                                Intent myIntent = new Intent(getApplicationContext(), PaperchaseReview.class);
+                                myIntent.putExtra("PaperchaseID", aktiveJagd.getId());
+                                startActivity(myIntent);
+                        }
+                        })
+                        .setNegativeButton("Abbrechen", null)                        //Do nothing on no
+                        .show();
+
+
+            }
+        }
+    }
 }
 
 

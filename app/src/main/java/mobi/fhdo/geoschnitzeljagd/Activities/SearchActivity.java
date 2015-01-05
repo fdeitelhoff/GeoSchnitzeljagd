@@ -33,7 +33,7 @@ public class SearchActivity extends Activity {
         searchText = (EditText) findViewById(R.id.searchText);
         searchList = (ListView) findViewById(R.id.searchList);
 
-        paperchases = new Paperchases(this);
+            paperchases = new Paperchases(this);
 
         seachButton.setOnClickListener(new View.OnClickListener() {
             @Override
