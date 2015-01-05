@@ -21,6 +21,10 @@ public class Marks extends DataManager {
         Cursor markCursor = null;
 
         try {
+            // This method will be called whenever the user wants to view a paperchase.
+            // So we clear the marks beforehand.
+            paperchase.getMarks().clear();
+
             database = getReadableDatabase();
 
             markCursor = database.rawQuery(

@@ -132,9 +132,6 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
         // If there's a paperchase present we want to display its data.
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            googleMap.clear();
-            waypoints.clear();
-
             paperchase = (Paperchase) extras.getSerializable("Paperchase");
 
             paperchaseName.setText(paperchase.getName());
