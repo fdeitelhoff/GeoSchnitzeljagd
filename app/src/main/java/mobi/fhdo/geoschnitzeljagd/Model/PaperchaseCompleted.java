@@ -49,6 +49,12 @@ public class PaperchaseCompleted
         setEndTime(new Timestamp(date.getTime()));
     }
 
+    public PaperchaseCompleted(User user, Paperchase paperchase, Timestamp startTime) {
+        this.user = user;
+        this.paperchase = paperchase;
+        this.startTime = startTime;
+    }
+
     public User getUser()
     {
         return user;

@@ -17,6 +17,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,8 +81,8 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
 
                 final newpaperchase activity = (newpaperchase) getActivity();
 
-                //Mark mark = new Mark(currentMarker.getPosition().latitude, currentMarker.getPosition().longitude);
-                Mark mark = new Mark(1.11, 2.22);
+                Mark mark = new Mark(currentMarker.getPosition().latitude, currentMarker.getPosition().longitude);
+               // Mark mark = new Mark(1.11, 2.22);
                 activity.paperchase.addMark(mark);
                 markers.add(currentMarker);
 
@@ -104,8 +105,8 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
         });
 
         // TODO: Von mir (Fabian) rausgenommen. Habe immer noch nicht die Maps am Laufen.
-        // createMapView();
-        // initLocation();
+        createMapView();
+        initLocation();
 
         return rootView;
 
@@ -213,22 +214,28 @@ public class newPaperchaseCreateMapFragment extends Fragment implements GoogleMa
 
         GPSTracker gpsTracker = new GPSTracker(getActivity());
         Location location = gpsTracker.getLocation();
-        if (currentMarker != null) {
-            currentMarker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
-        } else {
-            /*Latitude : 51.3000
-            Longitude : 7.2800*/
-            currentMarker = googleMap.addMarker(new MarkerOptions()
-                    //.position(new LatLng(location.getLatitude(), location.getLongitude()))
-                    .position(new LatLng(51.3000, 7.2800))
-                    .title("aktueller Standort")
-                    .draggable(true));
+        if (gpsTracker.canGetLocation()){
+            if (location != null){
+                if (currentMarker != null) {
+                    currentMarker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
+                } else {
+                    currentMarker = googleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                            .title("aktueller Standort")
+                            .draggable(true));
+                }
+
+                Log.d("aktueller Standort", "aktueller Standort: " + "Lat: " + location.getLatitude() + "Long: " + location.getLongitude());
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(location.getLatitude(), location.getLongitude())), 15));
+            }
+            else{
+                Toast.makeText(getActivity().getBaseContext(), "Position konnte nicht abgerufen werden, Bitte erneut versuchen."  , Toast.LENGTH_SHORT).show();
+            }
+
         }
-
-        //Log.d("aktuelles Standort", "aktuelles Standort: " + "Lat: " + location.getLatitude() + "Long: " + location.getLongitude());
-
-        //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(location.getLatitude(), location.getLongitude())), 15));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.3000, 7.2800), 15));
+        else{
+            gpsTracker.showSettingsAlert();
+        }
     }
 
     private void setCreatedMarker(Marker m, int i) {

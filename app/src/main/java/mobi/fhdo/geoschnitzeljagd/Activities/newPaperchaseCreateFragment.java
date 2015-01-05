@@ -63,15 +63,15 @@ public class newPaperchaseCreateFragment extends Fragment implements View.OnClic
                 String paperchase_name = et_paperchase_name.getText().toString();
                 List<String> paperchase_hint = new ArrayList<String>();
                 EditText et_paperchase_hint1 = (EditText) getActivity().findViewById(R.id.et_paperchase_location_1_hint);
-                paperchase_hint.add(et_paperchase_name.getText().toString());
+                paperchase_hint.add(et_paperchase_hint1.getText().toString());
                 EditText et_paperchase_hint2 = (EditText) getActivity().findViewById(R.id.et_paperchase_location_2_hint);
-                paperchase_hint.add(et_paperchase_name.getText().toString());
+                paperchase_hint.add(et_paperchase_hint2.getText().toString());
                 EditText et_paperchase_hint3 = (EditText) getActivity().findViewById(R.id.et_paperchase_location_3_hint);
-                paperchase_hint.add(et_paperchase_name.getText().toString());
+                paperchase_hint.add(et_paperchase_hint3.getText().toString());
                 EditText et_paperchase_hint4 = (EditText) getActivity().findViewById(R.id.et_paperchase_location_4_hint);
-                paperchase_hint.add(et_paperchase_name.getText().toString());
+                paperchase_hint.add(et_paperchase_hint4.getText().toString());
                 EditText et_paperchase_hint5 = (EditText) getActivity().findViewById(R.id.et_paperchase_location_5_hint);
-                paperchase_hint.add(et_paperchase_name.getText().toString());
+                paperchase_hint.add(et_paperchase_hint5.getText().toString());
 
 
                 for (int i = 0; i < activity.paperchase.getMarks().size(); i++) {
