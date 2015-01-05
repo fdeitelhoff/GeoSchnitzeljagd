@@ -139,7 +139,7 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
             int marks = 0;
             for (Mark mark : paperchase.getMarks()) {
                 addMarker(new LatLng(mark.getLatitude(), mark.getLongitude()),
-                        (++marks >= paperchase.getMarks().size()) ? true : false,
+                        ++marks >= paperchase.getMarks().size(),        // Last marker should be focused.
                         mark.getId(), mark.getHint());
             }
         } else {
@@ -180,7 +180,7 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
 
         new AlertDialog.Builder(this)
                 .setTitle("Hinweis für den Wegpunkt")
-                .setMessage("Hinweis für den Suchenden beim aktuellen Wegpunkt.")
+                .setMessage("Hinweis für den aktuellen Wegpunkt eingeben.")
                 .setView(input)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {

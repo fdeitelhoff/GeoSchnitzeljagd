@@ -22,7 +22,7 @@ import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
 
-public class PaperchaseListActivity extends Activity implements AdapterView.OnItemClickListener { // extends ActionBarActivity {
+public class PaperchaseListActivity extends Activity implements AdapterView.OnItemClickListener {
 
     private ListView paperchasesListView;
 
