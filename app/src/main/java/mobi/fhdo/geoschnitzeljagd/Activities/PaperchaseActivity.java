@@ -3,6 +3,7 @@ package mobi.fhdo.geoschnitzeljagd.Activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,7 +14,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,8 +36,7 @@ import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
 
-public class PaperchaseActivity extends Activity implements GoogleMap.OnMapClickListener,
-        GoogleMap.OnMarkerDragListener, GoogleMap.OnInfoWindowClickListener,
+public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWindowClickListener,
         GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerClickListener {
 
     private GPSTracker gpsTracker;
@@ -75,6 +74,9 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnMapClick
             public void onClick(View view) {
                 savePaperchase();
 
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("Paperchase", paperchase);
+                setResult(RESULT_OK, returnIntent);
                 finish();
             }
         });
@@ -138,62 +140,26 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnMapClick
     }
 
     private void createMapView() {
-        /**
-         * Catch the null pointer exception that
-         * may be thrown when initialising the map
-         */
         try {
-            if (null == googleMap) {
-
-
-                //googleMap = (GoogleMap) findViewById(R.id.mapView).;
-
+            if (googleMap == null) {
+                // Get the Google maps fragment.
                 googleMap = ((MapFragment) getFragmentManager().findFragmentById(
                         R.id.mapView)).getMap();
 
+                // Some UI adjustments.
                 googleMap.getUiSettings().setZoomControlsEnabled(false);
                 googleMap.getUiSettings().setMyLocationButtonEnabled(true);
                 googleMap.getUiSettings().setRotateGesturesEnabled(false);
                 googleMap.getUiSettings().setTiltGesturesEnabled(false);
-                /**/
-                /**
-                 * If the map is still null after attempted initialisation,
-                 * show an error to the user
-                 */
-                googleMap.setOnMapClickListener(this);
-                googleMap.setOnMarkerDragListener(this);
+
+                // Some listener for important events.
                 googleMap.setOnInfoWindowClickListener(this);
                 googleMap.setOnMapLongClickListener(this);
                 googleMap.setOnMarkerClickListener(this);
-
-                if (null == googleMap) {
-                    Toast.makeText(this,
-                            "Error creating map", Toast.LENGTH_SHORT).show();
-                }
             }
         } catch (NullPointerException exception) {
             Log.e("mapApp", exception.toString());
         }
-    }
-
-    @Override
-    public void onMapClick(LatLng latLng) {
-
-    }
-
-    @Override
-    public void onMarkerDragStart(Marker marker) {
-
-    }
-
-    @Override
-    public void onMarkerDrag(Marker marker) {
-
-    }
-
-    @Override
-    public void onMarkerDragEnd(Marker marker) {
-
     }
 
     @Override

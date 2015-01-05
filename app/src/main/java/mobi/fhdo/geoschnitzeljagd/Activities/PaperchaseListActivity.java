@@ -3,7 +3,6 @@ package mobi.fhdo.geoschnitzeljagd.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +33,8 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
 
     private Users users;
     private User loggedInUser;
+
+    private int lastPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +82,7 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.w("item", position + "");
+        lastPosition = position;
 
         Paperchase selectedPaperchase = (Paperchase) paperchasesListView.getAdapter().getItem(position);
 
@@ -89,7 +90,7 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
 
         Intent editPaperchaseIntent = new Intent(this, PaperchaseActivity.class);
         editPaperchaseIntent.putExtra("Paperchase", selectedPaperchase);
-        startActivity(editPaperchaseIntent);
+        startActivityForResult(editPaperchaseIntent, 1);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -106,6 +107,26 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                Paperchase paperchase = (Paperchase) data.getSerializableExtra("Paperchase");
+
+                if (lastPosition != -1) {
+                    ownPaperchases.set(lastPosition, paperchase);
+
+                    dataAdapter.notifyDataSetChanged();
+
+                    /*int visiblePosition = paperchasesListView.getFirstVisiblePosition();
+                    View view = paperchasesListView.getChildAt(lastPosition - visiblePosition);
+                    View v = paperchasesListView.getAdapter().getView(lastPosition, view, paperchasesListView);
+                    v.*/
+                }
+            }
         }
     }
 }
