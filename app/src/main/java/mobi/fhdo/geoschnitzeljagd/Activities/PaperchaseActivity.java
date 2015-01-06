@@ -20,11 +20,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.UUID;
@@ -40,20 +42,27 @@ import mobi.fhdo.geoschnitzeljagd.R;
 public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWindowClickListener,
         GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerClickListener {
 
-    private GPSTracker gpsTracker;
+    private Button addWaypointButton;
+    private Button savePaperchaseButton;
+    private EditText paperchaseNameEditText;
+    private TextView waypointCountEditText;
 
     private GoogleMap googleMap;
+
+    private GPSTracker gpsTracker;
 
     private User loggedInUser;
 
     private LinkedHashMap<Marker, UUID> waypoints;
     private Marker currentWaypoint;
 
+    private HashMap<Integer, Float> waypointColors;
+
     private Paperchases paperchases;
 
     private Paperchase paperchase;
 
-    private EditText paperchaseName;
+    private LatLngBounds bounds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +78,11 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
 
         setContentView(R.layout.activity_paperchase);
 
-        // Save all waypoints.
-        Button saveWaypoints = (Button) findViewById(R.id.button_save_waypoints);
-        saveWaypoints.setOnClickListener(new View.OnClickListener() {
+        // Save the paperchase.
+        savePaperchaseButton = (Button) findViewById(R.id.button_save_waypoints);
+        savePaperchaseButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (paperchaseName.getText().toString().trim().isEmpty()) {
+                if (paperchaseNameEditText.getText().toString().trim().isEmpty()) {
                     new AlertDialog.Builder(PaperchaseActivity.this)
                             .setTitle("Fehlender Name")
                             .setMessage("Die Schnitzeljagd kann nicht ohne Namen gespeichert werden!")
@@ -95,8 +104,8 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
         });
 
         // Add a new waypoint.
-        Button addWaypoint = (Button) findViewById(R.id.button_add_waypoint);
-        addWaypoint.setOnClickListener(new View.OnClickListener() {
+        addWaypointButton = (Button) findViewById(R.id.button_add_waypoint);
+        addWaypointButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 addMarker(true);
             }
@@ -115,16 +124,26 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
                     int waypointNumber = 0;
                     for (Marker waypoint : waypoints.keySet()) {
                         waypoint.setTitle(++waypointNumber + ". Wegpunkt");
+                        waypoint.setIcon(BitmapDescriptorFactory.defaultMarker(waypointColors.get(waypointNumber)));
                     }
+
+                    waypointCountEditText.setText("Aktuell " + waypoints.size() + "/5 Wegpunkten");
                 }
             }
         });
 
-        paperchaseName = (EditText) findViewById(R.id.editText_paperchase_name);
+        paperchaseNameEditText = (EditText) findViewById(R.id.editText_paperchase_name);
+        waypointCountEditText = (TextView) findViewById(R.id.textViewWayPointCount);
 
         loggedInUser = UserContext.getInstance().getLoggedInUser();
 
         waypoints = new LinkedHashMap<Marker, UUID>();
+        waypointColors = new HashMap<Integer, Float>();
+        waypointColors.put(1, BitmapDescriptorFactory.HUE_GREEN);
+        waypointColors.put(2, BitmapDescriptorFactory.HUE_ORANGE);
+        waypointColors.put(3, BitmapDescriptorFactory.HUE_CYAN);
+        waypointColors.put(4, BitmapDescriptorFactory.HUE_BLUE);
+        waypointColors.put(5, BitmapDescriptorFactory.HUE_RED);
 
         paperchases = new Paperchases(this);
 
@@ -135,14 +154,20 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
         if (extras != null) {
             paperchase = (Paperchase) extras.getSerializable("Paperchase");
 
-            paperchaseName.setText(paperchase.getName());
+            paperchaseNameEditText.setText(paperchase.getName());
 
-            int marks = 0;
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
             for (Mark mark : paperchase.getMarks()) {
-                addMarker(new LatLng(mark.getLatitude(), mark.getLongitude()),
-                        ++marks >= paperchase.getMarks().size(),        // Last marker should be focused.
+                addMarker(mark.getPosition(), false,
                         mark.getId(), mark.getHint());
+
+                builder.include(mark.getPosition());
             }
+
+            bounds = builder.build();
+
+            waypointCountEditText.setText("Aktuell " + waypoints.size() + "/5 Wegpunkten");
         } else {
             // Without a paperchase we add an initial marker on the map.
             addMarker(true);
@@ -161,6 +186,15 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
                 googleMap.getUiSettings().setMyLocationButtonEnabled(true);
                 googleMap.getUiSettings().setRotateGesturesEnabled(false);
                 googleMap.getUiSettings().setTiltGesturesEnabled(false);
+                googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                    @Override
+                    public void onMapLoaded() {
+                        if (bounds != null) {
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 250));
+                            bounds = null;
+                        }
+                    }
+                });
 
                 // Some listener for important events.
                 googleMap.setOnInfoWindowClickListener(this);
@@ -203,7 +237,9 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
 
     @Override
     public void onMapLongClick(LatLng position) {
-        addMarker(position, false);
+        if (waypoints.size() < 5) {
+            addMarker(position, false);
+        }
     }
 
     @Override
@@ -224,19 +260,36 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
     }
 
     private void addMarker(LatLng position, boolean focusMap, UUID uuid, String hint) {
-        Marker waypoint = googleMap.addMarker(new MarkerOptions()
-                .position(position)
-                .title((waypoints.size() + 1) + ". Wegpunkt")
-                .snippet(hint)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-                .draggable(true));
+        if (waypoints.size() < 5) {
+            int waypointNumber = waypoints.size() + 1;
 
-        waypoints.put(waypoint, uuid);
+            Marker waypoint = googleMap.addMarker(new MarkerOptions()
+                    .position(position)
+                    .title(waypointNumber + ". Wegpunkt")
+                    .snippet(hint)
+                    .icon(BitmapDescriptorFactory.defaultMarker(waypointColors.get(waypointNumber)))
+                    .draggable(true));
 
-        waypoint.showInfoWindow();
+            waypoints.put(waypoint, uuid);
 
-        if (focusMap) {
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
+            currentWaypoint = waypoint;
+
+            waypoint.showInfoWindow();
+
+            if (focusMap) {
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
+            }
+
+            waypointCountEditText.setText("Aktuell " + waypoints.size() + "/5 Wegpunkten");
+        } else {
+            new AlertDialog.Builder(this)
+                    .setTitle("Maximum erreichet")
+                    .setMessage("Das Maximum von fünf Wegpunkten pro Schnitzeljagd in der Version wurde erreicht.")
+                    .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                        }
+                    })
+                    .show();
         }
     }
 
@@ -271,7 +324,7 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
 
         // The timestamp is needed from the server!
         Paperchase paperchase = new Paperchase(paperchaseUID, loggedInUser,
-                paperchaseName.getText().toString().trim(), new Timestamp(555), marks);
+                paperchaseNameEditText.getText().toString().trim(), new Timestamp(555), marks);
 
         // Save the paperchase with waypoints into the local database.
         paperchases.create(paperchase);
@@ -296,7 +349,7 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
             marks.add(mark);
         }
 
-        paperchase.setName(paperchaseName.getText().toString().trim());
+        paperchase.setName(paperchaseNameEditText.getText().toString().trim());
         paperchase.setMarks(marks);
 
         paperchases.update(paperchase);
