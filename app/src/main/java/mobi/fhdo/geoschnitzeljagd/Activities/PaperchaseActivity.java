@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -227,6 +228,7 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
                 .position(position)
                 .title((waypoints.size() + 1) + ". Wegpunkt")
                 .snippet(hint)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
                 .draggable(true));
 
         waypoints.put(waypoint, uuid);

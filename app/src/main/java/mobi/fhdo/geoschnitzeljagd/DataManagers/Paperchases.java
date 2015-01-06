@@ -11,20 +11,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserNotExistsException;
 import mobi.fhdo.geoschnitzeljagd.Model.Mark;
 import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 
 
-public class Paperchases extends DataManager
-{
+public class Paperchases extends DataManager {
 
     private Marks marks;
     private Context contextBuffer;
 
-    public Paperchases(Context ctx)
-    {
+    public Paperchases(Context ctx) {
         super(ctx);
 
         contextBuffer = ctx;
@@ -32,40 +29,31 @@ public class Paperchases extends DataManager
         marks = new Marks(ctx);
     }
 
-    public List<Paperchase> own(User user)
-    {
+    public List<Paperchase> own(User user) {
         SQLiteDatabase database = null;
         Cursor paperchaseCursor = null;
         List<Paperchase> paperchases = new ArrayList<Paperchase>();
 
-        try
-        {
+        try {
             database = getReadableDatabase();
 
             paperchaseCursor = database.rawQuery(
                     "SELECT PID, name, timestamp FROM paperchase WHERE UID=? ORDER BY name",
                     new String[]{user.getId() + ""});
 
-            while (paperchaseCursor.moveToNext())
-            {
+            while (paperchaseCursor.moveToNext()) {
                 Paperchase paperchase = new Paperchase(UUID.fromString(paperchaseCursor.getString(0)), user, paperchaseCursor.getString(1), Timestamp.valueOf(paperchaseCursor.getString(2)));
 
                 paperchases.add(paperchase);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.w("Exception", e.toString());
-        }
-        finally
-        {
-            if (paperchaseCursor != null)
-            {
+        } finally {
+            if (paperchaseCursor != null) {
                 paperchaseCursor.close();
             }
 
-            if (database != null)
-            {
+            if (database != null) {
                 database.close();
             }
         }
@@ -73,10 +61,8 @@ public class Paperchases extends DataManager
         return paperchases;
     }
 
-    public Paperchase Get(UUID paperchasesId)
-    {
-        if (paperchasesId == null)
-        {
+    public Paperchase Get(UUID paperchasesId) {
+        if (paperchasesId == null) {
             throw new IllegalArgumentException("Die PaperchasesId darf nicht gleich Null sein!");
         }
 
@@ -87,40 +73,31 @@ public class Paperchases extends DataManager
         Users users = new Users(contextBuffer);
         users.getReadableDatabase();
 
-        try
-        {
+        try {
             database = getReadableDatabase();
 
             paperchaseCursor = database.rawQuery(
                     "SELECT pid, uid, name, timestamp FROM paperchase WHERE PID=?",
                     new String[]{paperchasesId.toString()});
 
-            if (paperchaseCursor.getCount() != 1)
-            {
+            if (paperchaseCursor.getCount() != 1) {
                 throw new Exception("Paperchase mit der ID '" + paperchasesId + "' existiert nicht!");
             }
 
-            while (paperchaseCursor.moveToNext())
-            {
+            while (paperchaseCursor.moveToNext()) {
                 paperchase = new Paperchase(UUID.fromString(paperchaseCursor.getString(0)),
-                                users.Get(UUID.fromString(paperchaseCursor.getString(1))),
-                                paperchaseCursor.getString(2),
-                                Timestamp.valueOf(paperchaseCursor.getString(3)));
+                        users.Get(UUID.fromString(paperchaseCursor.getString(1))),
+                        paperchaseCursor.getString(2),
+                        Timestamp.valueOf(paperchaseCursor.getString(3)));
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.d("Get Paperchase", e.getMessage());
-        }
-        finally
-        {
-            if (paperchaseCursor != null)
-            {
+        } finally {
+            if (paperchaseCursor != null) {
                 paperchaseCursor.close();
             }
 
-            if (database != null)
-            {
+            if (database != null) {
                 database.close();
             }
         }
@@ -129,38 +106,29 @@ public class Paperchases extends DataManager
     }
 
 
-    public List<Paperchase> search(String text)
-    {
+    public List<Paperchase> search(String text) {
         SQLiteDatabase database = null;
         Cursor paperchaseCursor = null;
         List<Paperchase> paperchases = new ArrayList<Paperchase>();
 
-        try
-        {
+        try {
             database = getReadableDatabase();
 
             paperchaseCursor = database.rawQuery("SELECT * FROM paperchase WHERE name LIKE '%" + text.toString() + "%'", null);
 
-            while (paperchaseCursor.moveToNext())
-            {
+            while (paperchaseCursor.moveToNext()) {
                 Paperchase paperchase = new Paperchase(UUID.fromString(paperchaseCursor.getString(0)), null, paperchaseCursor.getString(2), Timestamp.valueOf(paperchaseCursor.getString(3)));
 
                 paperchases.add(paperchase);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.w("Exception", e.toString());
-        }
-        finally
-        {
-            if (paperchaseCursor != null)
-            {
+        } finally {
+            if (paperchaseCursor != null) {
                 paperchaseCursor.close();
             }
 
-            if (database != null)
-            {
+            if (database != null) {
                 database.close();
             }
         }
@@ -182,10 +150,10 @@ public class Paperchases extends DataManager
 
             while (paperchaseCursor.moveToNext()) {
                 Paperchase paperchase = new Paperchase(UUID.fromString(paperchaseCursor.getString(0)), null, paperchaseCursor.getString(2), Timestamp.valueOf(paperchaseCursor.getString(3)));
-               paperchaseMarksCursor = database.rawQuery("SELECT mid,pid,latitude, longitude, hint, sequence from mark where pid=? order by sequence" ,
-                       new String[]{paperchase.getId() + ""});
+                paperchaseMarksCursor = database.rawQuery("SELECT mid,pid,latitude, longitude, hint, sequence from mark where pid=? order by sequence",
+                        new String[]{paperchase.getId() + ""});
 
-                while(paperchaseMarksCursor.moveToNext()){
+                while (paperchaseMarksCursor.moveToNext()) {
                     Mark mark = new Mark(UUID.fromString(paperchaseMarksCursor.getString(0)), UUID.fromString(paperchaseMarksCursor.getString(1)), paperchaseMarksCursor.getDouble(2), paperchaseMarksCursor.getDouble(3), paperchaseMarksCursor.getString(4), paperchaseMarksCursor.getInt(5));
                     paperchase.addMark(mark);
                 }
@@ -197,7 +165,7 @@ public class Paperchases extends DataManager
             if (paperchaseCursor != null) {
                 paperchaseCursor.close();
             }
-            if (paperchaseMarksCursor != null){
+            if (paperchaseMarksCursor != null) {
                 paperchaseMarksCursor.close();
             }
 
@@ -210,12 +178,10 @@ public class Paperchases extends DataManager
     }
 
 
-    public Paperchase create(Paperchase paperchase)
-    {
+    public Paperchase create(Paperchase paperchase) {
         SQLiteDatabase database = null;
 
-        try
-        {
+        try {
             database = getWritableDatabase();
 
             ContentValues values = new ContentValues();
@@ -225,19 +191,13 @@ public class Paperchases extends DataManager
 
             database.insert("paperchase", null, values);
 
-            for (Mark mark : paperchase.getMarks())
-            {
+            for (Mark mark : paperchase.getMarks()) {
                 marks.create(mark);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.w("Exception", e.toString());
-        }
-        finally
-        {
-            if (database != null)
-            {
+        } finally {
+            if (database != null) {
                 database.close();
             }
         }
@@ -245,12 +205,10 @@ public class Paperchases extends DataManager
         return paperchase;
     }
 
-    public Paperchase update(Paperchase paperchase)
-    {
+    public Paperchase update(Paperchase paperchase) {
         SQLiteDatabase database = null;
 
-        try
-        {
+        try {
             database = getWritableDatabase();
 
             ContentValues values = new ContentValues();
@@ -260,23 +218,35 @@ public class Paperchases extends DataManager
 
             marks.removeForPaperchase(paperchase);
 
-            for (Mark mark : paperchase.getMarks())
-            {
+            for (Mark mark : paperchase.getMarks()) {
                 marks.create(mark);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.w("Exception", e.toString());
-        }
-        finally
-        {
-            if (database != null)
-            {
+        } finally {
+            if (database != null) {
                 database.close();
             }
         }
 
         return paperchase;
+    }
+
+    public void remove(Paperchase paperchase) {
+        SQLiteDatabase database = null;
+
+        try {
+            database = getWritableDatabase();
+
+            database.delete("paperchase", "pid = ?", new String[]{paperchase.getId() + ""});
+
+            marks.removeForPaperchase(paperchase);
+        } catch (Exception e) {
+            Log.w("Exception", e.toString());
+        } finally {
+            if (database != null) {
+                database.close();
+            }
+        }
     }
 }

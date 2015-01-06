@@ -59,10 +59,8 @@ public class Marks extends DataManager {
         try {
             database = getWritableDatabase();
 
-            UUID newID = mark.getId() != null ? mark.getId() : UUID.randomUUID();
-
             ContentValues values = new ContentValues();
-            values.put("mid", newID.toString());
+            values.put("mid", mark.getId().toString());
             values.put("pid", mark.getPaperchaseId().toString());
             values.put("latitude", mark.getLatitude());
             values.put("longitude", mark.getLongitude());
@@ -70,8 +68,6 @@ public class Marks extends DataManager {
             values.put("sequence", mark.getSequence());
 
             database.insert("mark", null, values);
-
-            mark.setId(newID);
         } catch (Exception e) {
             Log.w("Exception", e.toString());
         } finally {
@@ -98,28 +94,4 @@ public class Marks extends DataManager {
             }
         }
     }
-
-    /*public Mark update(Mark mark) {
-        SQLiteDatabase database = null;
-
-        try {
-            database = getWritableDatabase();
-
-            ContentValues values = new ContentValues();
-            values.put("latitude", mark.getLatitude());
-            values.put("longitude", mark.getLongitude());
-            values.put("hint", mark.getHint());
-            values.put("sequence", mark.getSequence());
-
-            database.update("mark", values, "mid = ?", new String[]{mark.getId() + ""});
-        } catch (Exception e) {
-            Log.w("Exception", e.toString());
-        } finally {
-            if (database != null) {
-                database.close();
-            }
-        }
-
-        return mark;
-    }*/
 }

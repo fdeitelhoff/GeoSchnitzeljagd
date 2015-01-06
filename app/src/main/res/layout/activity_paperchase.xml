@@ -55,4 +55,12 @@
         android:textColor="#000000"
         android:textCursorDrawable="@null" />
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="60dp"
+        android:layout_height="100dp"
+        android:layout_alignBottom="@+id/button_remove_waypoint"
+        android:layout_alignLeft="@+id/button_save_waypoints"
+        android:layout_alignStart="@+id/button_save_waypoints" />
+
 </RelativeLayout>

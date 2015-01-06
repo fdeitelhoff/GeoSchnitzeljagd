@@ -1,6 +1,8 @@
 package mobi.fhdo.geoschnitzeljagd.Activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -66,12 +68,28 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
                                 return true;
                             }
 
-                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
-                                for (int position : reverseSortedPositions) {
-                                    ownPaperchases.remove(position);
-                                }
+                            public void onDismiss(ListView listView, final int[] reverseSortedPositions) {
+                                new AlertDialog.Builder(PaperchaseListActivity.this)
+                                        .setTitle("Schnitzeljagd löschen")
+                                        .setMessage("Soll die Schnitzeljagd gelöscht werden?")
+                                        .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int whichButton) {
+                                                for (int position : reverseSortedPositions) {
+                                                    Paperchase paperchase = ownPaperchases.get(position);
 
-                                dataAdapter.notifyDataSetChanged();
+                                                    paperchases.remove(paperchase);
+
+                                                    ownPaperchases.remove(paperchase);
+                                                }
+
+                                                dataAdapter.notifyDataSetChanged();
+                                            }
+                                        })
+                                        .setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int whichButton) {
+                                            }
+                                        })
+                                        .show();
                             }
                         });
         paperchasesListView.setOnTouchListener(touchListener);
@@ -124,7 +142,7 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
                 dataAdapter.sort(new Comparator<Paperchase>() {
                     @Override
                     public int compare(Paperchase lhs, Paperchase rhs) {
-                        return lhs.getName().compareTo(rhs.getName());
+                        return lhs.getName().compareToIgnoreCase(rhs.getName());
                     }
                 });
             }
