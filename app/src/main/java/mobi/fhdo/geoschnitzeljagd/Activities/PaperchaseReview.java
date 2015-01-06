@@ -66,8 +66,9 @@ public class PaperchaseReview extends Activity
     {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
         {
-            Intent myIntent = new Intent(this, PaperchaseStart.class);
-            startActivity(myIntent);
+            this.finish();
+            //Intent myIntent = new Intent(this, PaperchaseStart.class);
+            //startActivity(myIntent);
             return true;
         }
 
