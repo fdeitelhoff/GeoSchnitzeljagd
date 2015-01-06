@@ -208,14 +208,20 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
 
     @Override
     public void onInfoWindowClick(final Marker marker) {
+        String waypointText = marker.getSnippet();
+
+        if (waypointText.equals("Tippen um Hinweis zu setzen...")) {
+            waypointText = "";
+        }
+
         marker.hideInfoWindow();
 
         final EditText input = new EditText(this);
-        input.setText(marker.getSnippet(), TextView.BufferType.EDITABLE);
+        input.setText(waypointText, TextView.BufferType.EDITABLE);
 
         new AlertDialog.Builder(this)
-                .setTitle("Hinweis für den Wegpunkt")
-                .setMessage("Hinweis für den aktuellen Wegpunkt eingeben.")
+                .setTitle("Hinweis eingeben")
+                .setMessage("Hinweis für den aktuellen Wegpunkt:")
                 .setView(input)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
