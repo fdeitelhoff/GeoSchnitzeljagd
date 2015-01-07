@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -42,7 +43,7 @@ import mobi.fhdo.geoschnitzeljagd.Model.PaperchaseCompleted;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
 
-public class PaperchaseStart extends Activity implements GoogleMap.OnMyLocationChangeListener
+public class PaperchaseStart extends Activity implements GoogleMap.OnMyLocationChangeListener, GoogleMap.OnMarkerClickListener
 {
     private Button ratingButton;
 
@@ -82,8 +83,6 @@ public class PaperchaseStart extends Activity implements GoogleMap.OnMyLocationC
 
         createMapView();
 
-        googleMap.setMyLocationEnabled(true);
-        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null)
@@ -112,13 +111,27 @@ public class PaperchaseStart extends Activity implements GoogleMap.OnMyLocationC
                     .title(i+1 + ". Wegpunkt")
                     .snippet("Hinweis: " + m.getHint() )
                     .draggable(false));
-                    //mark.setVisible(false);
+                    mark.setVisible(false);
 
-                    if(i == 0){
-                        mark.setVisible(true);
+                    if (i == 0) {
                         mark.showInfoWindow();
+                        mark.setVisible(true);
+                        distance2NextMark.setVisibility(View.VISIBLE);
+                        mark.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                        mark.setTitle("Start");
                         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mark.getPosition(), 15));
                     }
+                    else if( i == anzMarkierung-1){
+                        mark.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                        mark.setTitle("Ziel");
+                    }
+                    else{
+                        mark.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                    }
+
+
+
+
                     paperchaseMarksLocation.add(mark);
                 }
 
@@ -254,6 +267,21 @@ public class PaperchaseStart extends Activity implements GoogleMap.OnMyLocationC
 
     }
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        if (!jagdaktive){
+            Location myLocation = gpsTracker.getLocation();
+            LatLng latLngmyLocation = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+            Toast.makeText(getBaseContext(), "Die Entfernung zu der Schnitzeljagd beträgt: " + new DecimalFormat("#.##").format(sphericalUtil.computeDistanceBetween(latLngmyLocation, marker.getPosition())) + " Meter", Toast.LENGTH_SHORT).show();
+
+            startHunt(aktuellePaperchase);
+        }
+
+
+        return false;
+    }
+
     private void createMapView() {
         /**
          * Catch the null pointer exception that
@@ -263,6 +291,16 @@ public class PaperchaseStart extends Activity implements GoogleMap.OnMyLocationC
             if (null == googleMap) {
                 googleMap = ((MapFragment) getFragmentManager().findFragmentById(
                         R.id.mapView)).getMap();
+
+                googleMap.getUiSettings().setRotateGesturesEnabled(false);
+                googleMap.getUiSettings().setTiltGesturesEnabled(false);
+
+                googleMap.setMyLocationEnabled(true);
+                googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+                googleMap.setOnMarkerClickListener(this);
+                googleMap.setOnMyLocationChangeListener(this);
+
 
                 /**
                  * If the map is still null after attempted initialisation,

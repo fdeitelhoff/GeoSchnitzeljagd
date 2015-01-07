@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -83,21 +84,6 @@ public class NearbyActivity extends ActionBarActivity implements GoogleMap.OnMar
 
     TextView distance2NextMark;
 
-
-
-
-    /*
-    Bochum
-        Latitude : 51.4925
-        Longitude : 7.3106
-    Dortmund
-        Latitude : 51.3000
-        Longitude : 7.2800
-    Essen
-        Latitude : 51.2800
-        Longitude : 7.0200
-     */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,22 +101,6 @@ public class NearbyActivity extends ActionBarActivity implements GoogleMap.OnMar
 
         gpsTracker = new GPSTracker(this);
 
-
-       /* Location l1 = new Location("Paperchase 1");
-        l1.setLatitude(51.4925);
-        l1.setLongitude(7.3106);
-        locations.add(l1);
-        Location l2 = new Location("Dortmund");
-        l2.setLatitude(51.3000);
-        l2.setLongitude(7.2800);
-        locations.add(l2);
-        Location l3 = new Location("Essen");
-        l3.setLatitude(51.2800);
-        l3.setLongitude(7.0200);
-        locations.add(l3);
-        */
-
-
         drawerLayout = (DrawerLayout) findViewById(R.id.ganzesLayout);
         drawerToggle = new ActionBarDrawerToggle(NearbyActivity.this, drawerLayout, R.drawable.ic_drawer, R.string.open, R.string.close);
         // Navigationsleiste -> Drawer Öffnen
@@ -141,17 +111,11 @@ public class NearbyActivity extends ActionBarActivity implements GoogleMap.OnMar
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        googleMap.setMyLocationEnabled(true);
-        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
 
         markClusterManager = new ClusterManager<Mark>(this, googleMap);
         googleMap.setOnCameraChangeListener(markClusterManager);
         //googleMap.setOnMarkerClickListener(markClusterManager);
 
-        googleMap.setOnMarkerClickListener(this);
-        googleMap.setOnMyLocationChangeListener(this);
-
-        googleMap.setOnMarkerDragListener(this);
 
 
         paperchases = new Paperchases(this);
@@ -173,12 +137,14 @@ public class NearbyActivity extends ActionBarActivity implements GoogleMap.OnMar
                         .title(paperchaseName)
                         .snippet("Anzahl Wegpunkte: " + marks.size())
                         .draggable(false)));
+                //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))))
 
-                Circle circle = googleMap.addCircle(new CircleOptions()
+               /* Circle circle = googleMap.addCircle(new CircleOptions()
                         .center(new LatLng(mark.getLatitude(), mark.getLongitude()))
                         .radius(20.0)
                         .strokeColor(Color.RED)
                         .fillColor(Color.TRANSPARENT));
+                        */
                 markClusterManager.addItem(mark);
                 locations.add(l);
                 locationDisplayName.add(paperchaseName);
@@ -235,6 +201,17 @@ public class NearbyActivity extends ActionBarActivity implements GoogleMap.OnMar
             if (null == googleMap) {
                 googleMap = ((MapFragment) getFragmentManager().findFragmentById(
                         R.id.mapView)).getMap();
+
+                googleMap.getUiSettings().setRotateGesturesEnabled(false);
+                googleMap.getUiSettings().setTiltGesturesEnabled(false);
+
+                googleMap.setMyLocationEnabled(true);
+                googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+                googleMap.setOnMarkerClickListener(this);
+                googleMap.setOnMyLocationChangeListener(this);
+
+                googleMap.setOnMarkerDragListener(this);
 
                 /**
                  * If the map is still null after attempted initialisation,
@@ -386,6 +363,15 @@ public class NearbyActivity extends ActionBarActivity implements GoogleMap.OnMar
                                 m.showInfoWindow();
                                 m.setVisible(true);
                                 distance2NextMark.setVisibility(View.VISIBLE);
+                                m.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                                m.setTitle("Start");
+                            }
+                            else if( j == anzMarkierung-1){
+                                m.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                                m.setTitle("Ziel");
+                            }
+                            else{
+                                m.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
                             }
 
                         }
@@ -435,10 +421,10 @@ public class NearbyActivity extends ActionBarActivity implements GoogleMap.OnMar
             }
         } else {
             LatLng latLngmyLocation = new LatLng(location.getLatitude(), location.getLongitude());
-            double displayDistanceMyNextMarker = sphericalUtil.computeDistanceBetween(latLngmyLocation, aktiveJagd.getMarks().get(aktuelleMarkierung).getPosition());
-            distance2NextMark.setText("Entfernung zw. Standort und nächster Markierung:" +  new DecimalFormat("#.##").format(displayDistanceMyNextMarker));
             double distanceToNextMark = 0.0;
             if (aktuelleMarkierung < anzMarkierung) {
+                double displayDistanceMyNextMarker = sphericalUtil.computeDistanceBetween(latLngmyLocation, aktiveJagd.getMarks().get(aktuelleMarkierung).getPosition());
+                distance2NextMark.setText("Entfernung zw. Standort und nächster Markierung:" +  new DecimalFormat("#.##").format(displayDistanceMyNextMarker));
                 if (sphericalUtil.computeDistanceBetween(latLngmyLocation, aktiveJagd.getMarks().get(aktuelleMarkierung).getPosition()) < DISTANCE_TO_MARK) {
                     paperchaseMarksLocation.get(aktuelleMarkierung).setVisible(true);
                     if (aktuelleMarkierung != anzMarkierung - 1) {
@@ -521,9 +507,9 @@ public class NearbyActivity extends ActionBarActivity implements GoogleMap.OnMar
         } else {
             LatLng latLngmyLocation = marker.getPosition();
             double distanceToNextMark = 0.0;
-            double displayDistanceMyNextMarker = sphericalUtil.computeDistanceBetween(latLngmyLocation, aktiveJagd.getMarks().get(aktuelleMarkierung).getPosition());
-            distance2NextMark.setText("Entfernung zw. Standort und nächster Markierung:" +  new DecimalFormat("#.##").format(displayDistanceMyNextMarker));
             if (aktuelleMarkierung < anzMarkierung) {
+                double displayDistanceMyNextMarker = sphericalUtil.computeDistanceBetween(latLngmyLocation, aktiveJagd.getMarks().get(aktuelleMarkierung).getPosition());
+                distance2NextMark.setText("Entfernung zw. Standort und nächster Markierung:" +  new DecimalFormat("#.##").format(displayDistanceMyNextMarker));
                 if (sphericalUtil.computeDistanceBetween(latLngmyLocation, aktiveJagd.getMarks().get(aktuelleMarkierung).getPosition()) < DISTANCE_TO_MARK) {
                     paperchaseMarksLocation.get(aktuelleMarkierung).setVisible(true);
                     if (aktuelleMarkierung != anzMarkierung - 1) {
