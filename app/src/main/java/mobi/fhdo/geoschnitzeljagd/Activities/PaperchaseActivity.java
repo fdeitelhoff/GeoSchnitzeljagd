@@ -80,6 +80,7 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
     private LatLngBounds bounds;
 
     private boolean isCreate;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -87,6 +88,8 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
         super.onCreate(savedInstanceState);
 
         gpsTracker = new GPSTracker(this);
+
+        context = this;
 
         //Remove title bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -406,7 +409,7 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
 
         paperchases.CreateOrUpdate(paperchase);
 
-        // TODO: bitte Prüfen
+        // TODO: Bitte Prüfen
         isCreate = true;
         String stringUrl = "http://schnitzeljagd.fabiandeitelhoff.de/api/v1/paperchase";
         ConnectivityManager connMgr = (ConnectivityManager)
@@ -506,6 +509,8 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
                 conn.setRequestMethod("PUT");
             }
 
+            paperchase.objectToOutputStream(conn.getOutputStream());
+
             conn.connect();
             int response = conn.getResponseCode();
             is = conn.getInputStream();
@@ -521,11 +526,11 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
                 {
                     //paperchases.update(paperchase);
                 }
-                Toast.makeText(getBaseContext(), "paperchase wurde angelegt bzw. geändert.", Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "paperchase wurde angelegt bzw. geändert.", Toast.LENGTH_LONG).show();
             }
             else
             {
-                Toast.makeText(getBaseContext(), "paperchase wurde nicht geändert bzw. angelegt! Versuchen Sie es später nochmal.", Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "paperchase wurde nicht geändert bzw. angelegt! Versuchen Sie es später nochmal.", Toast.LENGTH_LONG).show();
             }
 
 

@@ -98,7 +98,7 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
                                                 {
                                                     toBeDeletedPaperchase = ownPaperchases.get(position);
 
-                                                    // TODO: bitte Prüfen
+                                                    // TODO: Bitte Prüfen
                                                     // HTTP Anfrage um die SChnitzeljadt zu löschen
                                                     String stringUrl = "http://schnitzeljagd.fabiandeitelhoff.de/api/v1/paperchase/" + toBeDeletedPaperchase.getId();
                                                     ConnectivityManager connMgr = (ConnectivityManager)

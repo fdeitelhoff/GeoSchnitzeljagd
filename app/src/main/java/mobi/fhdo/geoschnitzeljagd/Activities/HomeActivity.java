@@ -46,7 +46,7 @@ public class HomeActivity extends Activity
         paperchases = new Paperchases(this);
         context = this;
 
-        // TODO: bitte Prüfen
+        // TODO: Bitte Prüfen
         // Alle SChnitzeljadten vom Server holen!
         String stringUrl = "http://schnitzeljagd.fabiandeitelhoff.de/api/v1/paperchases";
         ConnectivityManager connMgr = (ConnectivityManager)
