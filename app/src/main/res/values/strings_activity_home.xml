@@ -1,9 +1,11 @@
 <resources>
+    <string name="activity_home_textview_username">Hallo Benutzername!</string>
     <string name="activity_home_button_start_paperchase">Schnitzeljagd suchen</string>
     <string name="activity_home_button_create_paperchase">Schnitzeljagden in der Nähe</string>
     <string name="activity_home_button_own_paperchases">Eigene Schnitzeljagden</string>
     <string name="activity_home_button_paperchase_overview">Übersicht Schnitzeljagden</string>
     <string name="activity_home_button_user_profil">Benutzerprofil</string>
     <string name="activity_home_button_options">Einstellungen</string>
+    <string name="activity_home_button_logout">Abmelden</string>
     <string name="activity_home_button_exit">Beenden</string>
 </resources>

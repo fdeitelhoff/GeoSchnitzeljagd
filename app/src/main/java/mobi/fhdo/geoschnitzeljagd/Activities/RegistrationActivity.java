@@ -81,18 +81,20 @@ public class RegistrationActivity extends Activity {
             if (networkInfo != null && networkInfo.isConnected()) {
                 // User Lokal anlegen
                 if (users.CreateOrUpdate(newUser)) {
-                    UserContext.getInstance().userLoggedIn(users.Login(newUser));
+                    UserContext.getInstance().userLogin(users.Login(newUser));
 
                     // User auf dem Server hinterlegen
                     new DownloadWebpageTask().execute(stringUrl);
 
                     new AlertDialog.Builder(this)
                             .setTitle("Registrierung erfolgreich")
-                            .setMessage("Sie werden nun automatisch angemeldet.")
+                            .setMessage("Du wurdest nun automatisch angemeldet.")
                             .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
                                     Intent intent = new Intent(getBaseContext(), HomeActivity.class);
                                     startActivity(intent);
+
+                                    finish();
                                 }
                             })
                             .show();
@@ -104,6 +106,8 @@ public class RegistrationActivity extends Activity {
 
                 Intent intent = new Intent(getBaseContext(), LoginActivity.class);
                 startActivity(intent);
+
+                finish();
             }
         } catch (Exception e) {
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();

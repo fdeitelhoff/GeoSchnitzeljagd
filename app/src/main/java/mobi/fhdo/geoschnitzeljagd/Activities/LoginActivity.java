@@ -106,10 +106,12 @@ public class LoginActivity extends Activity {
         try {
             User user = new User(usernameView.getText().toString(), UserContext.getMd5(passwordView.getText().toString()));
 
-            UserContext.getInstance().userLoggedIn(users.Login(user));
+            UserContext.getInstance().userLogin(users.Login(user));
 
             Intent intent = new Intent(getBaseContext(), HomeActivity.class);
             startActivity(intent);
+
+            finish();
         } catch (UserLoginException e) {
             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }

@@ -373,7 +373,6 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
 
     @Override
     public void onMarkerDrag(Marker marker) {
-        UUID bla = waypoints.get(marker);
     }
 
     @Override

@@ -28,19 +28,9 @@ public class UserContext {
         return instance;
     }
 
-    public User getLoggedInUser() {
-        return user;
-    }
-
-    public void userLoggedIn(User user) {
-        this.user = user;
-    }
-
     // Erstellt einen MD5 Hash
-    public static final String getMd5(final String s)
-    {
-        try
-        {
+    public static final String getMd5(final String s) {
+        try {
             // Create MD5 Hash
             MessageDigest digest = java.security.MessageDigest
                     .getInstance("MD5");
@@ -49,8 +39,7 @@ public class UserContext {
 
             // Create Hex String
             StringBuffer hexString = new StringBuffer();
-            for (int i = 0; i < messageDigest.length; i++)
-            {
+            for (int i = 0; i < messageDigest.length; i++) {
                 String h = Integer.toHexString(0xFF & messageDigest[i]);
                 while (h.length() < 2)
                     h = "0" + h;
@@ -58,50 +47,49 @@ public class UserContext {
             }
             return hexString.toString();
 
-        }
-        catch (NoSuchAlgorithmException e)
-        {
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return "";
     }
 
     // Reads an InputStream and converts it to a String.
-    public static String readIt(InputStream stream) throws IOException, UnsupportedEncodingException
-    {
+    public static String readIt(InputStream stream) throws IOException, UnsupportedEncodingException {
         BufferedReader br = null;
         StringBuilder sb = new StringBuilder();
 
         String line;
-        try
-        {
+        try {
 
             br = new BufferedReader(new InputStreamReader(stream));
-            while ((line = br.readLine()) != null)
-            {
+            while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
 
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
-        }
-        finally
-        {
-            if (br != null)
-            {
-                try
-                {
+        } finally {
+            if (br != null) {
+                try {
                     br.close();
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
 
         return sb.toString();
+    }
+
+    public User getLoggedInUser() {
+        return user;
+    }
+
+    public void userLogin(User user) {
+        this.user = user;
+    }
+
+    public void userLogout() {
+        user = null;
     }
 }
