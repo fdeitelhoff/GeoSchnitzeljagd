@@ -93,7 +93,7 @@ public class Paperchase implements Serializable
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    public static Paperchase jsonToObject(String result, Context context)
+    public static Paperchase jsonToObject(JsonReader reader, Context context)
     {
         UUID id = null;
         User user = null;
@@ -105,9 +105,6 @@ public class Paperchase implements Serializable
 
         try
         {
-            InputStream input = new ByteArrayInputStream(result.getBytes(StandardCharsets.UTF_8));
-            JsonReader reader = new JsonReader(new InputStreamReader(input, "UTF-8"));
-
             if (reader.peek() == JsonToken.BEGIN_OBJECT)
                 reader.beginObject();
 

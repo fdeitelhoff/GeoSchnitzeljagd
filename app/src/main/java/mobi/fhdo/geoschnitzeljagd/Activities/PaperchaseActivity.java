@@ -337,7 +337,7 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
                 paperchaseNameEditText.getText().toString().trim(), new Timestamp(555), marks);
 
         // Save the paperchase with waypoints into the local database.
-        paperchases.create(paperchase);
+        paperchases.CreateOrUpdate(paperchase);
 
         this.paperchase = paperchase;
     }

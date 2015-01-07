@@ -113,7 +113,7 @@ public class Users extends DataManager
 
         try
         {
-            database = getReadableDatabase();
+            database = getWritableDatabase();
 
             userCursor = database.rawQuery(
                     "SELECT UID, username, password, timestamp FROM User WHERE UID=?",
@@ -184,22 +184,16 @@ public class Users extends DataManager
     public boolean DeleteAllUsers() throws Exception
     {
         SQLiteDatabase database = null;
-        Cursor userCursor = null;
 
         try
         {
-            database = getReadableDatabase();
+            database = getWritableDatabase();
 
             String sql = "Delete From " + _USER;
             database.execSQL(sql);
         }
         finally
         {
-            if (userCursor != null)
-            {
-                userCursor.close();
-            }
-
             if (database != null)
             {
                 database.close();
