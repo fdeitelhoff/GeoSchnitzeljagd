@@ -70,6 +70,8 @@
         android:layout_alignLeft="@+id/editText_paperchase_name"
         android:layout_alignStart="@+id/editText_paperchase_name"
         android:layout_below="@+id/editText_paperchase_name"
+        android:layout_marginTop="5dp"
+        android:background="#FFFFFF"
         android:editable="false"
         android:text="Keine Wegpunkte"
         android:textAppearance="?android:attr/textAppearanceSmall"

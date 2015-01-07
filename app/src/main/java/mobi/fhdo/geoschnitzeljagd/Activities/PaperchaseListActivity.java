@@ -33,8 +33,6 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
     private List<Paperchase> ownPaperchases;
     private ArrayAdapter dataAdapter;
 
-    private User loggedInUser;
-
     private int lastPosition = -1;
 
     @Override
@@ -48,7 +46,7 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
         paperchases = new Paperchases(this);
         marks = new Marks(this);
 
-        loggedInUser = UserContext.getInstance().getLoggedInUser();
+        User loggedInUser = UserContext.getInstance().getLoggedInUser();
 
         ownPaperchases = paperchases.own(loggedInUser);
 
@@ -76,6 +74,8 @@ public class PaperchaseListActivity extends Activity implements AdapterView.OnIt
                                             public void onClick(DialogInterface dialog, int whichButton) {
                                                 for (int position : reverseSortedPositions) {
                                                     Paperchase paperchase = ownPaperchases.get(position);
+
+                                                    // TODO: An dieser Stelle die Schnitzeljagd auf dem Server löschen.
 
                                                     paperchases.remove(paperchase);
 
