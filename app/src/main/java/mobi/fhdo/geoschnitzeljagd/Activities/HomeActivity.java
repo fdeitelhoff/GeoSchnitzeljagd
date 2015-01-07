@@ -25,8 +25,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import mobi.fhdo.geoschnitzeljagd.Contexts.UserContext;
+import mobi.fhdo.geoschnitzeljagd.DataManagers.Marks;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Paperchases;
 import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
@@ -36,6 +38,7 @@ public class HomeActivity extends Activity
 {
     private User loggedInUser;
     private Paperchases paperchases;
+    private Marks marks;
     private Context context;
 
     @Override
@@ -44,6 +47,7 @@ public class HomeActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         paperchases = new Paperchases(this);
+        marks = new Marks(this);
         context = this;
 
         // TODO: Bitte Prüfen
@@ -61,6 +65,10 @@ public class HomeActivity extends Activity
             Log.d("No network connection available.", "No network connection available.");
         }
 
+
+        //Paperchase g = paperchases.Get(UUID.fromString("c2fd1e18-2f7b-4933-b312-dfe2130b48bd"));
+        //Paperchase h = paperchases.Get(UUID.fromString("5d6e455c-91ea-46d2-aadd-eb0ee0d2ee9b"));
+        //Paperchase j = paperchases.Get(UUID.fromString("d5caf4ae-889a-11e4-ad4b-000c2905dce6"));
 
         loggedInUser = UserContext.getInstance().getLoggedInUser();
 
@@ -268,6 +276,7 @@ public class HomeActivity extends Activity
             {
                 // Alle vorhandenen Löschen!
                 paperchases.DeleteAllPaperchases();
+                marks.DeleteAllMarks();
 
                 reader.beginArray();
                 while (reader.hasNext())

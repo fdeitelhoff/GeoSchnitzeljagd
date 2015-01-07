@@ -139,4 +139,25 @@ public class Marks extends DataManager
             }
         }
     }
+    public boolean DeleteAllMarks() throws Exception
+    {
+        SQLiteDatabase database = null;
+
+        try
+        {
+            database = getWritableDatabase();
+
+            String sql = "Delete From " + _MARKIERUNG;
+            database.execSQL(sql);
+        }
+        finally
+        {
+            if (database != null)
+            {
+                database.close();
+            }
+        }
+
+        return true;
+    }
 }

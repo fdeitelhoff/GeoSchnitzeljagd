@@ -106,6 +106,11 @@ public class Paperchases extends DataManager
                         paperchaseCursor.getString(2),
                         Timestamp.valueOf(paperchaseCursor.getString(3)));
             }
+
+            if(paperchase != null)
+            {
+                marks.forPaperchase(paperchase);
+            }
         }
         catch (Exception e)
         {
