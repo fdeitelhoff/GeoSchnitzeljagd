@@ -30,6 +30,7 @@ public interface Constants {
     // Tabelle
     public static final String _SCHNITZELJAGD_ABSOLVIERT = "schnitzeljagd_absolviert";
     // Spalten
+    public static final String _PSID = "psid";
     public static final String _STARTZEIT = "startzeit";
     public static final String _ENDZEIT = "endzeit";
 

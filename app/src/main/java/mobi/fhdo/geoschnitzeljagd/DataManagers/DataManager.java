@@ -13,7 +13,7 @@ import java.util.UUID;
 public class DataManager extends SQLiteOpenHelper implements Constants
 {
     private static final String DATABASE_NAME = "mobi.fhdo.geoschnitzeljagd.sqlite.db";
-    private static final int DATABASE_VERSION = 22;
+    private static final int DATABASE_VERSION = 23;
 
     public DataManager(Context ctx)
     {
@@ -45,6 +45,7 @@ public class DataManager extends SQLiteOpenHelper implements Constants
                     _TIMESTAMP + "\" DATETIME DEFAULT CURRENT_TIMESTAMP\n);\n");
 
             db.execSQL("CREATE TABLE \"" + _SCHNITZELJAGD_ABSOLVIERT + "\" (" +
+                    "\"" + _PSID + "\" TEXT PRIMARY KEY, " +
                     "\"" + _UID + "\" TEXT REFERENCES \"" + _USER + "\" (\"" + _UID + "\"), " +
                     "\"" + _PID + "\" TEXT REFERENCES \"" + _SCHNITZELJAGD + "\" (\"" + _PID + "\"), " +
                     "\"" + _STARTZEIT + "\" TIMESTAMP NOT NULL, " +

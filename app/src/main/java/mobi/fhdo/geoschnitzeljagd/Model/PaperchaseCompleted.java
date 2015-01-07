@@ -26,13 +26,15 @@ import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
 
 public class PaperchaseCompleted
 {
+    private UUID id;
     private User user;
     private Paperchase paperchase;
     private Timestamp startTime;
     private Timestamp endTime;
 
-    public PaperchaseCompleted(User user, Paperchase paperchase, Timestamp startTime, Timestamp endTime)
+    public PaperchaseCompleted(UUID id, User user, Paperchase paperchase, Timestamp startTime, Timestamp endTime)
     {
+        this.id = id;
         this.user = user;
         this.paperchase = paperchase;
         this.startTime = startTime;
@@ -41,6 +43,7 @@ public class PaperchaseCompleted
 
     public PaperchaseCompleted()
     {
+        this.id = UUID.randomUUID();
         this.setPaperchase(new Paperchase("Name"));
         this.setUser(new User("Test", "Test"));
 
@@ -49,10 +52,21 @@ public class PaperchaseCompleted
         setEndTime(new Timestamp(date.getTime()));
     }
 
-    public PaperchaseCompleted(User user, Paperchase paperchase, Timestamp startTime) {
+    public PaperchaseCompleted(User user, Paperchase paperchase, Timestamp startTime)
+    {
         this.user = user;
         this.paperchase = paperchase;
         this.startTime = startTime;
+    }
+
+    public UUID getId()
+    {
+        return id;
+    }
+
+    public void setId(UUID id)
+    {
+        this.id = id;
     }
 
     public User getUser()
@@ -103,6 +117,7 @@ public class PaperchaseCompleted
         try
         {
             writer.beginObject();
+            writer.name("PSID").value(this.getId().toString());
             writer.name("PID").value(this.paperchase.getId().toString());
             writer.name("UID").value(this.user.getId().toString());
 
@@ -124,6 +139,7 @@ public class PaperchaseCompleted
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public static PaperchaseCompleted jsonToObject(String result, Context context)
     {
+        UUID id = null;
         User user = null;
         Paperchase paperchase = null;
         Timestamp startTime = null;
@@ -143,7 +159,11 @@ public class PaperchaseCompleted
             while (reader.hasNext())
             {
                 String name = reader.nextName();
-                if (name.equals("PID") && reader.hasNext())
+                if (name.equals("PSID") && reader.hasNext())
+                {
+                    id = UUID.fromString(reader.nextString());
+                }
+                else if (name.equals("PID") && reader.hasNext())
                 {
                     paperchase = paperchases.Get(UUID.fromString(reader.nextString()));
                 }
@@ -189,8 +209,8 @@ public class PaperchaseCompleted
             e.printStackTrace();
         }
 
-        if (user != null && paperchase != null && startTime != null && endTime != null)
-            return new PaperchaseCompleted(user, paperchase, startTime, endTime);
+        if (id != null && user != null && paperchase != null && startTime != null && endTime != null)
+            return new PaperchaseCompleted(id, user, paperchase, startTime, endTime);
         else
             return null;
     }
