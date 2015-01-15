@@ -175,10 +175,6 @@ public class Paperchase implements Serializable {
         marks.add(mark);
     }
 
-    public void removeMark(Mark mark) {
-        marks.remove(mark);
-    }
-
     public List<Mark> getMarks() {
         return marks;
     }
