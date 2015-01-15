@@ -104,7 +104,6 @@ public class NearbyActivity extends ActionBarActivity implements GoogleMap.OnMar
         //googleMap.setOnMarkerClickListener(markClusterManager);
 
 
-
         paperchases = new Paperchases(this);
         paperchaselist = paperchases.All();
         List<Mark> marks;
@@ -153,10 +152,10 @@ public class NearbyActivity extends ActionBarActivity implements GoogleMap.OnMar
                 drawerLayout.closeDrawers();
                 Location myLocation = gpsTracker.getLocation();
                 LatLng latLngmyLocation = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-                Toast.makeText(getBaseContext(), "Die Entfernung zu der Schnitzeljagd beträgt: " + new DecimalFormat("#.##").format(sphericalUtil.computeDistanceBetween(latLngmyLocation, new LatLng(locations.get(i).getLatitude(),locations.get(i).getLongitude()))) + " Meter", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Die Entfernung zu der Schnitzeljagd beträgt: " + new DecimalFormat("#.##").format(sphericalUtil.computeDistanceBetween(latLngmyLocation, new LatLng(locations.get(i).getLatitude(), locations.get(i).getLongitude()))) + " Meter", Toast.LENGTH_SHORT).show();
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom((new LatLng(locations.get(i).getLatitude(), locations.get(i).getLongitude())), 15));
                 paperchaseLocation.get(i).showInfoWindow();
-                startHunt(paperchaselist.get(i),i);
+                startHunt(paperchaselist.get(i), i);
 
             }
         });
@@ -278,14 +277,14 @@ public class NearbyActivity extends ActionBarActivity implements GoogleMap.OnMar
         LatLng latLngmyLocation = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
         Toast.makeText(getBaseContext(), "Die Entfernung zu der Schnitzeljagd beträgt: " + new DecimalFormat("#.##").format(sphericalUtil.computeDistanceBetween(latLngmyLocation, marker.getPosition())) + " Meter", Toast.LENGTH_SHORT).show();
 
-        if(paperchaseLocation.contains(marker)){
+        if (paperchaseLocation.contains(marker)) {
             int index = paperchaseLocation.indexOf(marker);
             startHunt(paperchaselist.get(index), index);
         }
         return false;
     }
 
-    public void startHunt(final Paperchase paperchase, final int index){
+    public void startHunt(final Paperchase paperchase, final int index) {
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -325,12 +324,10 @@ public class NearbyActivity extends ActionBarActivity implements GoogleMap.OnMar
                                 distance2NextMark.setVisibility(View.VISIBLE);
                                 m.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                                 m.setTitle("Start");
-                            }
-                            else if( j == anzMarkierung-1){
+                            } else if (j == anzMarkierung - 1) {
                                 m.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                                 m.setTitle("Ziel");
-                            }
-                            else{
+                            } else {
                                 m.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
                             }
 
@@ -347,14 +344,13 @@ public class NearbyActivity extends ActionBarActivity implements GoogleMap.OnMar
                 })
                 .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        paperchaseAbfrage.set(index,true);
+                        paperchaseAbfrage.set(index, true);
                     }
                 })                        //Do nothing on no
                 .show();
 
 
     }
-
 
 
     @Override
@@ -367,11 +363,11 @@ public class NearbyActivity extends ActionBarActivity implements GoogleMap.OnMar
             Mark mark;
             for (int i = 0; i < paperchaselist.size(); i++) {
                 final Paperchase paperchase = paperchaselist.get(i);
-                final int  indexTmp = i;
+                final int indexTmp = i;
                 marks = paperchase.getMarks();
                 if (marks.size() > 0) {
                     mark = marks.get(0);
-                    if (sphericalUtil.computeDistanceBetween(latLngmyLocation, new LatLng(mark.getLatitude(), mark.getLongitude())) < DISTANCE_TO_MARK && !paperchaseAbfrage.get(i)){
+                    if (sphericalUtil.computeDistanceBetween(latLngmyLocation, new LatLng(mark.getLatitude(), mark.getLongitude())) < DISTANCE_TO_MARK && !paperchaseAbfrage.get(i)) {
                         startHunt(paperchase, indexTmp);
 
                     }
@@ -384,7 +380,7 @@ public class NearbyActivity extends ActionBarActivity implements GoogleMap.OnMar
             double distanceToNextMark = 0.0;
             if (aktuelleMarkierung < anzMarkierung) {
                 double displayDistanceMyNextMarker = sphericalUtil.computeDistanceBetween(latLngmyLocation, aktiveJagd.getMarks().get(aktuelleMarkierung).getPosition());
-                distance2NextMark.setText("Entfernung zw. Standort und nächster Markierung:" +  new DecimalFormat("#.##").format(displayDistanceMyNextMarker));
+                distance2NextMark.setText("Entfernung zw. Standort und nächster Markierung:" + new DecimalFormat("#.##").format(displayDistanceMyNextMarker));
                 if (sphericalUtil.computeDistanceBetween(latLngmyLocation, aktiveJagd.getMarks().get(aktuelleMarkierung).getPosition()) < DISTANCE_TO_MARK) {
                     paperchaseMarksLocation.get(aktuelleMarkierung).setVisible(true);
                     if (aktuelleMarkierung != anzMarkierung - 1) {
@@ -457,7 +453,7 @@ public class NearbyActivity extends ActionBarActivity implements GoogleMap.OnMar
 
                     if (sphericalUtil.computeDistanceBetween(latLngmyLocation, new LatLng(mark.getLatitude(), mark.getLongitude())) < DISTANCE_TO_MARK && !paperchaseAbfrage.get(i)) {
 
-                      startHunt(paperchase, i);
+                        startHunt(paperchase, i);
 
                     }
 
@@ -469,7 +465,7 @@ public class NearbyActivity extends ActionBarActivity implements GoogleMap.OnMar
             double distanceToNextMark = 0.0;
             if (aktuelleMarkierung < anzMarkierung) {
                 double displayDistanceMyNextMarker = sphericalUtil.computeDistanceBetween(latLngmyLocation, aktiveJagd.getMarks().get(aktuelleMarkierung).getPosition());
-                distance2NextMark.setText("Entfernung zw. Standort und nächster Markierung:" +  new DecimalFormat("#.##").format(displayDistanceMyNextMarker));
+                distance2NextMark.setText("Entfernung zw. Standort und nächster Markierung:" + new DecimalFormat("#.##").format(displayDistanceMyNextMarker));
                 if (sphericalUtil.computeDistanceBetween(latLngmyLocation, aktiveJagd.getMarks().get(aktuelleMarkierung).getPosition()) < DISTANCE_TO_MARK) {
                     paperchaseMarksLocation.get(aktuelleMarkierung).setVisible(true);
                     if (aktuelleMarkierung != anzMarkierung - 1) {

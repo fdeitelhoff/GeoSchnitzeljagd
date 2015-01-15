@@ -11,7 +11,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,32 +30,24 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import mobi.fhdo.geoschnitzeljagd.DataManagers.DataManager;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.GPSTracker;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Marks;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.Paperchases;
-import mobi.fhdo.geoschnitzeljagd.DataManagers.Users;
-import mobi.fhdo.geoschnitzeljagd.Model.Exceptions.UserLoginException;
 import mobi.fhdo.geoschnitzeljagd.Model.Mark;
 import mobi.fhdo.geoschnitzeljagd.Model.Paperchase;
 import mobi.fhdo.geoschnitzeljagd.Model.PaperchaseCompleted;
 import mobi.fhdo.geoschnitzeljagd.Model.User;
 import mobi.fhdo.geoschnitzeljagd.R;
 
-public class PaperchaseStart extends Activity implements GoogleMap.OnMyLocationChangeListener, GoogleMap.OnMarkerClickListener
-{
+public class PaperchaseStart extends Activity implements GoogleMap.OnMyLocationChangeListener, GoogleMap.OnMarkerClickListener {
+    GoogleMap googleMap;
+    TextView distance2NextMark;
     private Button ratingButton;
-
     private UUID id;
     private User loggedInUser;
-
-    GoogleMap googleMap;
-
     private GPSTracker gpsTracker = new GPSTracker(this);
-
     private Paperchase aktuellePaperchase;
     private List<Mark> aktuellePaperchaseMarks;
-
     private List<Marker> paperchaseMarksLocation = new ArrayList<Marker>();
     private Paperchase aktiveJagd;
     private PaperchaseCompleted paperchaseCompleted;
@@ -68,10 +59,7 @@ public class PaperchaseStart extends Activity implements GoogleMap.OnMyLocationC
     private boolean paperchaseFinished;
     private boolean bewertungAbgegeben;
 
-    TextView distance2NextMark;
-
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paperchase_start);
 
@@ -85,8 +73,7 @@ public class PaperchaseStart extends Activity implements GoogleMap.OnMyLocationC
 
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null)
-        {
+        if (extras != null) {
             id = (UUID) extras.getSerializable("PaperchaseID");
             Log.w("Id", String.valueOf(id));
             loggedInUser = (User) extras.getSerializable("User");
@@ -100,17 +87,17 @@ public class PaperchaseStart extends Activity implements GoogleMap.OnMyLocationC
             aktuellePaperchase = marks.forPaperchase(aktuellePaperchase);
 
 
-            if (aktuellePaperchase != null){
-               aktuellePaperchaseMarks =  aktuellePaperchase.getMarks();
+            if (aktuellePaperchase != null) {
+                aktuellePaperchaseMarks = aktuellePaperchase.getMarks();
                 anzMarkierung = aktuellePaperchaseMarks.size();
-                for(int i = 0; i<aktuellePaperchaseMarks.size(); i++){
+                for (int i = 0; i < aktuellePaperchaseMarks.size(); i++) {
                     Mark m = aktuellePaperchaseMarks.get(i);
-                    Log.w("Paperchase Suche", "Markierungen: Lat:" + m.getPosition().latitude + " Long: "+ m.getPosition().longitude);
+                    Log.w("Paperchase Suche", "Markierungen: Lat:" + m.getPosition().latitude + " Long: " + m.getPosition().longitude);
                     Marker mark = googleMap.addMarker(new MarkerOptions()
-                    .position(m.getPosition())
-                    .title(i+1 + ". Wegpunkt")
-                    .snippet("Hinweis: " + m.getHint() )
-                    .draggable(false));
+                            .position(m.getPosition())
+                            .title(i + 1 + ". Wegpunkt")
+                            .snippet("Hinweis: " + m.getHint())
+                            .draggable(false));
                     mark.setVisible(false);
 
                     if (i == 0) {
@@ -120,16 +107,12 @@ public class PaperchaseStart extends Activity implements GoogleMap.OnMyLocationC
                         mark.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                         mark.setTitle("Start");
                         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mark.getPosition(), 15));
-                    }
-                    else if( i == anzMarkierung-1){
+                    } else if (i == anzMarkierung - 1) {
                         mark.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                         mark.setTitle("Ziel");
-                    }
-                    else{
+                    } else {
                         mark.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
                     }
-
-
 
 
                     paperchaseMarksLocation.add(mark);
@@ -144,11 +127,9 @@ public class PaperchaseStart extends Activity implements GoogleMap.OnMyLocationC
         }
 
 
-        ratingButton.setOnClickListener(new OnClickListener()
-        {
+        ratingButton.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), PaperchaseReview.class);
                 intent.putExtra("PaperchaseID", id);
                 startActivity(intent);
@@ -156,7 +137,7 @@ public class PaperchaseStart extends Activity implements GoogleMap.OnMyLocationC
         });
     }
 
-    public void startHunt(final Paperchase paperchase){
+    public void startHunt(final Paperchase paperchase) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder
@@ -189,7 +170,7 @@ public class PaperchaseStart extends Activity implements GoogleMap.OnMyLocationC
         if (jagdaktive) {
             LatLng latLngmyLocation = new LatLng(location.getLatitude(), location.getLongitude());
             double displayDistanceMyNextMarker = sphericalUtil.computeDistanceBetween(latLngmyLocation, aktiveJagd.getMarks().get(aktuelleMarkierung).getPosition());
-            distance2NextMark.setText("Entfernung zw. Standort und nächster Markierung:" +  new DecimalFormat("#.##").format(displayDistanceMyNextMarker));
+            distance2NextMark.setText("Entfernung zw. Standort und nächster Markierung:" + new DecimalFormat("#.##").format(displayDistanceMyNextMarker));
             double distanceToNextMark = 0.0;
             if (aktuelleMarkierung < anzMarkierung) {
                 if (sphericalUtil.computeDistanceBetween(latLngmyLocation, aktiveJagd.getMarks().get(aktuelleMarkierung).getPosition()) < DISTANCE_TO_MARK) {
@@ -240,10 +221,8 @@ public class PaperchaseStart extends Activity implements GoogleMap.OnMyLocationC
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
-        {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             Intent myIntent = new Intent(this, SearchActivity.class);
             myIntent.putExtra("User", loggedInUser);
             startActivity(myIntent);
@@ -255,7 +234,7 @@ public class PaperchaseStart extends Activity implements GoogleMap.OnMyLocationC
 
     private void initLocation() {
         Location location = gpsTracker.getLocation();
-        if(location != null){
+        if (location != null) {
             googleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(location.getLatitude(), location.getLongitude()))
                     .title("aktueller Standort")
@@ -270,7 +249,7 @@ public class PaperchaseStart extends Activity implements GoogleMap.OnMyLocationC
     @Override
     public boolean onMarkerClick(Marker marker) {
 
-        if (!jagdaktive){
+        if (!jagdaktive) {
             Location myLocation = gpsTracker.getLocation();
             LatLng latLngmyLocation = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
             Toast.makeText(getBaseContext(), "Die Entfernung zu der Schnitzeljagd beträgt: " + new DecimalFormat("#.##").format(sphericalUtil.computeDistanceBetween(latLngmyLocation, marker.getPosition())) + " Meter", Toast.LENGTH_SHORT).show();
@@ -315,8 +294,6 @@ public class PaperchaseStart extends Activity implements GoogleMap.OnMyLocationC
             Log.e("mapApp", exception.toString());
         }
     }
-
-
 
 
 }

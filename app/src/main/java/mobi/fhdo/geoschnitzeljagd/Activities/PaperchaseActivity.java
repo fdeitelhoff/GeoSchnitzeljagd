@@ -52,8 +52,7 @@ import mobi.fhdo.geoschnitzeljagd.R;
 
 public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWindowClickListener,
         GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerClickListener,
-        GoogleMap.OnMarkerDragListener
-{
+        GoogleMap.OnMarkerDragListener {
 
     private EditText paperchaseNameEditText;
     private TextView waypointCountEditText;
@@ -78,8 +77,7 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
     private boolean isCreate;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         gpsTracker = new GPSTracker(this);
@@ -94,19 +92,14 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
 
         // Save the paperchase.
         Button savePaperchaseButton = (Button) findViewById(R.id.button_save_waypoints);
-        savePaperchaseButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
-                if (paperchaseNameEditText.getText().toString().trim().isEmpty())
-                {
+        savePaperchaseButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                if (paperchaseNameEditText.getText().toString().trim().isEmpty()) {
                     new AlertDialog.Builder(PaperchaseActivity.this)
                             .setTitle("Fehlender Name")
                             .setMessage("Die Schnitzeljagd kann nicht ohne Namen gespeichert werden!")
-                            .setNeutralButton("Ok", new DialogInterface.OnClickListener()
-                            {
-                                public void onClick(DialogInterface dialog, int whichButton)
-                                {
+                            .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
                                 }
                             })
                             .show();
@@ -119,10 +112,7 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
                                 }
                             })
                             .show();
-                }
-
-                else
-                {
+                } else {
                     savePaperchase();
 
                     Intent returnIntent = new Intent();
@@ -136,30 +126,24 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
 
         // Add a new waypoint.
         Button addWaypointButton = (Button) findViewById(R.id.button_add_waypoint);
-        addWaypointButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
+        addWaypointButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 addMarker(true);
             }
         });
 
         // Remove a new waypoint.
         Button removeWaypoint = (Button) findViewById(R.id.button_remove_waypoint);
-        removeWaypoint.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
-                if (currentWaypoint != null)
-                {
+        removeWaypoint.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                if (currentWaypoint != null) {
                     waypoints.remove(currentWaypoint);
 
                     currentWaypoint.remove();
                     currentWaypoint = null;
 
                     int waypointNumber = 0;
-                    for (Marker waypoint : waypoints.keySet())
-                    {
+                    for (Marker waypoint : waypoints.keySet()) {
                         waypoint.setTitle(++waypointNumber + ". Wegpunkt");
                         waypoint.setIcon(BitmapDescriptorFactory.defaultMarker(waypointColors.get(waypointNumber)));
                     }
@@ -188,16 +172,14 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
 
         // If there's a paperchase present we want to display its data.
         Bundle extras = getIntent().getExtras();
-        if (extras != null)
-        {
+        if (extras != null) {
             paperchase = (Paperchase) extras.getSerializable("Paperchase");
 
             paperchaseNameEditText.setText(paperchase.getName());
 
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
-            for (Mark mark : paperchase.getMarks())
-            {
+            for (Mark mark : paperchase.getMarks()) {
                 addMarker(mark.getPosition(), false,
                         mark.getId(), mark.getHint());
 
@@ -207,20 +189,15 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
             bounds = builder.build();
 
             waypointCountEditText.setText("Aktuell " + waypoints.size() + "/5 Wegpunkten");
-        }
-        else
-        {
+        } else {
             // Without a paperchase we add an initial marker on the map.
             addMarker(true);
         }
     }
 
-    private void createMapView()
-    {
-        try
-        {
-            if (googleMap == null)
-            {
+    private void createMapView() {
+        try {
+            if (googleMap == null) {
                 // Get the Google maps fragment.
                 googleMap = ((MapFragment) getFragmentManager().findFragmentById(
                         R.id.mapView)).getMap();
@@ -230,13 +207,10 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
                 googleMap.getUiSettings().setMyLocationButtonEnabled(true);
                 googleMap.getUiSettings().setRotateGesturesEnabled(false);
                 googleMap.getUiSettings().setTiltGesturesEnabled(false);
-                googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback()
-                {
+                googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
                     @Override
-                    public void onMapLoaded()
-                    {
-                        if (bounds != null)
-                        {
+                    public void onMapLoaded() {
+                        if (bounds != null) {
                             googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 250));
                             bounds = null;
                         }
@@ -249,20 +223,16 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
                 googleMap.setOnMarkerClickListener(this);
                 googleMap.setOnMarkerDragListener(this);
             }
-        }
-        catch (NullPointerException exception)
-        {
+        } catch (NullPointerException exception) {
             Log.e("mapApp", exception.toString());
         }
     }
 
     @Override
-    public void onInfoWindowClick(final Marker marker)
-    {
+    public void onInfoWindowClick(final Marker marker) {
         String waypointText = marker.getSnippet();
 
-        if (waypointText.equals("Tippen um Hinweis zu setzen..."))
-        {
+        if (waypointText.equals("Tippen um Hinweis zu setzen...")) {
             waypointText = "";
         }
 
@@ -275,10 +245,8 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
                 .setTitle("Hinweis eingeben")
                 .setMessage("Hinweis für den aktuellen Wegpunkt:")
                 .setView(input)
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialog, int whichButton)
-                    {
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
                         Editable value = input.getText();
 
                         marker.setSnippet(value.toString());
@@ -286,10 +254,8 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
                     }
                 })
                 .setNegativeButton("Abbrechen",
-                        new DialogInterface.OnClickListener()
-                        {
-                            public void onClick(DialogInterface dialog, int whichButton)
-                            {
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
                                 // Abbrechen...
                                 marker.showInfoWindow();
                             }
@@ -298,38 +264,31 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
     }
 
     @Override
-    public void onMapLongClick(LatLng position)
-    {
-        if (waypoints.size() < 5)
-        {
+    public void onMapLongClick(LatLng position) {
+        if (waypoints.size() < 5) {
             addMarker(position, false);
         }
     }
 
     @Override
-    public boolean onMarkerClick(Marker marker)
-    {
+    public boolean onMarkerClick(Marker marker) {
         currentWaypoint = marker;
         marker.showInfoWindow();
         return true;
     }
 
-    private void addMarker(boolean focusMap)
-    {
+    private void addMarker(boolean focusMap) {
         Location location = gpsTracker.getLocation();
 
         addMarker(new LatLng(location.getLatitude(), location.getLongitude()), focusMap);
     }
 
-    private void addMarker(LatLng position, boolean focusMap)
-    {
+    private void addMarker(LatLng position, boolean focusMap) {
         addMarker(position, focusMap, UUID.randomUUID(), "Tippen um Hinweis zu setzen...");
     }
 
-    private void addMarker(LatLng position, boolean focusMap, UUID uuid, String hint)
-    {
-        if (waypoints.size() < 5)
-        {
+    private void addMarker(LatLng position, boolean focusMap, UUID uuid, String hint) {
+        if (waypoints.size() < 5) {
             int waypointNumber = waypoints.size() + 1;
 
             Marker waypoint = googleMap.addMarker(new MarkerOptions()
@@ -345,53 +304,42 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
 
             waypoint.showInfoWindow();
 
-            if (focusMap)
-            {
+            if (focusMap) {
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
             }
 
             waypointCountEditText.setText("Aktuell " + waypoints.size() + "/5 Wegpunkten");
 
             Log.w("Marker Added ", waypoint.getPosition().toString());
-        }
-        else
-        {
+        } else {
             new AlertDialog.Builder(this)
                     .setTitle("Maximum erreichet")
                     .setMessage("Das Maximum von fünf Wegpunkten pro Schnitzeljagd in der Version wurde erreicht.")
-                    .setNeutralButton("Ok", new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int whichButton)
-                        {
+                    .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
                         }
                     })
                     .show();
         }
     }
 
-    private void savePaperchase()
-    {
-        if (paperchase == null)
-        {
+    private void savePaperchase() {
+        if (paperchase == null) {
             // New paperchase!
             createPaperchase();
-        }
-        else
-        {
+        } else {
             // Paperchase already exists. Update it!
             updatePaperchase();
         }
     }
 
-    private void createPaperchase()
-    {
+    private void createPaperchase() {
         UUID paperchaseUID = UUID.randomUUID();
 
         // Collect the marks for the waypoints.
         List<Mark> marks = new ArrayList<Mark>();
         int sequence = 0;
-        for (Marker waypoint : waypoints.keySet())
-        {
+        for (Marker waypoint : waypoints.keySet()) {
             Mark mark = new Mark(waypoints.get(waypoint),
                     paperchaseUID,
                     waypoint.getPosition().latitude,
@@ -417,23 +365,18 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected())
-        {
+        if (networkInfo != null && networkInfo.isConnected()) {
             new DownloadWebpageTask().execute(stringUrl);
-        }
-        else
-        {
+        } else {
             Log.d("No network connection available.", "No network connection available.");
         }
     }
 
-    private void updatePaperchase()
-    {
+    private void updatePaperchase() {
         // Collect the marks for the waypoints.
         List<Mark> marks = new ArrayList<Mark>();
         int sequence = 0;
-        for (Marker waypoint : waypoints.keySet())
-        {
+        for (Marker waypoint : waypoints.keySet()) {
             Mark mark = new Mark(waypoints.get(waypoint),
                     paperchase.getId(),
                     waypoint.getPosition().latitude,
@@ -456,38 +399,30 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected())
-        {
+        if (networkInfo != null && networkInfo.isConnected()) {
             new DownloadWebpageTask().execute(stringUrl);
-        }
-        else
-        {
+        } else {
             Log.d("No network connection available.", "No network connection available.");
         }
     }
 
     @Override
-    public void onMarkerDragStart(Marker marker)
-    {
+    public void onMarkerDragStart(Marker marker) {
     }
 
     @Override
-    public void onMarkerDrag(Marker marker)
-    {
+    public void onMarkerDrag(Marker marker) {
     }
 
     @Override
-    public void onMarkerDragEnd(Marker marker)
-    {
+    public void onMarkerDragEnd(Marker marker) {
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    private String downloadUrl(String myurl) throws IOException
-    {
+    private String downloadUrl(String myurl) throws IOException {
         InputStream is = null;
 
-        try
-        {
+        try {
             URL url = new URL(myurl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             String encode = new String(Base64.encode((UserContext.getInstance().getLoggedInUser().getUsername() + ":" + UserContext.getInstance().getLoggedInUser().getPassword()).getBytes(), Base64.DEFAULT));
@@ -501,12 +436,9 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
             conn.setDoInput(true);
             conn.setDoOutput(true);
 
-            if (isCreate)
-            {
+            if (isCreate) {
                 conn.setRequestMethod("POST");
-            }
-            else
-            {
+            } else {
                 conn.setRequestMethod("PUT");
             }
 
@@ -516,21 +448,15 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
             int response = conn.getResponseCode();
             is = conn.getInputStream();
 
-            if(response == 200)
-            {
-                if(isCreate)
-                {
+            if (response == 200) {
+                if (isCreate) {
                     // Save the paperchase with waypoints into the local database.
                     //paperchases.CreateOrUpdate(paperchase);
-                }
-                else
-                {
+                } else {
                     //paperchases.update(paperchase);
                 }
                 //Toast.makeText(context, "paperchase wurde angelegt bzw. geändert.", Toast.LENGTH_LONG).show();
-            }
-            else
-            {
+            } else {
                 //Toast.makeText(context, "paperchase wurde nicht geändert bzw. angelegt! Versuchen Sie es später nochmal.", Toast.LENGTH_LONG).show();
             }
 
@@ -538,28 +464,19 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
             // Convert the InputStream into a string
             String contentAsString = UserContext.readIt(is);
             return contentAsString;
-        }
-
-        finally
-        {
-            if (is != null)
-            {
+        } finally {
+            if (is != null) {
                 is.close();
             }
         }
     }
 
-    private class DownloadWebpageTask extends AsyncTask<String, Void, String>
-    {
+    private class DownloadWebpageTask extends AsyncTask<String, Void, String> {
         @Override
-        protected String doInBackground(String... urls)
-        {
-            try
-            {
+        protected String doInBackground(String... urls) {
+            try {
                 return downloadUrl(urls[0]);
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 return "Unable to retrieve web page. URL may be invalid.";
             }
         }

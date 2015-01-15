@@ -1,7 +1,6 @@
 package mobi.fhdo.geoschnitzeljagd.Activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -15,8 +14,7 @@ import android.widget.Toast;
 import mobi.fhdo.geoschnitzeljagd.DataManagers.PaperchaseReviews;
 import mobi.fhdo.geoschnitzeljagd.R;
 
-public class PaperchaseReview extends Activity
-{
+public class PaperchaseReview extends Activity {
     RatingBar ratingDifficulty;
     RatingBar ratingExciting;
     RatingBar ratingEnvironment;
@@ -26,14 +24,12 @@ public class PaperchaseReview extends Activity
 
     private PaperchaseReviews reviews;
 
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paperchase_review);
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null)
-        {
+        if (extras != null) {
             Integer id = extras.getInt("PaperchaseID");
             Log.w("Id", id.toString());
             //Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
@@ -48,11 +44,9 @@ public class PaperchaseReview extends Activity
 
         comment = (EditText) findViewById(R.id.editText_Comment);
         ratingButton = (Button) findViewById(R.id.review_button);
-        ratingButton.setOnClickListener(new OnClickListener()
-        {
+        ratingButton.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 //TODO: Noch die passenden IDs übergeben
                 //Review r = new Review(0,null,null,(int)ratingDifficulty.getRating(),(int)ratingExciting.getRating(),(int)ratingEnvironment.getRating(),(int)ratingLength.getRating(), comment.getText().toString());
                 //reviews.Creaete(r);
@@ -62,10 +56,8 @@ public class PaperchaseReview extends Activity
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
-        {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             this.finish();
             //Intent myIntent = new Intent(this, PaperchaseStart.class);
             //startActivity(myIntent);
