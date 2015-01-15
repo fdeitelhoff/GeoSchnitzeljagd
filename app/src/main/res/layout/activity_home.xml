@@ -41,7 +41,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/paperchase_create" />
+        android:text="@string/activity_home_button_paperchase_create" />
 
 
     <Button

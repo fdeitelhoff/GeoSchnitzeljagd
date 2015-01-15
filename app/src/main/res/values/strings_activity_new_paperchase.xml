@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="title_activity_new_paperchase">Neue Schnitzeljagd</string>
-    <string name="menu_add_mark">Neuer Wegpunkt</string>
-    <string name="activity_new_paperchase_textview_name">Name:</string>
-    <string name="activity_new_paperchase_textview_marks">Markierungen:</string>
-</resources>

@@ -16,7 +16,7 @@
 
     <!-- android:theme="@style/AppTheme" -->
     <!-- android:name="mobi.fhdo.geoschnitzeljagd.Activities.NearbyActivity"-->
-            
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -42,12 +42,9 @@
             android:name=".Activities.HomeActivity"
             android:label="@string/title_activity_home" />
         <activity
-            android:name=".Activities.SettingsActivity"
-            android:label="@string/title_activity_home" />
-        <activity
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:name=".Activities.NearbyActivity"
-            android:label="@string/title_activity_home" />
+            android:label="@string/title_activity_home"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity
             android:name=".Activities.SearchActivity"
             android:label="@string/title_activity_home" />
@@ -66,45 +63,14 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDzfYRJYuZi3pIy87AV4iaZUflFYD74j7o" />
         <!--
-            -
             !!!!! JW: Um das Projekt bei mir ausführen zu könnne musste ich einen neuen Key generieren!!!!
             JW-KEy: AIzaSyBq54GhaWCPxdYAli74fQqHausHh3zmgo4
             Marcel-KEy: AIzaSyDzfYRJYuZi3pIy87AV4iaZUflFYD74j7o
             Fabian-Key: AIzaSyDbKPAAp70_v65QegY0af_S6-XmkH5Roac
         -->
-        <!--
-        <activity
-            android:name=".Activities.PaperchaseListActivity_alt"
-            android:label="@string/title_paperchase_list" />
-        <activity
-            android:name=".Activities.PaperchaseDetailActivity_alt"
-            android:label="@string/title_paperchase_detail"
-            android:parentActivityName=".Activities.PaperchaseListActivity_alt" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="mobi.fhdo.geoschnitzeljagd.PaperchaseListActivity" />
-        </activity>
-        -->
         <activity
             android:name=".Activities.PaperchaseListActivity"
             android:label="@string/title_activity_paperchase_list" />
-        <activity
-            android:name=".Activities.newpaperchase"
-            android:label="@string/paperchase_create" />
-        <activity
-            android:name=".Activities.NewPaperchaseActivity"
-            android:label="@string/title_activity_new_paperchase" />
-        <!--
-        <activity
-            android:name=".Activities.NewPaperchaseMarkMapActivity"
-            android:label="@string/title_activity_new_paperchase_mark_map_fragment" >
-        </activity>
-        -->
-        <activity
-            android:name=".Activities.NewPaperchaseMarkMapActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_fullscreen"
-            android:theme="@style/FullscreenTheme" />
         <activity
             android:name=".Activities.PaperchaseActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

@@ -7,4 +7,5 @@
     <string name="activity_home_button_user_profil">Benutzerprofil</string>
     <string name="activity_home_button_logout">Abmelden</string>
     <string name="activity_home_button_exit">Beenden</string>
+    <string name="activity_home_button_paperchase_create">Neue Schnitzeljagd</string>
 </resources>
