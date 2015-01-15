@@ -14,7 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Base64;
-import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -22,7 +21,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,10 +31,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Timestamp;
@@ -80,7 +76,6 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
     private LatLngBounds bounds;
 
     private boolean isCreate;
-    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -88,8 +83,6 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
         super.onCreate(savedInstanceState);
 
         gpsTracker = new GPSTracker(this);
-
-        context = this;
 
         //Remove title bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -117,7 +110,17 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
                                 }
                             })
                             .show();
+                } else if (waypoints.size() < 2) {
+                    new AlertDialog.Builder(PaperchaseActivity.this)
+                            .setTitle("Mindestens zwei Wegpunkte")
+                            .setMessage("Es müssen mindestens zwei Wegpunkte vorhanden sein!")
+                            .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                }
+                            })
+                            .show();
                 }
+
                 else
                 {
                     savePaperchase();
@@ -175,8 +178,8 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
         waypointColors = new HashMap<Integer, Float>();
         waypointColors.put(1, BitmapDescriptorFactory.HUE_GREEN);
         waypointColors.put(2, BitmapDescriptorFactory.HUE_ORANGE);
-        waypointColors.put(3, BitmapDescriptorFactory.HUE_CYAN);
-        waypointColors.put(4, BitmapDescriptorFactory.HUE_BLUE);
+        waypointColors.put(3, BitmapDescriptorFactory.HUE_ORANGE);
+        waypointColors.put(4, BitmapDescriptorFactory.HUE_ORANGE);
         waypointColors.put(5, BitmapDescriptorFactory.HUE_RED);
 
         paperchases = new Paperchases(this);
@@ -409,7 +412,6 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
 
         paperchases.CreateOrUpdate(paperchase);
 
-        // TODO: Bitte Prüfen
         isCreate = true;
         String stringUrl = "http://schnitzeljagd.fabiandeitelhoff.de/api/v1/paperchase";
         ConnectivityManager connMgr = (ConnectivityManager)
@@ -449,7 +451,6 @@ public class PaperchaseActivity extends Activity implements GoogleMap.OnInfoWind
 
         paperchases.update(paperchase);
 
-        // TODO: Bitte Prüfen
         isCreate = false;
         String stringUrl = "http://schnitzeljagd.fabiandeitelhoff.de/api/v1/paperchase";
         ConnectivityManager connMgr = (ConnectivityManager)

@@ -186,8 +186,6 @@ public class LoginActivity extends Activity {
             try {
                 // String to JsonReader
                 InputStream input = new ByteArrayInputStream(result.getBytes());
-                // TODO: ich musste das folgende rausnehmen, da sonst die Anwendung bei mir nicht Lief
-                //StandardCharsets.UTF_8
 
                 reader = new JsonReader(new InputStreamReader(input, "UTF-8"));
 
