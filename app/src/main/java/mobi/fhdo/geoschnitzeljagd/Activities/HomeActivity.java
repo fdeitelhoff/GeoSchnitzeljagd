@@ -77,16 +77,6 @@ public class HomeActivity extends Activity {
             }
         });
 
-        // Settings Button.
-        Button settings = (Button) findViewById(R.id.button_settings);
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent myIntent = new Intent(view.getContext(), SettingsActivity.class);
-                startActivity(myIntent);
-            }
-        });
-
         // Search Button.
         Button search = (Button) findViewById(R.id.button_search);
         search.setOnClickListener(new View.OnClickListener() {

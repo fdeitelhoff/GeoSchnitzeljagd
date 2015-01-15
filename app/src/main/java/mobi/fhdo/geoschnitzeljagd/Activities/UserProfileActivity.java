@@ -29,7 +29,6 @@ public class UserProfileActivity extends Activity {
     private Button deleteButton;
     private Button saveButton;
     private EditText usernameText;
-    private EditText pointsText;
 
     private Users users;
 
@@ -45,12 +44,6 @@ public class UserProfileActivity extends Activity {
         users = new Users(this);
 
         usernameText = (EditText) findViewById(R.id.username);
-        pointsText = (EditText) findViewById(R.id.points);
-
-        pointsText.setText("0");
-        // pointsText EditText Controll auf Read Only setzen
-        pointsText.setKeyListener(null);
-
         usernameText.setText(UserContext.getInstance().getLoggedInUser().getUsername());
 
         Log.d("UserId", UserContext.getInstance().getLoggedInUser().getId().toString());

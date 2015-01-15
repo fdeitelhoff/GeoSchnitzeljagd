@@ -15,37 +15,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:editable="true"
-        android:inputType="text"/>
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/activity_user_profile_label_points"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <EditText
-        android:id="@+id/points"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:editable="false"
-        android:ems="10"
-        android:inputType="number"
-        android:enabled="false"/>
+        android:inputType="text" />
 
     <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/activity_user_profile_button_Save"
         android:id="@+id/save"
-        android:layout_gravity="center_horizontal"/>
-
-    <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/activity_user_profile_button_delete"
-        android:id="@+id/delete"
         android:layout_gravity="center_horizontal"
-        android:visibility="visible"/>
+        android:text="@string/activity_user_profile_button_Save" />
+
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/activity_user_profile_button_delete"
+        android:visibility="visible" />
 
 </LinearLayout>
